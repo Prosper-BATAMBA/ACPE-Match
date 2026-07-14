@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "matching-engine"
+version = "1.0.0"
+description = "Pipeline de normalisation et d'enrichissement de profils pour l'ACPE"
+requires-python = ">=3.9"
+dependencies = [
+    "rapidfuzz>=3.0",
+]
+
+[tool.setuptools]
+packages = ["matching_engine", "matching_engine.normalizers", "matching_engine.enrichment"]
+
+[tool.setuptools.package-data]
+matching_engine = ["data/mappings/*.json", "data/graphs/*.json"]

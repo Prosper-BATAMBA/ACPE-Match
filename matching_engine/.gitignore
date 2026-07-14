@@ -1,0 +1,18 @@
+# Datasets bruts : contiennent des données personnelles de candidats réels
+# (noms, coordonnées...). Ne doivent jamais être versionnés ni partagés
+# publiquement. Régénérez les fichiers de mappings/graphs à partir de ces
+# fichiers via un script de build local, hors du dépôt Git.
+matching_engine/data/raw/*
+!matching_engine/data/raw/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+
+# Environnements
+.env

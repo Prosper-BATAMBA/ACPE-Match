@@ -1,0 +1,118 @@
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Data/Persistence
+*.db
+acpe.db
+
+# Cache/Model files
+st_models_cache/
+chromadb/
+postgres_data/
+chroma_data/
+
+# Logs
+*.log
+logs/
+
+# Test/Doc artifacts
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+.pytest.warnings
+.vscode-test/
+.hypothesis/
+test_reports/
+
+# Sensitive data
+*.key
+*.pem
+secrets/
+.env
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Media/Docs (if any)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.pdf
+*.md
+*.txt
+
+# Other
+.DS_Store
+Thumbs.db
+
+# Model files from training scripts
+*.cbm
+*.onnx
+*.index
+
+# Pattern matching files
+*.json
+*.yaml
+*.yml
+
+# Project evaluation artifacts
+evaluate_matching.py
+export_onnx.py
+full_evaluation*.py
+train_*.py
+seed_*.py
+captune_info/
+cross_encoder_onnx/
+feature_config.json
+full_evaluation.py
+faiss*.index
+faiss_offers_meta.json
+faiss_offers.index
+matching_model.json
+ranker_config.json
+test_backend.py
+test_model_sector.py
+train_matching_model.py
+train_ranker.py
