@@ -26,6 +26,30 @@ SKILL_DOMAINS = {
     "transversal": ["SKILL_SOFT_RELATIONNEL", "SKILL_SOFT_COMMUNICATION", "SKILL_SOFT_LEADERSHIP", "SKILL_RH_CORE", "SKILL_ADMIN_SECRETARIAT2", "SKILL_ADMIN_PILOTAGE", "SKILL_ADMIN_GESTION", "SKILL_DIR_GENERALE", "SKILL_DIR_MANAGEMENT_OP", "SKILL_DIR_PROJET"],
 }
 
+# Inverse : id_skill -> domaine (utilisé pour inférer le secteur cible d'une requête NL).
+SKILL_ID_TO_DOMAIN = {}
+for _dom, _ids in SKILL_DOMAINS.items():
+    for _sid in _ids:
+        SKILL_ID_TO_DOMAIN[_sid] = _dom
+
+# Domaine de compétences -> secteur cible (ids canoniques de secteur_mapping.json).
+# Permet d'inférer le secteur d'une requête NL même quand le texte ne le nomme pas
+# explicitement (ex: "informaticien" ne matche pas "informatique" en substring strict).
+DOMAIN_TO_SECTOR = {
+    "finance": "SEC_FIN_COMPTA",
+    "hse_maintenance": "SEC_INDU_MAINT",
+    "it_digital": "SEC_IT_DIGITAL",
+    "commerce": "SEC_COMM_VENTE",
+    "logistique": "SEC_TRANS_LOG",
+    "sante": "SEC_SANTE_PHARMA",
+    "btp_industrie": "SEC_BTP_AMENAGE",
+    "restauration": "SEC_HOTEL_RESTAU",
+    "agriculture": "SEC_AGRO",
+    "droit_securite": "SEC_DROIT_SOCIAL",
+    "marine_aero": "SEC_TRANS_LOG",
+    "transversal": None,
+}
+
 EDUCATION_RANKS = {
     "NV_0_AUCUN": 0, "NV_1_PRIMARY": 1, "NV_2_COLLEGE": 2,
     "NV_3_PRO_N1": 3, "NV_4_BAC": 4, "NV_5_BAC_2": 5,
@@ -497,16 +521,26 @@ def nl_offer_search(
     k: int = 10,
     embedding_fn=None,
 ) -> Dict[str, Any]:
-    """Recherche d'offres en langage naturel.
+    """Recherche d'offres en langage naturel (robuste, sémantique-first).
 
-    Le candidat décrit librement ce qu'il cherche (compétences + secteur + métier).
-    On extrait les compétences via SkillNormalizer et le secteur visé via
-    SectorNormalizer, on récupère les offres sémantiquement proches via FAISS,
-    puis on réutilise _extract_features + le CatBoost ranker pour scorer et
-    filtrer, exactement comme pour le matching candidat->offres.
+    Approche généralisable (pas de patch cas-par-cas) :
+      1. Extraction des compétences/secteur depuis le texte libre (Normalizers),
+         puis inférence du secteur cible à partir du domaine majoritaire des
+         compétences détectées (utile quand le texte ne nomme pas le secteur).
+      2. Alignement de représentation : on reconstruit un `profile_text`
+         normalisé via le MÊME pipeline de dénormalisation que les offres
+         (ProfileBuilder), puis on l'embed pour le FAISS. On compare donc
+         offres contre offres (espace d'embedding aligné) au lieu d'une
+         auto-description contre des offres.
+      3. Ranking sémantique en premier : similarité FAISS + boosts (compétences
+         matchées, secteur cible). Le seuil CatBoost 0.3 est abandonné (il est
+         mal calibré pour une entrée candidate synthétique sparse -> tous les
+         scores sont négatifs). Le score CatBoost est conservé en sortie à
+         titre informatif uniquement.
     """
     empty = {
         "query": query,
+        "query_profile_text": "",
         "extracted_skills": [],
         "target_secteur": None,
         "total_offers_compared": 0,
@@ -518,11 +552,14 @@ def nl_offer_search(
     from . import faiss_index as fi
     from . import ranker_service as rs
     from matching_engine import SkillNormalizer, SectorNormalizer
+    from .profile_builder import ProfileBuilder
 
     sn = SkillNormalizer()
     sec_norm = SectorNormalizer()
+    pb = ProfileBuilder()
 
     cand_skills = sn.extract_from_text(query)
+    detected_skill_ids = [s.get("id_skill") for s in cand_skills if s.get("id_skill")]
     extracted_skill_labels = sorted(
         {s.get("libelle_canonique", "") for s in cand_skills if s.get("libelle_canonique")}
     )
@@ -530,11 +567,37 @@ def nl_offer_search(
     target_secteurs = sec_norm.extract_from_text(query)
     target_secteur = target_secteurs[0] if target_secteurs else None
 
+    # Inférence de secteur à partir des domaines de compétences détectées.
+    # Général : si le texte ne nomme pas le secteur (ex: "informaticien" ne
+    # matche pas "informatique" en substring strict), on le déduit du domaine
+    # majoritaire des compétences extraites.
+    if not target_secteur or target_secteur.get("id_secteur") == "SEC_AUTRES":
+        domain_counts = {}
+        for sid in detected_skill_ids:
+            dom = SKILL_ID_TO_DOMAIN.get(sid)
+            if dom and dom != "transversal":
+                domain_counts[dom] = domain_counts.get(dom, 0) + 1
+        if domain_counts:
+            best_domain = max(domain_counts.items(), key=lambda kv: kv[1])[0]
+            inferred_id = DOMAIN_TO_SECTOR.get(best_domain)
+            if inferred_id and inferred_id != "SEC_AUTRES":
+                target_secteur = sec_norm.sector_metadata.get(inferred_id)
+
+    # 2. Alignement de représentation : profil offre normalisé (même pipeline
+    # que les offres au seed), puis embedding de ce profil aligné.
+    pb_result = pb.build_job_offer_profile(
+        secteur=target_secteur["secteur_canonique"] if target_secteur else None,
+        competences_recherchees=", ".join(extracted_skill_labels) if extracted_skill_labels else None,
+    )
+    query_profile_text = (pb_result.get("profile_text") or "").strip()
+
     if embedding_fn is None:
         from .embedding_service import encode
         embedding_fn = encode
 
-    q_emb = np.array(embedding_fn(query), dtype=np.float32)
+    # On embed le profil aligné si pertinent, sinon la requête brute (fallback).
+    text_to_embed = query_profile_text if len(query_profile_text) > 10 else query
+    q_emb = np.array(embedding_fn(text_to_embed), dtype=np.float32)
     q_emb_normed = q_emb / (np.linalg.norm(q_emb) or 1.0)
 
     try:
@@ -567,8 +630,6 @@ def nl_offer_search(
     except FileNotFoundError:
         feature_names = None
 
-    SCORE_THRESHOLD = float(os.environ.get("SCORE_THRESHOLD", "0.3"))
-
     offer_ids_to_load = [oid for oid, _ in faiss_results if oid]
     offers_from_db = db.query(JobOffer).filter(JobOffer.id.in_(offer_ids_to_load)).all()
     offer_map = {o.id: o for o in offers_from_db}
@@ -592,19 +653,6 @@ def nl_offer_search(
             "secteur": offer.secteur,
         }
 
-        if feature_names:
-            feat = _extract_features(cand_data, offer_data, semantic_score, sn)
-            feat_vec = np.array([[feat[f] for f in feature_names]], dtype=np.float32)
-            try:
-                score = float(rs.rerank(feat_vec)[0])
-            except Exception:
-                score = semantic_score
-        else:
-            score = semantic_score
-
-        if score < SCORE_THRESHOLD:
-            continue
-
         offer_skills = []
         if offer.competences_recherchees:
             offer_skills = sn.extract_from_text(offer.competences_recherchees)
@@ -620,22 +668,38 @@ def nl_offer_search(
             and target_secteur["id_secteur"] == offer.id_secteur
         )
 
+        # 3. Ranking sémantique + boosts (pas de gate CatBoost 0.3).
+        relevance = semantic_score
+        relevance += 0.05 * len(matched)
+        relevance += 0.10 * (1 if sector_match else 0)
+
+        # Score CatBoost conservé à titre informatif (non utilisé pour le rank/gate).
+        catboost_score = None
+        if feature_names:
+            feat = _extract_features(cand_data, offer_data, semantic_score, sn)
+            feat_vec = np.array([[feat[f] for f in feature_names]], dtype=np.float32)
+            try:
+                catboost_score = float(rs.rerank(feat_vec)[0])
+            except Exception:
+                catboost_score = None
+
         recommendations.append({
             "offer_id": offer_id,
             "intitule": offer.intitule,
             "entreprise": offer.entreprise,
             "secteur": offer.secteur,
-            "score": round(score, 4),
+            "score": round(relevance, 4),
+            "semantic_score": round(semantic_score, 4),
+            "catboost_score": round(catboost_score, 4) if catboost_score is not None else None,
             "matched_skills": matched,
             "sector_match": sector_match,
-            "semantic_score": round(semantic_score, 4),
         })
 
+    # Tri par pertinence décroissante ; top_k renvoyé (aucun seuil dur).
     recommendations.sort(key=lambda x: x["score"], reverse=True)
-    return {
-        "query": query,
-        "extracted_skills": extracted_skill_labels,
-        "target_secteur": target_secteur,
-        "total_offers_compared": len(faiss_results),
-        "recommendations": recommendations[:k],
-    }
+    empty["query_profile_text"] = query_profile_text
+    empty["extracted_skills"] = extracted_skill_labels
+    empty["target_secteur"] = target_secteur
+    empty["total_offers_compared"] = len(faiss_results)
+    empty["recommendations"] = recommendations[:k]
+    return empty

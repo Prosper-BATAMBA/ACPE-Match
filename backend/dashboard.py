@@ -528,11 +528,13 @@ elif page == "🔍 Recherche NL Offres":
                                 else:
                                     st.caption(rec.get("secteur") or "N/A")
 
-                            st.metric("Score modèle (brut)", f"{rec['score']:.2f}")
+                            st.metric("Score de pertinence", f"{rec['score']:.2f}")
                             st.metric(
                                 "Similarité sémantique",
                                 f"{rec.get('semantic_score', 0):.2f}",
                             )
+                            if rec.get("catboost_score") is not None:
+                                st.caption(f"Score CatBoost (info) : {rec['catboost_score']:.2f}")
 
 
 # ─────────────────────────────────────────────
