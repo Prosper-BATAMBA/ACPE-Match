@@ -8,19 +8,25 @@ normalisés (métier, spécialité, secteur), mais ne les rédige jamais sous
 forme de texte — c'est le rôle du TextEnricher, en aval.
 
 Sources consommées :
-    - job_knowledge_graph.json      (deux niveaux : "metiers" précis + "familles" en repli)
+    - job_knowledge_graph.json      (trois niveaux : "metiers" précis + "sous_familles"
+                                      intermédiaire + "familles" en repli ultime — v3)
     - speciality_knowledge_graph.json (plat, clé = id_famille)
     - secteur_knowledge_graph.json    (plat, clé = id_secteur)
 
 Logique de résolution pour le métier (décrite dans job_knowledge_graph.json
-lui-même) :
+lui-même, v3) :
     1. On cherche une correspondance précise dans "metiers" en comparant le
        "metier_canonique" renvoyé par JobNormalizer au "libelle_source" de
        chaque entrée (même normalisation que les Normalizers : minuscule,
        sans accent, sans ponctuation).
-    2. Si rien de précis n'est trouvé, on retombe sur "familles" via
-       l'id_famille déjà résolu par JobNormalizer — réponse plus générique,
-       mais jamais vide tant que l'id_famille existe dans le graphe.
+    2. Si rien de précis n'est trouvé, on regarde si le JobNormalizer a résolu
+       un "id_sous_famille" (métier reconnu dans une sous-famille affinée,
+       ex: Data Analyst -> sous-famille Data Science) : réponse spécifique,
+       mais sans niveau_etude_min ni metiers_proches (absents à ce niveau de
+       granularité, seules les fiches "metiers" les renseignent).
+    3. Sinon, repli sur "familles" via l'id_famille déjà résolu par
+       JobNormalizer — réponse générique, mais jamais vide tant que
+       l'id_famille existe dans le graphe.
 """
 
 from __future__ import annotations
@@ -51,6 +57,7 @@ class KnowledgeEnricher:
         secteur_graph_path = secteur_graph_path or str(SECTEUR_KNOWLEDGE_GRAPH_PATH)
 
         self._job_metiers: Dict[str, Any] = {}
+        self._job_sous_familles: Dict[str, Any] = {}
         self._job_familles: Dict[str, Any] = {}
         self._job_libelle_index: Dict[str, str] = {}  # libelle_source nettoyé -> JOB_id
 
@@ -78,6 +85,7 @@ class KnowledgeEnricher:
             data = json.load(f)
 
         self._job_metiers = data.get("metiers", {})
+        self._job_sous_familles = data.get("sous_familles", {})
         self._job_familles = data.get("familles", {})
 
         for job_id, entry in self._job_metiers.items():
@@ -94,7 +102,7 @@ class KnowledgeEnricher:
             data = json.load(f)
         return data.get("graph", {})
 
-    # ---------- job : résolution précise puis repli famille ----------
+    # ---------- job : résolution précise -> sous-famille -> repli famille ----------
 
     def _resolve_job_id(self, metier_canonique: str) -> Optional[str]:
         clean_input = self._clean_text(metier_canonique)
@@ -103,14 +111,16 @@ class KnowledgeEnricher:
     def enrich_job(self, job_result: Dict[str, Any]) -> Dict[str, Any]:
         """
         job_result : dictionnaire déjà renvoyé par JobNormalizer.normalize()
-        (doit contenir au minimum "metier_canonique" et idéalement "id_famille").
+        (doit contenir au minimum "metier_canonique" et idéalement "id_famille",
+        et depuis la mise à jour du JobNormalizer, "id_sous_famille" quand le
+        métier a pu être affiné au-delà de la famille générique).
 
         Renvoie un contexte brut, sans mise en forme :
             {
-              "niveau_precision": "metier" | "famille" | "aucune",
+              "niveau_precision": "metier" | "sous_famille" | "famille" | "aucune",
               "competences_inferred": [...],
-              "niveau_etude_min": "NV_x_...",
-              "metiers_proches": [...],   # libellés résolus si niveau "metier"
+              "niveau_etude_min": "NV_x_...",  # None au niveau "sous_famille"
+              "metiers_proches": [...],   # vide au niveau "sous_famille"
               "famille": "..."
             }
         """
@@ -127,8 +137,9 @@ class KnowledgeEnricher:
 
         metier_canonique = job_result.get("metier_canonique", "")
         id_famille = job_result.get("id_famille")
+        id_sous_famille = job_result.get("id_sous_famille")
 
-        # 1. Tentative de résolution précise
+        # 1. Tentative de résolution précise (métier)
         job_id = self._resolve_job_id(metier_canonique)
         if job_id and job_id in self._job_metiers:
             entry = self._job_metiers[job_id]
@@ -146,7 +157,19 @@ class KnowledgeEnricher:
                 "famille": entry.get("famille"),
             }
 
-        # 2. Repli sur la famille
+        # 2. Repli sur la sous-famille (plus précis qu'une famille entière,
+        # mais pas de niveau_etude_min / metiers_proches à ce niveau de granularité)
+        if id_sous_famille and id_sous_famille in self._job_sous_familles:
+            entry = self._job_sous_familles[id_sous_famille]
+            return {
+                "niveau_precision": "sous_famille",
+                "competences_inferred": entry.get("competences_inferred", []) or [],
+                "niveau_etude_min": None,
+                "metiers_proches": [],
+                "famille": entry.get("famille"),
+            }
+
+        # 3. Repli ultime sur la famille
         if id_famille and id_famille in self._job_familles:
             entry = self._job_familles[id_famille]
             return {
@@ -190,7 +213,17 @@ if __name__ == "__main__":
     print("=== Résolution précise ===")
     print(json.dumps(enricher.enrich_job(job_result_precis), ensure_ascii=False, indent=2))
 
-    # Cas 2 : métier inconnu du graphe -> repli sur la famille
+    # Cas 2 : métier reconnu dans une sous-famille affinée (pas de fiche précise,
+    # mais le JobNormalizer a résolu id_sous_famille) -> réponse spécifique
+    job_result_sous_famille = {
+        "metier_canonique": "Data Analyst", "id_famille": "FAM_IT_DATA",
+        "id_sous_famille": "FAM_IT_DATA_SCIENCE",
+    }
+    print("\n=== Repli sur la sous-famille ===")
+    print(json.dumps(enricher.enrich_job(job_result_sous_famille), ensure_ascii=False, indent=2))
+
+    # Cas 3 : métier totalement inconnu (ni fiche précise, ni sous-famille résolue)
+    # -> repli sur la famille générique
     job_result_repli = {"metier_canonique": "Coursier En Moto", "id_famille": "FAM_TRANS_LOG"}
     print("\n=== Repli sur la famille ===")
     print(json.dumps(enricher.enrich_job(job_result_repli), ensure_ascii=False, indent=2))

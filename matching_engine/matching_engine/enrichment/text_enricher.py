@@ -77,6 +77,8 @@ class TextEnricher:
             lignes.append(f"Métier : {job_result['metier_canonique']}")
         if job_result and job_result.get("famille_fr"):
             lignes.append(f"Famille de métier : {job_result['famille_fr']}")
+        if job_result and job_result.get("sous_famille_fr"):
+            lignes.append(f"Sous-famille : {job_result['sous_famille_fr']}")
         if secteur_result and secteur_result.get("secteur_canonique"):
             lignes.append(f"Secteur d'activité : {secteur_result['secteur_canonique']}")
         if localisation_result and localisation_result.get("nom_departement"):

@@ -1,11 +1,19 @@
-# IDE/Editor
+# ─────────────────────────────────────────────
+# ACPE Match — .gitignore
+# Objectif : versionner le CODE + modèles/configs nécessaires,
+#           EXCLUER les données personnelles (RGPD) et artefacts d'entraînement.
+# ─────────────────────────────────────────────
+
+# ── IDE / OS ──
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.DS_Store
+Thumbs.db
 
-# Python
+# ── Python ──
 __pycache__/
 *.py[cod]
 *$py.class
@@ -28,91 +36,63 @@ wheels/
 *.egg
 MANIFEST
 
-# Virtual environments
+# ── Virtual environments ──
 venv/
 env/
 .venv/
-env/
 ENV/
 env.bak/
 venv.bak/
 
-# Data/Persistence
+# ═════════════════════════════════════════════
+# DONNÉES PERSONNELLES (RGPD) — STRICTEMENT EXCLUES
+# ═════════════════════════════════════════════
+# Base SQLite des candidats/offres (noms, prénoms, etc.)
 *.db
 acpe.db
+backend/acpe.db
 
-# Cache/Model files
-st_models_cache/
-chromadb/
-postgres_data/
+# Embeddings ChromaDB dérivés des profils (volumineux + données perso)
 chroma_data/
+backend/chroma_data/
+chromadb/
 
-# Logs
+# ═════════════════════════════════════════════
+# ARTEFACTS D'ENTRAÎNEMENT (volumineux, régénérables)
+# ═════════════════════════════════════════════
+catboost_info/
+captune_info/
+cross_encoder_onnx/
+
+# ═════════════════════════════════════════════
+# LOGS / RAPPORTS DE TEST LOCAUX
+# ═════════════════════════════════════════════
 *.log
+server.log
+streamlit.log
 logs/
+test_report.txt
+run_tests.ps1
 
-# Test/Doc artifacts
-coverage/
-.coverage
-htmlcov/
-.pytest_cache/
-.pytest.warnings
-.vscode-test/
-.hypothesis/
-test_reports/
-
-# Sensitive data
+# ── Secrets ──
 *.key
 *.pem
 secrets/
 .env
 
-# Temporary files
+# ── Temporaires ──
 tmp/
 temp/
 *.tmp
 *.temp
 
-# Media/Docs (if any)
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
-*.pdf
-*.md
-*.txt
-
-# Other
-.DS_Store
-Thumbs.db
-
-# Model files from training scripts
-*.cbm
-*.onnx
-*.index
-
-# Pattern matching files
-*.json
-*.yaml
-*.yml
-
-# Project evaluation artifacts
-evaluate_matching.py
-export_onnx.py
-full_evaluation*.py
-train_*.py
-seed_*.py
-captune_info/
-cross_encoder_onnx/
-feature_config.json
-full_evaluation.py
-faiss*.index
-faiss_offers_meta.json
-faiss_offers.index
-matching_model.json
-ranker_config.json
-test_backend.py
-test_model_sector.py
-train_matching_model.py
-train_ranker.py
+# ═════════════════════════════════════════════
+# NOTES
+# ── Inclus intentionnellement (nécessaires au run) :
+#    backend/catboost_ranker.cbm  (modèle, ~574 KB, non sensible)
+#    backend/ranker_config.json   (feature names du ranker)
+#    backend/faiss_offers.index   (index FAISS, ~10 MB)
+#    matching_engine/.../graphs/*.json (graphes de connaissances)
+#    matching_engine/.../skills/skills_enriched.json (référentiel compétences)
+#    rapport_technique.md          (livrable hackathon)
+# ═════════════════════════════════════════════

@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import init_db
-from .routers import candidates, job_offers, matching
+from .routers import candidates, job_offers, matching, stats, export_csv
 
 
 @asynccontextmanager
@@ -31,6 +31,8 @@ app.add_middleware(
 app.include_router(candidates.router)
 app.include_router(job_offers.router)
 app.include_router(matching.router)
+app.include_router(stats.router)
+app.include_router(export_csv.router)
 
 
 @app.get("/")

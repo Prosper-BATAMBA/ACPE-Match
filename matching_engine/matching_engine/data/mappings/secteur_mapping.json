@@ -1,0 +1,335 @@
+{
+  "mapping_version": "2.0",
+  "description": "Table de correspondance et de normalisation des secteurs d'activité pour l'harmonisation des profils demandeurs et des offres ACPE. Enrichi à partir des valeurs réelles observées dans Offres_ACPE.xlsx et Demandeurs_.xlsx (colonnes Secteur d'activité, Secteur demandé, secteur_metier).",
+  "canonical_sectors": [
+    {
+      "id_secteur": "SEC_AGRO",
+      "libelle_canonique": "Agriculture, Agroalimentaire & Élevage",
+      "variations_textuelles_associees": [
+        "Agriculture & Industrie Agroalimentaire",
+        "Agriculture - Agroalimentaire - Brasserie - Produits laitiers - Boulangerie",
+        "Agriculture/Agroalimentaire",
+        "Pêche - Aquaculture - Pisciculture",
+        "Elevage - Aviculture - Pastoralisme",
+        "Agronomie",
+        "Agriculture",
+        "Maintenance - Matériel Agricole"
+      ]
+    },
+    {
+      "id_secteur": "SEC_TRANS_LOG",
+      "libelle_canonique": "Transport, Logistique & Supply Chain",
+      "variations_textuelles_associees": [
+        "Transport, Logistique & Supply Chain",
+        "Transit - Transport et Logistique - Génie Logistique",
+        "Transport / Logistique",
+        "Transit",
+        "Transport et logistique et transit",
+        "Logistique",
+        "Douane - Fiscalité - Contrôle des frontières",
+        "Aéronautique",
+        "Aéronautique et Spatial",
+        "Exploitation Aéroportuaire",
+        "Transport Aérien",
+        "Trans Maritime",
+        "Transport maritime - Portuaire - Logistique maritime",
+        "Transport terrestre - Transport - Transport Maritime - Transport Aérien - Transport Fluvial",
+        "Transport",
+        "Logistique et Distribution"
+      ]
+    },
+    {
+      "id_secteur": "SEC_FIN_COMPTA",
+      "libelle_canonique": "Finance, Banque, Assurance & Comptabilité",
+      "variations_textuelles_associees": [
+        "Finance, Banque, Assurance, Comptabilité & Fiscalité",
+        "Audits - Finance - Banque - Assurance - Fiscalité - Comptabilité - Expertise Comptable",
+        "Finance",
+        "Comptabilité",
+        "Banque/Finance",
+        "Assurance",
+        "Banque",
+        "Fiscalité",
+        "Assurance Vie",
+        "Banque – Finance – Services numériques",
+        "Finance/Banque",
+        "Droit, Fiscalité, Conseil et Audit",
+        "Droit/Audit",
+        "Économie et Finance Internationales",
+        "Gestion des risques"
+      ]
+    },
+    {
+      "id_secteur": "SEC_RH_ADMIN",
+      "libelle_canonique": "Ressources Humaines, Gestion Administrative & Conseil",
+      "variations_textuelles_associees": [
+        "Conseil, Stratégie & Gestion des Ressources Humaines",
+        "Administration et Gestion - Fonction Publique - Ressources Humaines - Recrutement - Société d'intérim",
+        "Gestion Administrative",
+        "Administration",
+        "Ressources Humaines",
+        "Secrétariat",
+        "Conseil",
+        "Conseil juridique",
+        "Administration Publique",
+        "Conseil en management et stratégie",
+        "Consulting - Stratégie - Organisation",
+        "Gestion des Ressources Humaines",
+        "Fonction Publique",
+        "Fonction Publique & Administration"
+      ]
+    },
+    {
+      "id_secteur": "SEC_COMM_VENTE",
+      "libelle_canonique": "Commerce, Vente, Marketing & Grande Distribution",
+      "variations_textuelles_associees": [
+        "Commerce, Vente, Marketing & Distribution",
+        "Commerce - Vente - Marketing - Grande distribution - Distribution - Négoce - Relation client ",
+        "Commerce",
+        "Vente",
+        "Marketing",
+        "Grande distribution",
+        "Négoce",
+        "Relation client",
+        "Commerce de détail",
+        "Commerce et distribution automobile - Service automobiles - Concessionnaires - Garages",
+        "Commerce - Vente - Marketing - Grande distribution - Distribution - Négoce - Relation client",
+        "Commerce informel - Vendeurs ambulants - Activités de rue",
+        "Service client - Centre d'appel - Téléopérateur",
+        "Service client - Centre d’appel - Téléopérateur"
+      ]
+    },
+    {
+      "id_secteur": "SEC_IT_DIGITAL",
+      "libelle_canonique": "Informatique, Data, Télécommunications & Digital",
+      "variations_textuelles_associees": [
+        "Informatique, Data, Télécommunications & Digital",
+        "Informatique - Cybersécurité - Infographie - Data - Intelligence Artificielle - Digitalisation",
+        "Télécommunications",
+        "Informatique",
+        "Digital",
+        "Développement Web",
+        "Réseaux & Télécoms",
+        "Cybernétique-Mathématiques",
+        "Business Intelligence - Statistiques - Études",
+        "Développement Web - Programmation - Systèmes d'Information",
+        "Informatique - Développement - Système & Réseaux",
+        "Infographie",
+        "Réseaux et Télécommunications",
+        "Technologies de l'information (IT)",
+        "Développement Web - Programmation - Systèmes d’Information",
+        "Technologies de l’information (IT)"
+      ]
+    },
+    {
+      "id_secteur": "SEC_BTP_AMENAGE",
+      "libelle_canonique": "Bâtiment, Travaux Publics, BTP & Architecture",
+      "variations_textuelles_associees": [
+        "Bâtiment, Travaux Publics & Aménagement du Territoire",
+        "BTP - Bâtiment - Travaux Publics - Construction - Architecture - Design",
+        "Génie Civil - Construction - Bâtiment et Travaux - Architecture",
+        "BTP",
+        "Génie Civil",
+        "Construction",
+        "Architecture",
+        "Urbanisation - Géographie - Aménagement du territoire"
+      ]
+    },
+    {
+      "id_secteur": "SEC_HYDRO_PETROLE",
+      "libelle_canonique": "Pétrole, Gaz, Énergie & Hydrocarbures",
+      "variations_textuelles_associees": [
+        "Pétrole, Gaz & Hydrocarbures",
+        "Support aux activités de forage - Forage pétrolier et gazier - Forage d’eau - Forage géotechnique et environnemental",
+        "Énergie, Environnement & Eau",
+        "Forage",
+        "Hydrocarbures",
+        "Mines et Carrières - Extraction de matières premières",
+        "Mines",
+        "Distribution de produits pétroliers et dérivés",
+        "Hydrocarbure",
+        "Industrie pétrolière et gazière",
+        "Industrie pétrolière et gazière - Services pétroliers - Hydrocarbures",
+        "Services et fournisseurs des produits pétrolier - Distibution et commercialisation",
+        "Support aux activités de forage - Forage pétrolier et gazier - Forage d'eau - Forage géotechnique et environnemental",
+        "Extraction, production et commercialisation d'eau minérale, d'eau de source",
+        "Services Publics - Traitement d'eau - Voiries Urbaines",
+        "Énergie Renouvelable - Solaire - Éolien - Biomasse - Hydroélectrique - Électricité  - Énergie"
+      ]
+    },
+    {
+      "id_secteur": "SEC_QHSE_ENVIRON",
+      "libelle_canonique": "Qualité, Hygiène, Sécurité, Environnement (QHSE)",
+      "variations_textuelles_associees": [
+        "Assurance Qualité, Contrôle, Testing (QHSE)",
+        "Environnement - Hygiène-Qualité - Sécurité - Extraction, Production et commercialisation d'eau - Collecte des déchets",
+        "Assainissement - Gestion des déchets - Environnement",
+        "QHSE",
+        "HSE",
+        "Environnement",
+        "Gestion des déchets",
+        "Qualité - Audit - Gestion opérationnelle",
+        "Qualité, Hygiène, Sécurité, Environnement",
+        "Développement durable",
+        "Hygiene Envirennementale",
+        "hygiène environnementale",
+        "HSSE ( Hygiène, Santé, Sécurité et Environnement)",
+        "Responsable HSSE ( Hygiène, Santé, Sécurité et Environnement)",
+        "Environnement/HSE"
+      ]
+    },
+    {
+      "id_secteur": "SEC_SANTE_PHARMA",
+      "libelle_canonique": "Santé, Pharmacie & Recherche Scientifique",
+      "variations_textuelles_associees": [
+        "Santé, Pharmacie & Recherche Scientifique",
+        "Santé - Médecine - Pharmacie - vente de produits pharmaceutiques",
+        "Santé",
+        "Pharmacie",
+        "Médecine",
+        "Recherche et Développement",
+        "Recherche scientifique - Innovation - Laboratoires",
+        "Santé/Pharmacie",
+        "Sciences"
+      ]
+    },
+    {
+      "id_secteur": "SEC_INDU_MAINT",
+      "libelle_canonique": "Industrie, Production & Maintenance",
+      "variations_textuelles_associees": [
+        "Industrie, Production & Maintenance",
+        "Machines et équipements / Automobile",
+        "Automobile",
+        "Chimie / Parachimie",
+        "Maintenance industrielle",
+        "Électromécanique",
+        "Mécanicien",
+        "Froid et Climatisation",
+        "génie frigorifique",
+        "Soudure",
+        "TUYAUTERIES",
+        "Plastique - Caoutchouc",
+        "Secteur de la maintenance industrielle et mécanique",
+        "Electricité-Electricité Industrielle-Electromécanique-Electrotechnique",
+        "Electricité/Electromécanique",
+        "Industrie",
+        "Industrie Lourde - Mines - Extraction - Exploitation Minière - Métallurgie",
+        "Industrie/Mines"
+      ]
+    },
+    {
+      "id_secteur": "SEC_FOREST_BOIS",
+      "libelle_canonique": "Exploitation Forestière, Bois & Artisanat",
+      "variations_textuelles_associees": [
+        "Exploitation Forestière & Bois",
+        "Artisanat",
+        "Menuiserie",
+        "Exploitation forestière",
+        "Artisanat et Métiers d'Art",
+        "Textile / Habillement / Chaussure",
+        "Exploitation Forestière - Bois - Produits forestiers",
+        "Exploitation forestière & Bois"
+      ]
+    },
+    {
+      "id_secteur": "SEC_HOTEL_RESTAU",
+      "libelle_canonique": "Hôtellerie, Restauration & Tourisme",
+      "variations_textuelles_associees": [
+        "Hôtellerie - Restauration",
+        "Tourisme, Loisirs & Voyages",
+        "Hôtellerie",
+        "Restauration",
+        "Tourisme",
+        "Hôtellerie-Restauration",
+        "Tourisme - Loisirs - Agences de voyage",
+        "Tourisme - Voyages-Conservation et Écotourisme",
+        "Sports - Coaching sportif - Gestion d’activités sportives",
+        "Sports, Coaching & Gestion d'Activités Sportives"
+      ]
+    },
+    {
+      "id_secteur": "SEC_SECURITE",
+      "libelle_canonique": "Sécurité, Sûreté & Défense",
+      "variations_textuelles_associees": [
+        "Sécurité, Sûreté & Défense",
+        "Sécurité et Gardiennage – Protection des Installations Stratégiques",
+        "Sécurité",
+        "Gardiennage",
+        "Sécurité - Sûreté - Défense",
+        "Sécurité et Gardiennage – Protection des Sites Pétroliers, Aéroportuaires et Sensibles"
+      ]
+    },
+    {
+      "id_secteur": "SEC_EDU_FORM",
+      "libelle_canonique": "Éducation, Formation & Enseignement",
+      "variations_textuelles_associees": [
+        "Éducation - Formation - Enseignement",
+        "Enseignement",
+        "Formation",
+        "Éducation, Formation & Enseignement",
+        "Parcours Étudiant et Formation"
+      ]
+    },
+    {
+      "id_secteur": "SEC_COMM_MEDIA",
+      "libelle_canonique": "Communication, Médias & Événementiel",
+      "variations_textuelles_associees": [
+        "Communication, Médias & Événementiel",
+        "Communication",
+        "Médias",
+        "Journalisme",
+        "Art - Culture - Littérature - Mode",
+        "Littérature",
+        "Mode",
+        "COMMUNICATION ET MARKETING",
+        "Communication - Médias - Informations - Community Manager - Audiovisuel et Multimédia - Journalisme",
+        "Communication institutionnelle - Relations publiques",
+        "Événementiel - Organisation d'événements",
+        "Événementiel - Spectacle - Animation"
+      ]
+    },
+    {
+      "id_secteur": "SEC_SERVICES_NETTOYAGE",
+      "libelle_canonique": "Services à la personne, Nettoyage & Blanchisserie",
+      "variations_textuelles_associees": [
+        "Nettoyage & Blanchisserie",
+        "Nettoyage - Blanchisserie - Pressing",
+        "Services à la personne",
+        "Nettoyage"
+      ]
+    },
+    {
+      "id_secteur": "SEC_DROIT_SOCIAL",
+      "libelle_canonique": "Droit, Justice & Secteur Social",
+      "variations_textuelles_associees": [
+        "Droit et Justice",
+        "Social",
+        "Juridique",
+        "ONG & Social",
+        "Services à la Personne & Social"
+      ]
+    },
+    {
+      "id_secteur": "SEC_AUTRES",
+      "libelle_canonique": "Autres Secteurs / Non Spécifié",
+      "variations_textuelles_associees": [
+        "Divers ",
+        "Non déclaré",
+        "Autres",
+        "Autorité de Régulation",
+        "Aucun",
+        "Divers",
+        "Secteur par défaut",
+        "Prestation de services",
+        "Immobilier"
+      ]
+    },
+    {
+      "id_secteur": "SEC_TRADUCTION",
+      "libelle_canonique": "Traduction & Interprétariat",
+      "variations_textuelles_associees": [
+        "Traduction"
+      ]
+    }
+  ]
+}

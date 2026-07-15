@@ -18,6 +18,7 @@ class JobOffer(Base):
     competences_recherchees = Column(Text, nullable=True)
 
     id_famille = Column(String, nullable=True)
+    id_sous_famille = Column(String, nullable=True)
     id_secteur = Column(String, nullable=True)
     code_departement = Column(String, nullable=True)
     profile_text = Column(Text, nullable=True)

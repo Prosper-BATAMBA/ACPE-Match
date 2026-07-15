@@ -1,0 +1,171 @@
+{
+  "mapping_version": "1.1",
+  "description": "Table de normalisation géographique reliant les villes et coquilles textuelles aux 15 Départements du Congo (Code Matricule).",
+  "departments_mapping": [
+    {
+      "code_departement": "BZV",
+      "nom_departement": "Brazzaville",
+      "lieux_inclus": [
+        "BRAZZAVILLE",
+        "Brazzaville"
+      ]
+    },
+    {
+      "code_departement": "PNR",
+      "nom_departement": "Pointe-Noire",
+      "lieux_inclus": [
+        "POINTE-NOIRE",
+        "Pointe-Noire",
+        "Pointe Noire"
+      ]
+    },
+    {
+      "code_departement": "KOU",
+      "nom_departement": "Kouilou",
+      "lieux_inclus": [
+        "Kouilou",
+        "KOUILOU",
+        "HINDA",
+        "LOANGO",
+        "Madingo-Kayes"
+      ]
+    },
+    {
+      "code_departement": "NIA",
+      "nom_departement": "Niari",
+      "lieux_inclus": [
+        "Niari",
+        "NIARI",
+        "DOLISIE",
+        "DIVENIE",
+        "MAYOKO",
+        "Kibangou",
+        "Mossendjo"
+      ]
+    },
+    {
+      "code_departement": "BOU",
+      "nom_departement": "Bouenza",
+      "lieux_inclus": [
+        "Bouenza",
+        "BOUENZA",
+        "NKAYI",
+        " NKAYI",
+        "BOUANSA",
+        "KAYES",
+        "Madingou",
+        "Loutété"
+      ]
+    },
+    {
+      "code_departement": "POO",
+      "nom_departement": "Pool",
+      "lieux_inclus": [
+        "Pool",
+        "POOL",
+        "Kinkala",
+        "Mindouli",
+        "Ignié"
+      ]
+    },
+    {
+      "code_departement": "PLA",
+      "nom_departement": "Plateaux",
+      "lieux_inclus": [
+        "Plateaux",
+        "PLATEAUX",
+        "GAMBOMA",
+        "GAMBOMA ",
+        "Djambala",
+        "Ngo"
+      ]
+    },
+    {
+      "code_departement": "CUV",
+      "nom_departement": "Cuvette",
+      "lieux_inclus": [
+        "Cuvette",
+        "CUVETTE",
+        "OWANDO",
+        "OYO",
+        "BOUNDJI",
+        "NTOKOU",
+        "Makoua"
+      ]
+    },
+    {
+      "code_departement": "CVO",
+      "nom_departement": "Cuvette-Ouest",
+      "lieux_inclus": [
+        "Cuvette-Ouest",
+        "CUVETTE-OUEST",
+        "EWO",
+        "Kellé",
+        "Mbomo"
+      ]
+    },
+    {
+      "code_departement": "SAN",
+      "nom_departement": "Sangha",
+      "lieux_inclus": [
+        "Sangha",
+        "SANGHA",
+        "OUESSO",
+        "Pokola",
+        "Mokéko"
+      ]
+    },
+    {
+      "code_departement": "LIK",
+      "nom_departement": "Likouala",
+      "lieux_inclus": [
+        "Likouala",
+        "Lkouala",
+        "IMPFONDO",
+        "Epena",
+        "Bétou"
+      ]
+    },
+    {
+      "code_departement": "LEK",
+      "nom_departement": "Lékoumou",
+      "lieux_inclus": [
+        "Lékoumou",
+        "LEKOUMOU",
+        "Sibiti",
+        "Zanaga",
+        "Komono"
+      ]
+    },
+    {
+      "code_departement": "NKA",
+      "nom_departement": "Nkema-Alima",
+      "lieux_inclus": [
+        "Nkema-Alima",
+        "NKEMA-ALIMA",
+        "Nkema Alima",
+        "Alima"
+      ]
+    },
+    {
+      "code_departement": "COU",
+      "nom_departement": "Congo-Oubangui",
+      "lieux_inclus": [
+        "Congo-Oubangui",
+        "CONGO-OUBANGUI",
+        "Congo Oubangui",
+        "Oubangui"
+      ]
+    },
+    {
+      "code_departement": "DJO",
+      "nom_departement": "Djoué Lefini",
+      "lieux_inclus": [
+        "Djoué Lefini",
+        "DJOUE LEFINI",
+        "Djoué-Lefini",
+        "Djoué"
+      ]
+    }
+  ]
+}

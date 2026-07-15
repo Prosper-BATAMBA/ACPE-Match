@@ -31,19 +31,19 @@ RAW_DATA_DIR = DATA_DIR / "raw"
 # Utilisés uniquement par des scripts hors-runtime qui (re)génèrent les
 # mappings et graphes ci-dessous. Aucun Normalizer ni Enricher n'y touche
 # directement au runtime.
-OFFRES_ACPE_PATH = RAW_DATA_DIR / "Offres_ACPE.xlsx"
+OFFRES_ACPE_PATH = RAW_DATA_DIR / "Offres_enrichi.xlsx"
 OFFRES_ACPE_EXTENSIONS_PATH = RAW_DATA_DIR / "Offres_ACPE_Extensions.xlsx"
 DEMANDEURS_PATH = RAW_DATA_DIR / "Demandeurs_.xlsx"
 
 # --- Mappings (couche 1 : normalisation) ---
-JOB_MAPPING_PATH = MAPPINGS_DIR / "job_mapping.json"
+JOB_MAPPING_PATH = MAPPINGS_DIR / "job_mapping_enriched.json"
 SECTEUR_MAPPING_PATH = MAPPINGS_DIR / "secteur_mapping.json"
 NIVEAU_ETUDE_MAPPING_PATH = MAPPINGS_DIR / "niveau_etude.json"
 SPECIALITY_MAPPING_PATH = MAPPINGS_DIR / "speciality_mapping.json"
-SKILLS_MAPPING_PATH = MAPPINGS_DIR / "skills.json"
+SKILLS_MAPPING_PATH = MAPPINGS_DIR / "skills_enriched.json"
 LOCALITE_MAPPING_PATH = MAPPINGS_DIR / "localite.json"
 
 # --- Graphes (couche 2 : enrichissement) ---
-JOB_KNOWLEDGE_GRAPH_PATH = GRAPHS_DIR / "job_knowledge_graph.json"
+JOB_KNOWLEDGE_GRAPH_PATH = GRAPHS_DIR / "job_knowledge_graph_v3.json"
 SPECIALITY_KNOWLEDGE_GRAPH_PATH = GRAPHS_DIR / "speciality_knowledge_graph.json"
 SECTEUR_KNOWLEDGE_GRAPH_PATH = GRAPHS_DIR / "secteur_knowledge_graph.json"

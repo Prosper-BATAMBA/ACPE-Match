@@ -22,6 +22,7 @@ class Candidate(Base):
     experience_libre = Column(Text, nullable=True)
 
     id_famille = Column(String, nullable=True)
+    id_sous_famille = Column(String, nullable=True)
     id_secteur = Column(String, nullable=True)
     code_niveau_etude = Column(String, nullable=True)
     code_departement = Column(String, nullable=True)

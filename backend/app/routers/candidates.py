@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 
 from ..database import get_db
 from ..models.candidate import Candidate
@@ -7,6 +8,7 @@ from ..schemas.candidate import CandidateCreate, CandidateResponse
 from ..services.profile_builder import ProfileBuilder
 from ..services.embedding_service import encode
 from ..chromadb_client import get_candidates_collection
+from ..stats_cache import invalidate as invalidate_stats
 
 router = APIRouter(prefix="/api/v1/candidates", tags=["candidates"])
 
@@ -60,6 +62,7 @@ def create_candidate(payload: CandidateCreate, db: Session = Depends(get_db)):
         competences_brutes=payload.competences_brutes,
         experience_libre=payload.experience_libre,
         id_famille=job_r.get("id_famille"),
+        id_sous_famille=spec_r.get("id_famille_affiliation"),
         id_secteur=secteur_r.get("id_secteur"),
         code_niveau_etude=edu_r.get("code_niveau"),
         code_departement=loc_r.get("code_departement"),
@@ -79,12 +82,39 @@ def create_candidate(payload: CandidateCreate, db: Session = Depends(get_db)):
             metadatas=[{"id": payload.id}],
         )
 
+    invalidate_stats()
+
     return candidate
 
 
 @router.get("", response_model=list[CandidateResponse])
 def list_candidates(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return db.query(Candidate).offset(skip).limit(limit).all()
+
+
+@router.get("/search")
+def search_candidates(
+    q: str = Query("", description="Recherche par nom, prénom, métier, secteur, lieu"),
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+):
+    query = db.query(Candidate)
+    if q:
+        like_q = f"%{q}%"
+        query = query.filter(
+            or_(
+                Candidate.id.ilike(like_q),
+                Candidate.nom.ilike(like_q),
+                Candidate.prenom.ilike(like_q),
+                Candidate.metier_vise.ilike(like_q),
+                Candidate.secteur_demande.ilike(like_q),
+                Candidate.lieu.ilike(like_q),
+            )
+        )
+    total = query.count()
+    results = query.offset(skip).limit(limit).all()
+    return {"total": total, "results": [CandidateResponse.model_validate(c) for c in results]}
 
 
 @router.get("/{candidate_id}", response_model=CandidateResponse)

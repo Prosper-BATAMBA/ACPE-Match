@@ -1,0 +1,1676 @@
+{
+  "knowledge_graph_version": "3.0",
+  "description": "Base de connaissances a TROIS niveaux (evolution de la v2 a deux niveaux). Niveau 'metiers' : id_canonique precis pour chaque intitule reellement observe (inchange depuis la v2, 50 fiches avec niveau_etude_min + metiers_proches). Niveau 'sous_familles' (NOUVEAU) : id_sous_famille issu du decoupage fin de job_mapping_enriched.json, utilise quand le metier n'a pas de fiche precise mais appartient a une sous-famille reconnue par le JobNormalizer (ex: Data Analyst -> sous-famille Data Science, pas juste la famille IT generique). Pas de niveau_etude_min/metiers_proches a ce niveau. Niveau 'familles' (fallback ultime, inchange) : utilise quand ni le metier ni la sous-famille ne sont resolus. Logique du KnowledgeEnricher : 1) chercher l'ID dans 'metiers' -> reponse ultra-precise ; 2) sinon chercher l'id_sous_famille -> reponse specifique ; 3) sinon chercher l'id_famille dans 'familles' -> reponse generique par defaut.",
+  "metiers": {
+    "JOB_AGENT_TRANSIT": {
+      "libelle_source": "Agent de transit",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Douanes",
+        "Réglementation douanière",
+        "Transit international",
+        "Logistique documentaire"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_LOGISTICIEN",
+        "JOB_RESPONSABLE_LOGISTIQUE"
+      ]
+    },
+    "JOB_LOGISTICIEN": {
+      "libelle_source": "Logisticien",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Gestion des stocks",
+        "Planification logistique",
+        "Supply chain",
+        "Gestion de flotte"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_GESTIONNAIRE_STOCKS",
+        "JOB_RESPONSABLE_LOGISTIQUE"
+      ]
+    },
+    "JOB_CHAUFFEUR_SEMI_REMORQUE": {
+      "libelle_source": "Chauffeur Semi-Remorque",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Conduite poids lourd",
+        "Permis CE / FIMO",
+        "Sécurité routière",
+        "Livraison"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_GESTIONNAIRE_STOCKS"
+      ]
+    },
+    "JOB_GESTIONNAIRE_STOCKS": {
+      "libelle_source": "Gestionnaire de stocks",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Gestion des stocks",
+        "Inventaire",
+        "Approvisionnement",
+        "Outils ERP"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_LOGISTICIEN",
+        "JOB_CHEF_MAGASINIER"
+      ]
+    },
+    "JOB_AGENT_EXPLOITATION_ESCALE": {
+      "libelle_source": "Agent Exploitation Escale",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Opérations aéroportuaires",
+        "Coordination des vols",
+        "Sécurité aéroportuaire"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_AGENT_EXPLOITATION_AEROGARE"
+      ]
+    },
+    "JOB_AGENT_EXPLOITATION_AEROGARE": {
+      "libelle_source": "Agent Exploitation Aérogare",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Accueil passagers",
+        "Coordination aérogare",
+        "Gestion des flux"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_AGENT_EXPLOITATION_ESCALE"
+      ]
+    },
+    "JOB_COORDINATEUR_OPERATIONS_LOGISTIQUES": {
+      "libelle_source": "coordinateur des operations logistiques",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Coordination logistique",
+        "Supply chain",
+        "Gestion d'équipe"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_LOGISTICIEN",
+        "JOB_RESPONSABLE_LOGISTIQUE"
+      ]
+    },
+    "JOB_RESPONSABLE_ENTREPOT": {
+      "libelle_source": "RESPONSABLE D'ENTREPOT",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Gestion d'entrepôt",
+        "Management d'équipe",
+        "Optimisation des flux"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_CHEF_MAGASINIER",
+        "JOB_GESTIONNAIRE_STOCKS"
+      ]
+    },
+    "JOB_CHEF_MAGASINIER": {
+      "libelle_source": "Chef magasinier",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Gestion de stock",
+        "Supervision d'équipe",
+        "Réception marchandises"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_RESPONSABLE_ENTREPOT"
+      ]
+    },
+    "JOB_RESPONSABLE_LOGISTIQUE": {
+      "libelle_source": "Responsable Logistique",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Pilotage logistique",
+        "Supply chain",
+        "Management",
+        "Optimisation des coûts"
+      ],
+      "niveau_etude_min": "NV_6_BAC_3",
+      "metiers_proches": [
+        "JOB_LOGISTICIEN",
+        "JOB_COORDINATEUR_OPERATIONS_LOGISTIQUES"
+      ]
+    },
+    "JOB_ASSISTANT_RH": {
+      "libelle_source": "Assistante Ressources Humaines",
+      "id_famille": "FAM_RH_ADMIN",
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Gestion administrative du personnel",
+        "Recrutement",
+        "Suivi des dossiers RH"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_GESTIONNAIRE_RH",
+        "JOB_CHARGE_RH"
+      ]
+    },
+    "JOB_ADMIN_RH": {
+      "libelle_source": "Administration et des Ressources Humaines",
+      "id_famille": "FAM_RH_ADMIN",
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Gestion administrative",
+        "Gestion RH globale"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_GESTIONNAIRE_RH"
+      ]
+    },
+    "JOB_GESTIONNAIRE_RH": {
+      "libelle_source": "Gestionnaire des ressources humaines",
+      "id_famille": "FAM_RH_ADMIN",
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Gestion de la paie",
+        "Recrutement",
+        "Droit social"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_CHARGE_RH",
+        "JOB_ASSISTANT_RH"
+      ]
+    },
+    "JOB_SECRETAIRE_BUREAUTIQUE": {
+      "libelle_source": "secrétaire bureautique",
+      "id_famille": "FAM_RH_ADMIN",
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Bureautique",
+        "Rédaction de courriers",
+        "Gestion d'agenda"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_AGENT_ADMINISTRATIF"
+      ]
+    },
+    "JOB_AGENT_ADMINISTRATIF": {
+      "libelle_source": "Agent Administratif",
+      "id_famille": "FAM_RH_ADMIN",
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Gestion de dossiers",
+        "Classement",
+        "Accueil"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_SECRETAIRE_BUREAUTIQUE"
+      ]
+    },
+    "JOB_CHARGE_RH": {
+      "libelle_source": "Chargé des Ressources Humaines",
+      "id_famille": "FAM_RH_ADMIN",
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Recrutement",
+        "Formation",
+        "Relations sociales"
+      ],
+      "niveau_etude_min": "NV_6_BAC_3",
+      "metiers_proches": [
+        "JOB_GESTIONNAIRE_RH"
+      ]
+    },
+    "JOB_COMPTABLE_SENIOR": {
+      "libelle_source": "Comptable senior",
+      "id_famille": "FAM_COMPTA_FIN",
+      "famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "Comptabilité générale",
+        "Clôtures comptables",
+        "Encadrement",
+        "Fiscalité"
+      ],
+      "niveau_etude_min": "NV_6_BAC_3",
+      "metiers_proches": [
+        "JOB_COMPTABLE",
+        "JOB_RESPONSABLE_AUDIT_INTERNE"
+      ]
+    },
+    "JOB_GESTIONNAIRE_COMPTA": {
+      "libelle_source": "Gestionnaire",
+      "id_famille": "FAM_COMPTA_FIN",
+      "famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "Gestion financière",
+        "Suivi budgétaire",
+        "Reporting"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_COMPTABLE"
+      ]
+    },
+    "JOB_RESPONSABLE_AUDIT_INTERNE": {
+      "libelle_source": "Responsable Audit Interne",
+      "id_famille": "FAM_COMPTA_FIN",
+      "famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "Audit interne",
+        "Contrôle des risques",
+        "Conformité"
+      ],
+      "niveau_etude_min": "NV_7_BAC_5",
+      "metiers_proches": [
+        "JOB_COMPTABLE_SENIOR"
+      ]
+    },
+    "JOB_COMPTABLE": {
+      "libelle_source": "Comptable",
+      "id_famille": "FAM_COMPTA_FIN",
+      "famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "Comptabilité générale",
+        "Saisie comptable",
+        "Déclarations fiscales"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_COMPTABLE_SENIOR",
+        "JOB_GESTIONNAIRE_COMPTA"
+      ]
+    },
+    "JOB_ASSISTANT_HSE": {
+      "libelle_source": "Assistant HSE",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Suivi des normes HSE",
+        "Reporting sécurité",
+        "Sensibilisation"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_TECHNICIEN_HSE",
+        "JOB_RESPONSABLE_HSE"
+      ]
+    },
+    "JOB_RESPONSABLE_HSE": {
+      "libelle_source": "Responsable HSE",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Politique HSE",
+        "Gestion des risques",
+        "Audit sécurité",
+        "Management"
+      ],
+      "niveau_etude_min": "NV_6_BAC_3",
+      "metiers_proches": [
+        "JOB_TECHNICIEN_HSE",
+        "JOB_ASSISTANT_HSE"
+      ]
+    },
+    "JOB_TECHNICIEN_HSE": {
+      "libelle_source": "Technicien HSE",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Contrôle sécurité",
+        "Normes environnementales",
+        "Inspection"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_ASSISTANT_HSE",
+        "JOB_RESPONSABLE_HSE"
+      ]
+    },
+    "JOB_CHARGE_MAINTENANCE": {
+      "libelle_source": "Chargé de maintenance",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Maintenance préventive",
+        "Maintenance corrective",
+        "Gestion des interventions"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_TECHNICIEN_ELECTRICIEN",
+        "JOB_MECANICIEN"
+      ]
+    },
+    "JOB_INGENIEUR_MECANIQUE": {
+      "libelle_source": "Ingénieur Mécanique",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Conception mécanique",
+        "Maintenance industrielle",
+        "Analyse technique"
+      ],
+      "niveau_etude_min": "NV_7_BAC_5",
+      "metiers_proches": [
+        "JOB_MECANICIEN",
+        "JOB_INGENIEUR_PROCESS"
+      ]
+    },
+    "JOB_ELECTROTECHNICIEN": {
+      "libelle_source": "ElectroTechnicien",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Électrotechnique",
+        "Maintenance électrique",
+        "Automatismes"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_TECHNICIEN_ELECTRICIEN"
+      ]
+    },
+    "JOB_TECHNICIEN_ELECTRICIEN": {
+      "libelle_source": "Technicien Electricien",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Installation électrique",
+        "Dépannage",
+        "Normes électriques"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_ELECTROTECHNICIEN",
+        "JOB_CHARGE_MAINTENANCE"
+      ]
+    },
+    "JOB_MECANICIEN": {
+      "libelle_source": "Mécanicien",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Réparation mécanique",
+        "Diagnostic de panne",
+        "Entretien"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_INGENIEUR_MECANIQUE",
+        "JOB_CHARGE_MAINTENANCE"
+      ]
+    },
+    "JOB_SOUDEUR": {
+      "libelle_source": "Soudeur",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Soudure industrielle",
+        "Lecture de plans",
+        "Contrôle qualité soudure"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_TECHNICIEN_TUYAUTEUR"
+      ]
+    },
+    "JOB_TECHNICIEN_INSTRUMENTISTE": {
+      "libelle_source": "Technicien Instrumentiste",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Instrumentation industrielle",
+        "Régulation",
+        "Calibration"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_INGENIEUR_PROCESS"
+      ]
+    },
+    "JOB_INGENIEUR_PROCESS": {
+      "libelle_source": "Ingénieur Process",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Optimisation de procédés",
+        "Conduite d'installations",
+        "Amélioration continue"
+      ],
+      "niveau_etude_min": "NV_7_BAC_5",
+      "metiers_proches": [
+        "JOB_INGENIEUR_MECANIQUE",
+        "JOB_TECHNICIEN_INSTRUMENTISTE"
+      ]
+    },
+    "JOB_TECHNICIEN_TUYAUTEUR": {
+      "libelle_source": "Technicien Tuyauteur",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Tuyauterie industrielle",
+        "Lecture de plans isométriques",
+        "Assemblage"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_SOUDEUR"
+      ]
+    },
+    "JOB_INGENIEUR_FORAGE": {
+      "libelle_source": "Ingénieur Forage",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Opérations de forage",
+        "Sécurité pétrolière",
+        "Gestion de puits"
+      ],
+      "niveau_etude_min": "NV_7_BAC_5",
+      "metiers_proches": [
+        "JOB_INGENIEUR_PROCESS"
+      ]
+    },
+    "JOB_RESPONSABLE_PRODUCTION": {
+      "libelle_source": "Responsable de Production",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Pilotage de production",
+        "Management d'équipe",
+        "Optimisation des rendements"
+      ],
+      "niveau_etude_min": "NV_6_BAC_3",
+      "metiers_proches": [
+        "JOB_INGENIEUR_PROCESS"
+      ]
+    },
+    "JOB_TECHNICIEN_FRIGORISTE": {
+      "libelle_source": "Technicien Frigoriste",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Froid industriel",
+        "Climatisation",
+        "Maintenance frigorifique"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_TECHNICIEN_ELECTRICIEN"
+      ]
+    },
+    "JOB_VENDEUR_PHARMACIE": {
+      "libelle_source": "vendeur/vendeuse en pharmacie.",
+      "id_famille": "FAM_COMM_VENTE",
+      "famille": "Commerce, Vente & Relation Client",
+      "competences_inferred": [
+        "Conseil client",
+        "Vente de produits pharmaceutiques",
+        "Connaissance produits OTC"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_AGENT_COMMERCIAL"
+      ]
+    },
+    "JOB_CAISSIER": {
+      "libelle_source": "CAISSIER",
+      "id_famille": "FAM_COMM_VENTE",
+      "famille": "Commerce, Vente & Relation Client",
+      "competences_inferred": [
+        "Encaissement",
+        "Relation client",
+        "Gestion de caisse"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_VENDEUR_PHARMACIE"
+      ]
+    },
+    "JOB_AGENT_COMMERCIAL": {
+      "libelle_source": "Agent Commercial",
+      "id_famille": "FAM_COMM_VENTE",
+      "famille": "Commerce, Vente & Relation Client",
+      "competences_inferred": [
+        "Prospection",
+        "Négociation commerciale",
+        "Suivi clientèle"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_GERANT_STATION_SERVICE"
+      ]
+    },
+    "JOB_GERANT_STATION_SERVICE": {
+      "libelle_source": "Gérant de station-service",
+      "id_famille": "FAM_COMM_VENTE",
+      "famille": "Commerce, Vente & Relation Client",
+      "competences_inferred": [
+        "Gestion de point de vente",
+        "Management d'équipe",
+        "Gestion des stocks carburant"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_AGENT_COMMERCIAL"
+      ]
+    },
+    "JOB_INFORMATICIEN": {
+      "libelle_source": "Informaticienne",
+      "id_famille": "FAM_IT_DATA",
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "Développement informatique",
+        "Maintenance systèmes",
+        "Support technique"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_ADMINISTRATEUR_RESEAUX",
+        "JOB_CHEF_DE_PROJET_IT"
+      ]
+    },
+    "JOB_ADMINISTRATEUR_RESEAUX": {
+      "libelle_source": "Administrateur Réseaux-Téléccom & Controle Accès",
+      "id_famille": "FAM_IT_DATA",
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "Administration réseaux",
+        "Télécoms",
+        "Sécurité des accès"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_INFORMATICIEN"
+      ]
+    },
+    "JOB_CHEF_DE_PROJET_IT": {
+      "libelle_source": "Chef de Projet",
+      "id_famille": "FAM_IT_DATA",
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "Gestion de projet IT",
+        "Coordination d'équipe",
+        "Méthodologies agiles"
+      ],
+      "niveau_etude_min": "NV_7_BAC_5",
+      "metiers_proches": [
+        "JOB_INFORMATICIEN"
+      ]
+    },
+    "JOB_CHEF_DE_SALLE": {
+      "libelle_source": "Chef de salle",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Management de salle",
+        "Service client",
+        "Coordination d'équipe"
+      ],
+      "niveau_etude_min": "NV_4_BAC",
+      "metiers_proches": [
+        "JOB_CUISINIER",
+        "JOB_MANAGER_RESTA"
+      ]
+    },
+    "JOB_AGENT_POLYVALENT": {
+      "libelle_source": "Agent Polyvalent",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Polyvalence",
+        "Entretien",
+        "Service"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_MANOEUVRE"
+      ]
+    },
+    "JOB_CUISINIER": {
+      "libelle_source": "Cuisinier",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Préparation culinaire",
+        "Hygiène alimentaire",
+        "Gestion de cuisine"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_CHEF_DE_SALLE"
+      ]
+    },
+    "JOB_MANAGER_RESTA": {
+      "libelle_source": "Manager",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Management d'équipe",
+        "Gestion d'établissement",
+        "Suivi des performances"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2",
+      "metiers_proches": [
+        "JOB_CHEF_DE_SALLE"
+      ]
+    },
+    "JOB_COIFFEUR": {
+      "libelle_source": "Coiffeur",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Coupe et coiffage",
+        "Conseil client",
+        "Techniques capillaires"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_AGENT_POLYVALENT"
+      ]
+    },
+    "JOB_AGENT_SECURITE_RESTA": {
+      "libelle_source": "Agent de sécurité",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Surveillance",
+        "Contrôle d'accès",
+        "Prévention des risques"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_AGENT_POLYVALENT"
+      ]
+    },
+    "JOB_TECHNICIEN_SURFACE": {
+      "libelle_source": "Technicien de surface",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Nettoyage professionnel",
+        "Entretien des locaux",
+        "Hygiène"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_AGENT_POLYVALENT"
+      ]
+    },
+    "JOB_MANOEUVRE": {
+      "libelle_source": "Manœuvre",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Travaux manuels",
+        "Assistance technique",
+        "Manutention"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP",
+      "metiers_proches": [
+        "JOB_AGENT_POLYVALENT"
+      ]
+    }
+  },
+  "sous_familles": {
+    "SF_LOG_TRANSPORT": {
+      "sous_famille": "Transport & Conduite",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Permis poids lourd",
+        "Conduite défensive",
+        "Réglementation routière",
+        "Entretien véhicule"
+      ]
+    },
+    "SF_LOG_ENTREPOT": {
+      "sous_famille": "Logistique, Stock & Entrepôt",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Gestion des stocks",
+        "Gestion d'entrepôt (WMS)",
+        "Manutention",
+        "Inventaire"
+      ]
+    },
+    "SF_LOG_ACHATS": {
+      "sous_famille": "Achats & Approvisionnement",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Sourcing fournisseurs",
+        "Négociation achats",
+        "Gestion des approvisionnements"
+      ]
+    },
+    "SF_LOG_DOUANE": {
+      "sous_famille": "Douane & Transit",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Réglementation douanière",
+        "Déclaration en douane",
+        "Incoterms",
+        "Transit international"
+      ]
+    },
+    "SF_LOG_MANAGEMENT": {
+      "sous_famille": "Management Supply Chain",
+      "id_famille": "FAM_TRANS_LOG",
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Pilotage de la chaîne logistique",
+        "Gestion de flotte",
+        "Optimisation logistique",
+        "Leadership"
+      ]
+    },
+    "SF_RH_CORE": {
+      "sous_famille": "Ressources Humaines",
+      "id_famille": "FAM_RH_ADMIN",
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Recrutement",
+        "Gestion de la paie",
+        "Droit du travail",
+        "GPEC"
+      ]
+    },
+    "SF_ADMIN_SECRETARIAT": {
+      "sous_famille": "Administration & Secrétariat",
+      "id_famille": "FAM_RH_ADMIN",
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Gestion administrative",
+        "Secrétariat",
+        "Rédaction de courriers",
+        "Classement & archivage"
+      ]
+    },
+    "SF_ADMIN_DIRECTION": {
+      "sous_famille": "Administration Générale & Pilotage",
+      "id_famille": "FAM_RH_ADMIN",
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Pilotage administratif",
+        "Gestion de projet",
+        "Reporting"
+      ]
+    },
+    "SF_FIN_COMPTA": {
+      "sous_famille": "Comptabilité générale",
+      "id_famille": "FAM_COMPTA_FIN",
+      "famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "Comptabilité SYSCOHADA",
+        "Tenue de comptes",
+        "Déclarations fiscales",
+        "États financiers"
+      ]
+    },
+    "SF_FIN_AUDIT": {
+      "sous_famille": "Audit & Contrôle de gestion",
+      "id_famille": "FAM_COMPTA_FIN",
+      "famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "Audit financier",
+        "Contrôle de gestion",
+        "Normes d'audit"
+      ]
+    },
+    "SF_FIN_FINANCE": {
+      "sous_famille": "Finance & Trésorerie",
+      "id_famille": "FAM_COMPTA_FIN",
+      "famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "Analyse financière",
+        "Gestion de trésorerie",
+        "Marchés financiers"
+      ]
+    },
+    "SF_FIN_RECOUV_ASSUR": {
+      "sous_famille": "Recouvrement & Assurance",
+      "id_famille": "FAM_COMPTA_FIN",
+      "famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "Recouvrement de créances",
+        "Produits d'assurance",
+        "Gestion des sinistres"
+      ]
+    },
+    "SF_HSE_QUALITE": {
+      "sous_famille": "QHSE & Qualité",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Conformité HSE & Normes",
+        "Prévention et évaluation des risques",
+        "Contrôle qualité",
+        "Audit de sécurité"
+      ]
+    },
+    "SF_HSE_MECA": {
+      "sous_famille": "Maintenance Mécanique & Chaudronnerie",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Maintenance mécanique",
+        "Chaudronnerie",
+        "Soudure",
+        "Dépannage électromécanique"
+      ]
+    },
+    "SF_HSE_ELEC": {
+      "sous_famille": "Maintenance Électrique & Instrumentation",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Électricité industrielle",
+        "Instrumentation",
+        "Automatisme",
+        "Habilitation électrique"
+      ]
+    },
+    "SF_HSE_PRODUCTION": {
+      "sous_famille": "Production Industrielle",
+      "id_famille": "FAM_HSE_INDUS",
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Conduite de ligne de production",
+        "Contrôle qualité en production",
+        "Conditionnement"
+      ]
+    },
+    "SF_VENTE_COMMERCIAL": {
+      "sous_famille": "Vente & Développement Commercial",
+      "id_famille": "FAM_COMM_VENTE",
+      "famille": "Commerce, Vente & Relation Client",
+      "competences_inferred": [
+        "Techniques de vente et négociation",
+        "Prospection",
+        "Développement de portefeuille"
+      ]
+    },
+    "SF_VENTE_RELATION_CLIENT": {
+      "sous_famille": "Relation Client & Support",
+      "id_famille": "FAM_COMM_VENTE",
+      "famille": "Commerce, Vente & Relation Client",
+      "competences_inferred": [
+        "Gestion de la relation client",
+        "Techniques de centre d'appels",
+        "Gestion des réclamations"
+      ]
+    },
+    "SF_VENTE_MARKETING": {
+      "sous_famille": "Marketing & Études",
+      "id_famille": "FAM_COMM_VENTE",
+      "famille": "Commerce, Vente & Relation Client",
+      "competences_inferred": [
+        "Marketing opérationnel",
+        "Étude de marché",
+        "Analyse marketing"
+      ]
+    },
+    "FAM_IT_DATA_SCIENCE": {
+      "sous_famille": "Data Science, Analyse de données & BI",
+      "id_famille": "FAM_IT_DATA",
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "Python",
+        "Power BI",
+        "SQL",
+        "Machine Learning",
+        "Excel avancé",
+        "Statistiques appliquées",
+        "Visualisation de données"
+      ]
+    },
+    "FAM_IT_DEV": {
+      "sous_famille": "Développement Logiciel & Web",
+      "id_famille": "FAM_IT_DATA",
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "Bases de données relationnelles",
+        "Git & intégration continue",
+        "Docker",
+        "Développement Web"
+      ]
+    },
+    "FAM_IT_RESEAUX_SYS": {
+      "sous_famille": "Réseaux, Systèmes & Télécoms",
+      "id_famille": "FAM_IT_DATA",
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "Administration réseaux",
+        "Administration systèmes (Windows/Linux)",
+        "Protocoles TCP/IP",
+        "Virtualisation",
+        "Supervision & monitoring",
+        "Télécommunications"
+      ]
+    },
+    "FAM_IT_CYBERSEC": {
+      "sous_famille": "Cybersécurité",
+      "id_famille": "FAM_IT_DATA",
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "Sécurité informatique",
+        "Analyse de vulnérabilités",
+        "Gestion des incidents de sécurité",
+        "Normes ISO 27001",
+        "Pare-feu & VPN"
+      ]
+    },
+    "FAM_IT_CARTO_SIG": {
+      "sous_famille": "Cartographie & Systèmes d'Information Géographique",
+      "id_famille": "FAM_IT_DATA",
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "Systèmes d'Information Géographique (SIG)",
+        "QGIS / ArcGIS",
+        "Traitement de données spatiales"
+      ]
+    },
+    "FAM_IT_DIGITAL_MKT": {
+      "sous_famille": "Digital, Marketing & Business Digital",
+      "id_famille": "FAM_IT_DATA",
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "Marketing digital",
+        "Réseaux sociaux & community management",
+        "SEO/SEA",
+        "Analyse de la performance digitale"
+      ]
+    },
+    "SF_RESTA_CUISINE": {
+      "sous_famille": "Restauration & Cuisine",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Techniques culinaires",
+        "Normes HACCP",
+        "Gestion de production culinaire"
+      ]
+    },
+    "SF_RESTA_HOTELLERIE": {
+      "sous_famille": "Hôtellerie & Accueil",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Accueil client",
+        "Gestion hôtelière",
+        "Réservation & front office"
+      ]
+    },
+    "SF_RESTA_SERVICES_PERSONNE": {
+      "sous_famille": "Services de Proximité",
+      "id_famille": "FAM_RESTA_SERV",
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Techniques de coiffure/esthétique",
+        "Hygiène et soins",
+        "Relation client de proximité"
+      ]
+    },
+    "SF_SANTE_MEDICAL": {
+      "sous_famille": "Médical & Paramédical",
+      "id_famille": "FAM_SANTE",
+      "famille": "Santé, Pharmacie & Recherche Scientifique",
+      "competences_inferred": [
+        "Soins infirmiers",
+        "Diagnostic médical",
+        "Suivi de patients"
+      ]
+    },
+    "SF_SANTE_PHARMA": {
+      "sous_famille": "Pharmacie",
+      "id_famille": "FAM_SANTE",
+      "famille": "Santé, Pharmacie & Recherche Scientifique",
+      "competences_inferred": [
+        "Pharmacologie",
+        "Dispensation pharmaceutique",
+        "Gestion d'officine"
+      ]
+    },
+    "SF_SANTE_RECHERCHE": {
+      "sous_famille": "Recherche Scientifique & Laboratoire",
+      "id_famille": "FAM_SANTE",
+      "famille": "Santé, Pharmacie & Recherche Scientifique",
+      "competences_inferred": [
+        "Analyses de laboratoire",
+        "Recherche scientifique",
+        "Protocoles expérimentaux"
+      ]
+    },
+    "SF_BTP_GROS_OEUVRE": {
+      "sous_famille": "Gros Œuvre & Construction",
+      "id_famille": "FAM_BTP",
+      "famille": "Bâtiment, Travaux Publics & Aménagement du Territoire",
+      "competences_inferred": [
+        "Maçonnerie",
+        "Coffrage",
+        "Lecture de plans",
+        "Charpenterie"
+      ]
+    },
+    "SF_BTP_ENGINS": {
+      "sous_famille": "Conduite d'Engins & Travaux",
+      "id_famille": "FAM_BTP",
+      "famille": "Bâtiment, Travaux Publics & Aménagement du Territoire",
+      "competences_inferred": [
+        "Conduite d'engins de chantier",
+        "Sécurité chantier",
+        "Suivi de travaux"
+      ]
+    },
+    "SF_BTP_ETUDES": {
+      "sous_famille": "Études & Conception",
+      "id_famille": "FAM_BTP",
+      "famille": "Bâtiment, Travaux Publics & Aménagement du Territoire",
+      "competences_inferred": [
+        "Conception architecturale",
+        "AutoCAD / Dessin technique",
+        "Génie civil"
+      ]
+    },
+    "SF_PETROLE_FORAGE": {
+      "sous_famille": "Forage & Complétion",
+      "id_famille": "FAM_PETROLE_GAZ",
+      "famille": "Industrie Pétrolière, Gazière & Énergie",
+      "competences_inferred": [
+        "Techniques de forage",
+        "Complétion de puits",
+        "Sécurité forage"
+      ]
+    },
+    "SF_PETROLE_INGENIERIE": {
+      "sous_famille": "Ingénierie Pétrolière & Gisement",
+      "id_famille": "FAM_PETROLE_GAZ",
+      "famille": "Industrie Pétrolière, Gazière & Énergie",
+      "competences_inferred": [
+        "Génie pétrolier",
+        "Géologie pétrolière",
+        "Ingénierie de réservoir"
+      ]
+    },
+    "SF_PETROLE_OFFSHORE": {
+      "sous_famille": "Opérations Offshore & Raffinerie",
+      "id_famille": "FAM_PETROLE_GAZ",
+      "famille": "Industrie Pétrolière, Gazière & Énergie",
+      "competences_inferred": [
+        "Opérations offshore",
+        "Raffinage pétrolier",
+        "HSE Oil & Gas",
+        "Commissioning"
+      ]
+    },
+    "SF_AGRI_PRODUCTION": {
+      "sous_famille": "Agriculture & Élevage",
+      "id_famille": "FAM_AGRI",
+      "famille": "Agriculture, Agroalimentaire & Exploitation Forestière",
+      "competences_inferred": [
+        "Techniques agricoles",
+        "Élevage",
+        "Agronomie"
+      ]
+    },
+    "SF_AGRI_TRANSFORMATION": {
+      "sous_famille": "Agroalimentaire & Transformation",
+      "id_famille": "FAM_AGRI",
+      "famille": "Agriculture, Agroalimentaire & Exploitation Forestière",
+      "competences_inferred": [
+        "Transformation agroalimentaire",
+        "Contrôle qualité alimentaire",
+        "Process industriel agroalimentaire"
+      ]
+    },
+    "SF_AGRI_FORESTERIE": {
+      "sous_famille": "Foresterie & Exploitation Forestière",
+      "id_famille": "FAM_AGRI",
+      "famille": "Agriculture, Agroalimentaire & Exploitation Forestière",
+      "competences_inferred": [
+        "Exploitation forestière",
+        "Sylviculture",
+        "Gestion des ressources forestières"
+      ]
+    },
+    "SF_JURI_AFFAIRES": {
+      "sous_famille": "Droit des Affaires & Contrats",
+      "id_famille": "FAM_JURIDIQUE",
+      "famille": "Droit, Justice & Conformité",
+      "competences_inferred": [
+        "Droit des sociétés",
+        "Rédaction de contrats",
+        "Droit des affaires"
+      ]
+    },
+    "SF_JURI_CONTENTIEUX": {
+      "sous_famille": "Contentieux & Conformité",
+      "id_famille": "FAM_JURIDIQUE",
+      "famille": "Droit, Justice & Conformité",
+      "competences_inferred": [
+        "Procédure judiciaire",
+        "Conformité réglementaire",
+        "Gestion du contentieux"
+      ]
+    },
+    "SF_SECU_GARDIENNAGE": {
+      "sous_famille": "Gardiennage & Sûreté",
+      "id_famille": "FAM_SECURITE",
+      "famille": "Sécurité, Sûreté & Défense",
+      "competences_inferred": [
+        "Surveillance & contrôle d'accès",
+        "Rondes de sécurité",
+        "Gestion des incidents"
+      ]
+    },
+    "SF_SECU_DEFENSE": {
+      "sous_famille": "Défense & Sûreté d'État",
+      "id_famille": "FAM_SECURITE",
+      "famille": "Sécurité, Sûreté & Défense",
+      "competences_inferred": [
+        "Discipline militaire",
+        "Tactiques de défense",
+        "Sûreté d'État"
+      ]
+    },
+    "SF_COM_INSTITUTIONNELLE": {
+      "sous_famille": "Communication Institutionnelle",
+      "id_famille": "FAM_COMM_MEDIA",
+      "famille": "Communication, Médias & Événementiel",
+      "competences_inferred": [
+        "Communication institutionnelle",
+        "Relations publiques",
+        "Rédaction de communiqués"
+      ]
+    },
+    "SF_COM_MEDIAS": {
+      "sous_famille": "Médias & Journalisme",
+      "id_famille": "FAM_COMM_MEDIA",
+      "famille": "Communication, Médias & Événementiel",
+      "competences_inferred": [
+        "Rédaction journalistique",
+        "Enquête & reportage",
+        "Présentation média"
+      ]
+    },
+    "SF_COM_EVENEMENTIEL": {
+      "sous_famille": "Événementiel",
+      "id_famille": "FAM_COMM_MEDIA",
+      "famille": "Communication, Médias & Événementiel",
+      "competences_inferred": [
+        "Organisation d'événements",
+        "Gestion logistique événementielle"
+      ]
+    },
+    "SF_MARINE_MARCHANDE": {
+      "sous_famille": "Marine Marchande",
+      "id_famille": "FAM_MARINE",
+      "famille": "Marine, Aéronautique & Opérations Portuaires/Aéroportuaires",
+      "competences_inferred": [
+        "Navigation maritime",
+        "Sécurité maritime",
+        "Manœuvre de navire"
+      ]
+    },
+    "SF_AERO": {
+      "sous_famille": "Aéronautique",
+      "id_famille": "FAM_MARINE",
+      "famille": "Marine, Aéronautique & Opérations Portuaires/Aéroportuaires",
+      "competences_inferred": [
+        "Opérations aéroportuaires",
+        "Sécurité aérienne",
+        "Gestion d'escale"
+      ]
+    },
+    "SF_MARINE_PORT": {
+      "sous_famille": "Opérations Portuaires",
+      "id_famille": "FAM_MARINE",
+      "famille": "Marine, Aéronautique & Opérations Portuaires/Aéroportuaires",
+      "competences_inferred": [
+        "Opérations portuaires",
+        "Manutention portuaire",
+        "Logistique maritime"
+      ]
+    },
+    "SF_DIR_GENERALE": {
+      "sous_famille": "Direction Générale & Stratégie",
+      "id_famille": "FAM_DIRECTION",
+      "famille": "Direction Générale & Management",
+      "competences_inferred": [
+        "Pilotage stratégique",
+        "Gouvernance d'entreprise",
+        "Vision stratégique"
+      ]
+    },
+    "SF_DIR_MANAGEMENT_OP": {
+      "sous_famille": "Management Opérationnel",
+      "id_famille": "FAM_DIRECTION",
+      "famille": "Direction Générale & Management",
+      "competences_inferred": [
+        "Management d'équipe",
+        "Supervision opérationnelle",
+        "Leadership"
+      ]
+    },
+    "SF_DIR_PROJET": {
+      "sous_famille": "Gestion de Projet",
+      "id_famille": "FAM_DIRECTION",
+      "famille": "Direction Générale & Management",
+      "competences_inferred": [
+        "Gestion de projet",
+        "Planification & pilotage",
+        "Coordination d'équipes"
+      ]
+    }
+  },
+  "familles": {
+    "FAM_TRANS_LOG": {
+      "famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "Gestion des stocks",
+        "Planification de tournées",
+        "Réglementation douanière",
+        "Gestion de flotte",
+        "Transit",
+        "Conduite de véhicules lourds",
+        "Gestion des expéditions",
+        "Suivi des livraisons"
+      ],
+      "metiers_proches": [
+        "FAM_HSE_INDUS",
+        "FAM_MARINE",
+        "FAM_PETROLE_GAZ"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP"
+    },
+    "FAM_RH_ADMIN": {
+      "famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "Gestion de la paie",
+        "Recrutement",
+        "Gestion administrative",
+        "Droit social",
+        "Secrétariat",
+        "Droit du travail"
+      ],
+      "metiers_proches": [
+        "FAM_JURIDIQUE",
+        "FAM_DIRECTION",
+        "FAM_COMPTA_FIN"
+      ],
+      "niveau_etude_min": "NV_4_BAC"
+    },
+    "FAM_COMPTA_FIN": {
+      "famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "Établissement des bilans",
+        "Contrôle de gestion",
+        "Audit financier",
+        "Fiscalité",
+        "Comptabilité générale"
+      ],
+      "metiers_proches": [
+        "FAM_RH_ADMIN",
+        "FAM_JURIDIQUE",
+        "FAM_DIRECTION"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2"
+    },
+    "FAM_HSE_INDUS": {
+      "famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "Prévention des risques",
+        "Maintenance préventive/curative",
+        "Normes ISO",
+        "Électromécanique",
+        "Sécurité au travail",
+        "Maintenance électromécanique",
+        "Gestion des risques industriels",
+        "Maintenance préventive"
+      ],
+      "metiers_proches": [
+        "FAM_PETROLE_GAZ",
+        "FAM_BTP",
+        "FAM_TRANS_LOG"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP"
+    },
+    "FAM_COMM_VENTE": {
+      "famille": "Commerce, Vente & Relation Client",
+      "competences_inferred": [
+        "Négociation commerciale",
+        "Gestion de caisse",
+        "Prospection",
+        "Relation client",
+        "Merchandising",
+        "Techniques de négociation",
+        "Prospection commerciale"
+      ],
+      "metiers_proches": [
+        "FAM_COMM_MEDIA",
+        "FAM_DIRECTION",
+        "FAM_TOURISME"
+      ],
+      "niveau_etude_min": "NV_4_BAC"
+    },
+    "FAM_IT_DATA": {
+      "famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "Développement Web",
+        "Administration réseaux",
+        "Analyse de données",
+        "Machine Learning",
+        "Sécurité informatique",
+        "Développement logiciel",
+        "Administration systèmes/réseaux",
+        "Cybersécurité"
+      ],
+      "metiers_proches": [
+        "FAM_COMPTA_FIN",
+        "FAM_COMM_MEDIA",
+        "FAM_DIRECTION"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2"
+    },
+    "FAM_RESTA_SERV": {
+      "famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "Service en salle",
+        "Cuisine",
+        "Gestion d'équipe",
+        "Accueil clientèle",
+        "Entretien",
+        "Hygiène alimentaire",
+        "Accueil client"
+      ],
+      "metiers_proches": [
+        "FAM_TOURISME",
+        "FAM_COMM_VENTE",
+        "FAM_SOCIAL"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP"
+    },
+    "FAM_SANTE": {
+      "famille": "Santé, Pharmacie & Recherche Scientifique",
+      "competences_inferred": [
+        "Soins infirmiers",
+        "Diagnostic médical",
+        "Dispensation pharmaceutique",
+        "Hygiène hospitalière",
+        "Recherche clinique",
+        "Pharmacologie"
+      ],
+      "metiers_proches": [
+        "FAM_SOCIAL",
+        "FAM_EDUC",
+        "FAM_HSE_INDUS"
+      ],
+      "niveau_etude_min": "NV_6_BAC_3"
+    },
+    "FAM_EDUC": {
+      "famille": "Éducation, Formation & Enseignement",
+      "competences_inferred": [
+        "Pédagogie",
+        "Conception de programmes",
+        "Évaluation des apprentissages",
+        "Orientation scolaire",
+        "Formation professionnelle",
+        "Conception de programmes de formation",
+        "Gestion de classe"
+      ],
+      "metiers_proches": [
+        "FAM_SOCIAL",
+        "FAM_SANTE",
+        "FAM_RH_ADMIN"
+      ],
+      "niveau_etude_min": "NV_6_BAC_3"
+    },
+    "FAM_BTP": {
+      "famille": "Bâtiment, Travaux Publics & Aménagement du Territoire",
+      "competences_inferred": [
+        "Lecture de plans",
+        "Gros œuvre",
+        "Génie civil",
+        "Topographie",
+        "Conduite d'engins de chantier",
+        "Gestion de chantier"
+      ],
+      "metiers_proches": [
+        "FAM_HSE_INDUS",
+        "FAM_PETROLE_GAZ",
+        "FAM_TRANS_LOG"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP"
+    },
+    "FAM_PETROLE_GAZ": {
+      "famille": "Industrie Pétrolière, Gazière & Énergie",
+      "competences_inferred": [
+        "Forage",
+        "Sécurité des puits",
+        "Opérations offshore",
+        "Production pétrolière",
+        "Mise en service (commissioning)",
+        "Opérations de forage",
+        "Maintenance d'installations pétrolières",
+        "Normes environnementales"
+      ],
+      "metiers_proches": [
+        "FAM_HSE_INDUS",
+        "FAM_MARINE",
+        "FAM_BTP"
+      ],
+      "niveau_etude_min": "NV_4_BAC"
+    },
+    "FAM_AGRI": {
+      "famille": "Agriculture, Agroalimentaire & Exploitation Forestière",
+      "competences_inferred": [
+        "Production agricole",
+        "Élevage",
+        "Protection phytosanitaire",
+        "Exploitation forestière",
+        "Transformation agroalimentaire",
+        "Techniques agricoles",
+        "Gestion d'exploitation"
+      ],
+      "metiers_proches": [
+        "FAM_BTP",
+        "FAM_HSE_INDUS",
+        "FAM_RESTA_SERV"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP"
+    },
+    "FAM_JURIDIQUE": {
+      "famille": "Droit, Justice & Conformité",
+      "competences_inferred": [
+        "Rédaction juridique",
+        "Contentieux",
+        "Conformité réglementaire",
+        "Droit des affaires",
+        "Veille légale"
+      ],
+      "metiers_proches": [
+        "FAM_RH_ADMIN",
+        "FAM_DIRECTION",
+        "FAM_COMPTA_FIN"
+      ],
+      "niveau_etude_min": "NV_7_BAC_5"
+    },
+    "FAM_IMMO": {
+      "famille": "Immobilier",
+      "competences_inferred": [
+        "Gestion locative",
+        "Transaction immobilière",
+        "Gestion de patrimoine",
+        "Estimation foncière",
+        "Syndic de copropriété",
+        "Estimation de biens"
+      ],
+      "metiers_proches": [
+        "FAM_COMM_VENTE",
+        "FAM_JURIDIQUE",
+        "FAM_DIRECTION"
+      ],
+      "niveau_etude_min": "NV_4_BAC"
+    },
+    "FAM_SECURITE": {
+      "famille": "Sécurité, Sûreté & Défense",
+      "competences_inferred": [
+        "Surveillance",
+        "Prévention des risques",
+        "Contrôle d'accès",
+        "Intervention d'urgence",
+        "Sûreté des sites",
+        "Intervention"
+      ],
+      "metiers_proches": [
+        "FAM_HSE_INDUS",
+        "FAM_MARINE",
+        "FAM_DIRECTION"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP"
+    },
+    "FAM_COMM_MEDIA": {
+      "famille": "Communication, Médias & Événementiel",
+      "competences_inferred": [
+        "Stratégie de communication",
+        "Relations publiques",
+        "Production de contenu",
+        "Gestion d'événements",
+        "Community management",
+        "Rédaction",
+        "Production audiovisuelle"
+      ],
+      "metiers_proches": [
+        "FAM_COMM_VENTE",
+        "FAM_TOURISME",
+        "FAM_DIRECTION"
+      ],
+      "niveau_etude_min": "NV_5_BAC_2"
+    },
+    "FAM_TOURISME": {
+      "famille": "Tourisme, Loisirs & Sport",
+      "competences_inferred": [
+        "Accueil touristique",
+        "Organisation de voyages",
+        "Animation d'activités",
+        "Coaching sportif",
+        "Gestion de loisirs",
+        "Organisation de séjours",
+        "Animation"
+      ],
+      "metiers_proches": [
+        "FAM_RESTA_SERV",
+        "FAM_COMM_VENTE",
+        "FAM_COMM_MEDIA"
+      ],
+      "niveau_etude_min": "NV_4_BAC"
+    },
+    "FAM_TRADUCTION": {
+      "famille": "Traduction & Interprétariat",
+      "competences_inferred": [
+        "Traduction écrite",
+        "Interprétariat simultané",
+        "Localisation",
+        "Révision linguistique",
+        "Terminologie",
+        "Traduction technique"
+      ],
+      "metiers_proches": [
+        "FAM_COMM_MEDIA",
+        "FAM_EDUC",
+        "FAM_JURIDIQUE"
+      ],
+      "niveau_etude_min": "NV_6_BAC_3"
+    },
+    "FAM_MARINE": {
+      "famille": "Marine, Aéronautique & Opérations Portuaires/Aéroportuaires",
+      "competences_inferred": [
+        "Navigation",
+        "Opérations portuaires",
+        "Escale aérienne",
+        "Manutention aéroportuaire",
+        "Sécurité maritime",
+        "Sécurité maritime/aérienne"
+      ],
+      "metiers_proches": [
+        "FAM_TRANS_LOG",
+        "FAM_HSE_INDUS",
+        "FAM_PETROLE_GAZ"
+      ],
+      "niveau_etude_min": "NV_4_BAC"
+    },
+    "FAM_DIRECTION": {
+      "famille": "Direction Générale & Management",
+      "competences_inferred": [
+        "Pilotage stratégique",
+        "Gestion d'équipe",
+        "Prise de décision",
+        "Gestion de projet",
+        "Reporting",
+        "Management d'équipe"
+      ],
+      "metiers_proches": [
+        "FAM_COMPTA_FIN",
+        "FAM_RH_ADMIN",
+        "FAM_JURIDIQUE"
+      ],
+      "niveau_etude_min": "NV_7_BAC_5"
+    },
+    "FAM_ARTISANAT": {
+      "famille": "Artisanat & Métiers d'Art",
+      "competences_inferred": [
+        "Travail manuel spécialisé",
+        "Techniques artisanales",
+        "Confection",
+        "Finition",
+        "Sur-mesure",
+        "Travail manuel de précision"
+      ],
+      "metiers_proches": [
+        "FAM_RESTA_SERV",
+        "FAM_COMM_VENTE",
+        "FAM_BTP"
+      ],
+      "niveau_etude_min": "NV_3_CAP_BEP"
+    },
+    "FAM_SOCIAL": {
+      "famille": "Services à la Personne & Action Sociale",
+      "competences_inferred": [
+        "Accompagnement social",
+        "Aide à la personne",
+        "Médiation communautaire",
+        "Protection de l'enfance",
+        "Insertion professionnelle"
+      ],
+      "metiers_proches": [
+        "FAM_SANTE",
+        "FAM_EDUC",
+        "FAM_RESTA_SERV"
+      ],
+      "niveau_etude_min": "NV_4_BAC"
+    }
+  }
+}

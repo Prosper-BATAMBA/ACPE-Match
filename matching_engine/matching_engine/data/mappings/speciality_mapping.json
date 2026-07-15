@@ -1,0 +1,123 @@
+{
+  "mapping_version": "1.0",
+  "description": "Table de correspondance reliant les Filières / Spécialités des demandeurs aux familles de métiers (id_famille) du moteur d'appariement.",
+  "specialty_mappings": [
+    {
+      "id_famille": "FAM_TRANS_LOG",
+      "libelle_famille": "Transport, Logistique & Supply Chain",
+      "filieres_associees": [
+        "Transport, logistique et transit",
+        "Logistique et Supply Chain Management",
+        "Transport et logistique",
+        "Transport Routier",
+        "Génie Logistique",
+        "Transit",
+        "Gestion des Stocks"
+      ]
+    },
+    {
+      "id_famille": "FAM_RH_ADMIN",
+      "libelle_famille": "Ressources Humaines & Administration",
+      "filieres_associees": [
+        "Gestion des Ressources Humaines",
+        "Ressources humaines",
+        "Secrétariat",
+        "Secrétariat de Direction",
+        "Administration des Entreprises",
+        "Communication administrative",
+        "Sciences Juridiques et Administratives"
+      ]
+    },
+    {
+      "id_famille": "FAM_COMPTA_FIN",
+      "libelle_famille": "Comptabilité, Gestion & Audit",
+      "filieres_associees": [
+        "Banque et Finance",
+        "Comptabilité",
+        "Gestion comptable et financier",
+        "Gestion comptable et financière",
+        "Droit des Affaires et Fiscalité",
+        "Economie",
+        "Economie internationale",
+        "Economie d'entreprise",
+        "Audit et Contrôle de Gestion",
+        "Finances publiques",
+        "Sciences Économiques"
+      ]
+    },
+    {
+      "id_famille": "FAM_HSE_INDUS",
+      "libelle_famille": "HSE & Maintenance Industrielle",
+      "filieres_associees": [
+        "Génie Mécanique",
+        "Génie Électrique",
+        "Génie des procédés industriels",
+        "Bac F3",
+        "Géosciences",
+        "Électricité bâtiment",
+        "Électricité industrielle",
+        "Soudure Homologué",
+        "Électrotechnique",
+        "Maintenance industrielle",
+        "Génie civil",
+        "Maçonnerie",
+        "Gestion d'environnement",
+        "Qualité, Hygiène, Sécurité, Environnement (QHSE)",
+        "Forage et Production",
+        "Pétrochimie"
+      ]
+    },
+    {
+      "id_famille": "FAM_COMM_VENTE",
+      "libelle_famille": "Commerce, Vente & Relation Client",
+      "filieres_associees": [
+        "Vente en pharmacie",
+        "Marketing",
+        "Commerce International",
+        "Gestion Commerciale",
+        "Techniques de Vente",
+        "Action Commerciale",
+        "Relation Client"
+      ]
+    },
+    {
+      "id_famille": "FAM_IT_DATA",
+      "libelle_famille": "Informatique, Systèmes & Data Science",
+      "filieres_associees": [
+        "Réseaux et Télécommunications",
+        "Développement Web",
+        "Informatique de Gestion",
+        "Génie Informatique",
+        "Systèmes d'Information",
+        "Sciences Informatiques",
+        "Infographie"
+      ]
+    },
+    {
+      "id_famille": "FAM_RESTA_SERV",
+      "libelle_famille": "Hôtellerie, Restauration & Services de Proximité",
+      "filieres_associees": [
+        "Hôtellerie",
+        "Restauration",
+        "Arts Culinaires",
+        "Tourisme",
+        "Sécurité Privée",
+        "Esthétique - Cosmétique - Coiffure"
+      ]
+    },
+    {
+      "id_famille": "FAM_GENERAL_OU_AUTRE",
+      "libelle_famille": "Tronc Commun / Formations Généralistes",
+      "filieres_associees": [
+        "Bac A",
+        "Bac D",
+        "Bac C",
+        "Aucune",
+        "Droit privé",
+        "Agroéconomie",
+        "Sciences Humaines",
+        "Lettres Modernes"
+      ]
+    }
+  ]
+}

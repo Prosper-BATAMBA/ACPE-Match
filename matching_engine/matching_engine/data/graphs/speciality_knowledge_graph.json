@@ -1,0 +1,192 @@
+{
+  "graph_version": "1.0",
+  "description": "Graphe de connaissances enrichissant chaque id_famille de speciality_mapping.json. Sert de couche d'inférence : quand une filière est normalisée en id_famille mais qu'aucun métier exact n'est identifié, ce graphe permet de déduire compétences probables, métiers de débouché et secteurs pertinents. Les id_skill référencent skills.json, les id_canonique référencent job_mapping_base.json, les code_niveau référencent niveau_etude.json, les id_secteur référencent secteur_mapping.json.",
+  "graph": {
+    "FAM_TRANS_LOG": {
+      "libelle_famille": "Transport, Logistique & Supply Chain",
+      "competences_inferred": [
+        "SKILL_ADMIN_GESTION"
+      ],
+      "competences_inferred_hors_referentiel": [
+        "Gestion des stocks",
+        "Douanes et transit",
+        "Chaîne logistique",
+        "Suivi de flotte"
+      ],
+      "metiers_debouches": [
+        "JOB_TRANSIT"
+      ],
+      "metiers_debouches_a_creer": [
+        "JOB_LOGISTICIEN",
+        "JOB_AGENT_EXPLOITATION_TRANSPORT",
+        "JOB_RESPONSABLE_SUPPLY_CHAIN"
+      ],
+      "secteurs_associes": [
+        "SEC_TRANS_LOG"
+      ],
+      "niveau_etude_typique": "NV_4_BAC"
+    },
+    "FAM_RH_ADMIN": {
+      "libelle_famille": "Ressources Humaines & Administration",
+      "competences_inferred": [
+        "SKILL_ADMIN_GESTION",
+        "SKILL_IT_OFFICE",
+        "SKILL_SOFT_COMMUNICATION"
+      ],
+      "competences_inferred_hors_referentiel": [
+        "Gestion des ressources humaines",
+        "Droit du travail",
+        "Recrutement"
+      ],
+      "metiers_debouches": [],
+      "metiers_debouches_a_creer": [
+        "JOB_ASSISTANT_RH",
+        "JOB_SECRETAIRE_DIRECTION",
+        "JOB_CHARGE_RECRUTEMENT"
+      ],
+      "secteurs_associes": [
+        "SEC_RH_ADMIN"
+      ],
+      "niveau_etude_typique": "NV_5_BAC_2"
+    },
+    "FAM_COMPTA_FIN": {
+      "libelle_famille": "Comptabilité, Gestion & Audit",
+      "competences_inferred": [
+        "SKILL_FIN_COMPTA_OHADA",
+        "SKILL_FIN_FISCALITE",
+        "SKILL_IT_OFFICE"
+      ],
+      "competences_inferred_hors_referentiel": [
+        "Contrôle de gestion",
+        "Audit financier",
+        "Analyse économique"
+      ],
+      "metiers_debouches": [],
+      "metiers_debouches_a_creer": [
+        "JOB_COMPTABLE",
+        "JOB_AUDITEUR",
+        "JOB_ANALYSTE_FINANCIER"
+      ],
+      "secteurs_associes": [
+        "SEC_FIN_COMPTA"
+      ],
+      "niveau_etude_typique": "NV_6_LICENCE"
+    },
+    "FAM_HSE_INDUS": {
+      "libelle_famille": "HSE & Maintenance Industrielle",
+      "competences_inferred": [
+        "SKILL_HSE_CONFORMITE",
+        "SKILL_HSE_PREVENTION",
+        "SKILL_MAINT_PREVENT",
+        "SKILL_MAINT_ELEC"
+      ],
+      "competences_inferred_hors_referentiel": [
+        "Génie mécanique",
+        "Électrotechnique",
+        "Soudure industrielle"
+      ],
+      "metiers_debouches": [],
+      "metiers_debouches_a_creer": [
+        "JOB_TECHNICIEN_MAINTENANCE",
+        "JOB_RESPONSABLE_HSE",
+        "JOB_ELECTROMECANICIEN"
+      ],
+      "secteurs_associes": [
+        "SEC_QHSE_ENVIRON",
+        "SEC_INDU_MAINT",
+        "SEC_HYDRO_PETROLE",
+        "SEC_BTP_AMENAGE"
+      ],
+      "niveau_etude_typique": "NV_3_PRO_N1"
+    },
+    "FAM_COMM_VENTE": {
+      "libelle_famille": "Commerce, Vente & Relation Client",
+      "competences_inferred": [
+        "SKILL_COM_NEGOCIATION",
+        "SKILL_COM_ASSURANCE",
+        "SKILL_SOFT_RELATIONNEL"
+      ],
+      "competences_inferred_hors_referentiel": [
+        "Marketing opérationnel",
+        "Commerce international",
+        "Gestion commerciale"
+      ],
+      "metiers_debouches": [],
+      "metiers_debouches_a_creer": [
+        "JOB_COMMERCIAL",
+        "JOB_CHARGE_CLIENTELE",
+        "JOB_RESPONSABLE_MARKETING"
+      ],
+      "secteurs_associes": [
+        "SEC_COMM_VENTE"
+      ],
+      "niveau_etude_typique": "NV_4_BAC"
+    },
+    "FAM_IT_DATA": {
+      "libelle_famille": "Informatique, Systèmes & Data Science",
+      "competences_inferred": [
+        "SKILL_IT_OFFICE"
+      ],
+      "competences_inferred_hors_referentiel": [
+        "Python",
+        "Développement Web",
+        "Réseaux & Télécoms",
+        "Systèmes d'Information"
+      ],
+      "metiers_debouches": [
+        "JOB_DATA_SCIENTIST"
+      ],
+      "metiers_debouches_a_creer": [
+        "JOB_DEVELOPPEUR_WEB",
+        "JOB_ADMIN_RESEAUX",
+        "JOB_INFOGRAPHISTE"
+      ],
+      "secteurs_associes": [
+        "SEC_IT_DIGITAL"
+      ],
+      "niveau_etude_typique": "NV_6_LICENCE"
+    },
+    "FAM_RESTA_SERV": {
+      "libelle_famille": "Hôtellerie, Restauration & Services de Proximité",
+      "competences_inferred": [
+        "SKILL_SOFT_RELATIONNEL"
+      ],
+      "competences_inferred_hors_referentiel": [
+        "Arts culinaires",
+        "Accueil touristique",
+        "Techniques esthétiques"
+      ],
+      "metiers_debouches": [],
+      "metiers_debouches_a_creer": [
+        "JOB_AGENT_ACCUEIL_HOTELLERIE",
+        "JOB_CUISINIER",
+        "JOB_AGENT_SECURITE_PRIVEE"
+      ],
+      "secteurs_associes": [
+        "SEC_HOTEL_RESTAU",
+        "SEC_SECURITE",
+        "SEC_SERVICES_NETTOYAGE"
+      ],
+      "niveau_etude_typique": "NV_3_PRO_N1"
+    },
+    "FAM_GENERAL_OU_AUTRE": {
+      "libelle_famille": "Tronc Commun / Formations Généralistes",
+      "competences_inferred": [
+        "SKILL_SOFT_COMMUNICATION"
+      ],
+      "competences_inferred_hors_referentiel": [],
+      "metiers_debouches": [],
+      "metiers_debouches_a_creer": [],
+      "secteurs_associes": [
+        "SEC_AUTRES"
+      ],
+      "niveau_etude_typique": "NV_2_COLLEGE",
+      "note": "Famille fourre-tout : peu ou pas d'inférence fiable possible. À traiter comme signal faible dans le scoring de matching, ne devrait jamais bloquer un appariement à elle seule."
+    }
+  },
+  "_meta_a_faire": {
+    "note": "Les entrées de 'competences_inferred_hors_referentiel' et 'metiers_debouches_a_creer' pointent vers des concepts qui n'existent pas encore dans skills.json / job_mapping_base.json. Elles servent de backlog pour étendre ces référentiels avant de les transformer en véritables id_skill / id_canonique.",
+    "count_metiers_a_creer": 21,
+    "count_competences_hors_referentiel": 17
+  }
+}

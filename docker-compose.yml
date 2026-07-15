@@ -1,0 +1,78 @@
+version: '3.8'
+
+# Le réseau privé qui permet à nos conteneurs de discuter entre eux en circuit fermé
+networks:
+  acpe-network:
+    driver: bridge
+
+services:
+  # 1. Le Hub Central (Logique Métier, API, Normalisation, Enrichissement et Embeddings)
+  backend:
+    build: ./backend
+    container_name: acpe-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - st_models_cache:/root/.cache/torch/sentence_transformers  # Cache du modèle (évite de le re-télécharger)
+    environment:
+      - DATABASE_URL=postgresql://postgres:acpe2026@postgresql:5432/acpe_db
+      - CHROMADB_HOST=chromadb
+      - CHROMADB_PORT=8000
+      - SENTENCE_TRANSFORMER_MODEL=BAAI/bge-m3
+    networks:
+      - acpe-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      chromadb:
+        condition: service_started
+
+  # 2. L'Interface Conseiller (Widget / Extension Démo)
+  frontend:
+    build: ./frontend
+    container_name: acpe-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://backend:8000
+    networks:
+      - acpe-network
+    depends_on:
+      - backend
+
+  # 3. Base de Données Classique (Filtres métiers, Villes, Diplômes)
+  postgresql:
+    image: postgres:15-alpine
+    container_name: acpe-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=acpe2026
+      - POSTGRES_DB=acpe_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - acpe-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 4. Base Vectorielle (Indexation des sens des textes, vecteurs sentence-transformers)
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: acpe-chromadb
+    ports:
+      - "8010:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    networks:
+      - acpe-network
+
+volumes:
+  postgres_data:
+  chroma_data:
+  st_models_cache:
