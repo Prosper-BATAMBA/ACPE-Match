@@ -191,7 +191,11 @@
             "animer",
             "management",
             "leadership",
-            "gestion de projet"
+            "gestion de projet",
+            "manager une equipe",
+            "manager equipe",
+            "encadrer une equipe",
+            "encadrement equipe"
           ]
         }
       ]
@@ -600,7 +604,10 @@
           "sous_famille_associee": "SF_RESTA_CUISINE",
           "mots_cles_extraction": [
             "techniques culinaires",
-            "normes haccp"
+            "normes haccp",
+            "cuisine",
+            "cuisinier",
+            "chef de cuisine"
           ]
         },
         {

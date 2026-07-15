@@ -26,7 +26,7 @@ st.sidebar.title("🔗 ACPE Match")
 st.sidebar.caption("IndabaX Congo 2026")
 page = st.sidebar.radio(
     "Navigation",
-    ["📊 Vue d'ensemble", "🎯 Matching", "📥 Export CSV", "🔄 Offre → Candidats", "📋 Rapport"],
+    ["📊 Vue d'ensemble", "🎯 Matching", "📥 Export CSV", "🔄 Offre → Candidats", "🔍 Recherche NL Offres", "📋 Rapport"],
 )
 st.sidebar.divider()
 st.sidebar.caption("API: " + API_URL)
@@ -450,7 +450,93 @@ elif page == "🔄 Offre → Candidats":
 
 
 # ─────────────────────────────────────────────
-# PAGE 5 : RAPPORT TECHNIQUE
+# PAGE 5 : RECHERCHE NL OFFRES
+# ─────────────────────────────────────────────
+elif page == "🔍 Recherche NL Offres":
+    st.title("🔍 Recherche d'offres en langage naturel")
+    st.caption(
+        "Décrivez librement ce que vous cherchez — compétences, secteur, "
+        "métier — et le moteur classe les offres pertinentes."
+    )
+
+    nl_query = st.text_area(
+        "Votre recherche libre",
+        placeholder=(
+            "Ex: Je cherche une offre dans la restauration, je sais faire "
+            "la cuisine et manager une équipe..."
+        ),
+        height=120,
+    )
+    nl_k = st.slider("Nombre d'offres (top-K)", 1, 20, 10)
+
+    if st.button("🔎 Rechercher", type="primary", disabled=not nl_query.strip()):
+        with st.spinner("Recherche et classement des offres..."):
+            try:
+                resp = requests.post(
+                    f"{API_URL}/api/v1/matching/nl-offer-search",
+                    json={"query": nl_query, "top_k": nl_k},
+                    timeout=30,
+                )
+                resp.raise_for_status()
+                nl_results = resp.json()
+            except Exception as e:
+                st.error(f"Erreur API : {e}")
+                nl_results = None
+
+        if nl_results:
+            if nl_results.get("error"):
+                st.error(nl_results["error"])
+            else:
+                skills = nl_results.get("extracted_skills", [])
+                secteur = nl_results.get("target_secteur")
+                st.info(
+                    f"🧩 Compétences détectées : {', '.join(skills) if skills else 'aucune'} "
+                    f"· 🏷️ Secteur visé : {secteur['secteur_canonique'] if secteur else 'non détecté'}"
+                )
+
+                recs = nl_results.get("recommendations", [])
+                if not recs:
+                    st.warning("Aucune offre ne correspond suffisamment à votre recherche.")
+                else:
+                    max_score = max((r["score"] for r in recs), default=1.0) or 1.0
+                    for i, rec in enumerate(recs, 1):
+                        norm = min(rec["score"] / max_score, 1.0) if max_score else 0.0
+                        matched = rec.get("matched_skills", [])
+                        with st.expander(
+                            f"#{i} — {rec.get('intitule', 'N/A')} "
+                            f"| {rec.get('entreprise', 'N/A')} "
+                            f"| {rec.get('secteur', 'N/A')} "
+                            f"| Score: {norm:.0%}",
+                            expanded=(i == 1),
+                        ):
+                            st.progress(norm)
+
+                            col_m, col_s = st.columns(2)
+                            with col_m:
+                                st.markdown("**🟢 Compétences matchées**")
+                                if matched:
+                                    for s in matched:
+                                        st.markdown(f"🟢 `{s}`")
+                                else:
+                                    st.caption("Aucune compétence en commun")
+                            with col_s:
+                                st.markdown("**🏷️ Secteur**")
+                                if rec.get("sector_match"):
+                                    st.success(
+                                        f"✅ {rec.get('secteur')} correspond au secteur visé"
+                                    )
+                                else:
+                                    st.caption(rec.get("secteur") or "N/A")
+
+                            st.metric("Score modèle (brut)", f"{rec['score']:.2f}")
+                            st.metric(
+                                "Similarité sémantique",
+                                f"{rec.get('semantic_score', 0):.2f}",
+                            )
+
+
+# ─────────────────────────────────────────────
+# PAGE 6 : RAPPORT TECHNIQUE
 # ─────────────────────────────────────────────
 elif page == "📋 Rapport":
     st.title("📋 Rapport Technique")

@@ -120,6 +120,28 @@ class SectorNormalizer:
         # on le classe dans "Autres" pour garder un vecteur propre.
         return fallback_meta
 
+    def extract_from_text(self, text_block):
+        """
+        Scanne un bloc de texte entier (ex: une phrase de recherche libre) et
+        extrait tous les secteurs trouvés, par sous-chaîne (substring) sur
+        l'index inversé, à l'image de SkillNormalizer.extract_from_text.
+
+        Retourne une liste de dictionnaires {id_secteur, secteur_canonique}
+        dédupliqués par id_secteur (pas de recherche floue volontaire, voir
+        SkillNormalizer.extract_from_text pour la justification).
+        """
+        if not text_block or not isinstance(text_block, str):
+            return []
+
+        clean_text = f" {self._clean_text(text_block)} "
+        detected = {}
+
+        for indexed_variation, id_sect in self.sector_index.items():
+            if f" {indexed_variation} " in clean_text:
+                detected[id_sect] = self.sector_metadata[id_sect]
+
+        return list(detected.values())
+
 # === TEST D'UTILISATION ===
 # normalizer = SectorNormalizer()
 #

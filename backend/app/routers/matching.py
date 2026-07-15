@@ -1,12 +1,17 @@
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models.candidate import Candidate
 from ..models.job_offer import JobOffer
 from ..chromadb_client import get_offers_collection, get_candidates_collection
-from ..services.matching_engine_service import get_recommendations, get_candidates_for_offer
+from ..services.matching_engine_service import (
+    get_recommendations,
+    get_candidates_for_offer,
+    nl_offer_search,
+)
 from ..services.embedding_service import encode
 
 router = APIRouter(prefix="/api/v1/matching", tags=["matching"])
@@ -84,3 +89,26 @@ def match_offer(
         "top_k": top_k,
         "recommendations": enriched,
     }
+
+
+class NLOfferSearchRequest(BaseModel):
+    query: str
+    top_k: int = 10
+
+
+@router.post("/nl-offer-search")
+def nl_offer_search_endpoint(
+    req: NLOfferSearchRequest,
+    db: Session = Depends(get_db),
+):
+    """Recherche d'offres à partir d'une phrase libre (langage naturel)."""
+    if not req.query or not req.query.strip():
+        raise HTTPException(status_code=400, detail="Le champ 'query' est requis.")
+
+    results = nl_offer_search(
+        db=db,
+        query=req.query,
+        k=req.top_k,
+        embedding_fn=encode,
+    )
+    return results

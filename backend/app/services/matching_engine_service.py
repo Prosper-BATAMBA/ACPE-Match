@@ -489,3 +489,153 @@ def get_candidates_for_offer(
 
     recommendations.sort(key=lambda x: x["score"], reverse=True)
     return recommendations[:k]
+
+
+def nl_offer_search(
+    db: Session,
+    query: str,
+    k: int = 10,
+    embedding_fn=None,
+) -> Dict[str, Any]:
+    """Recherche d'offres en langage naturel.
+
+    Le candidat décrit librement ce qu'il cherche (compétences + secteur + métier).
+    On extrait les compétences via SkillNormalizer et le secteur visé via
+    SectorNormalizer, on récupère les offres sémantiquement proches via FAISS,
+    puis on réutilise _extract_features + le CatBoost ranker pour scorer et
+    filtrer, exactement comme pour le matching candidat->offres.
+    """
+    empty = {
+        "query": query,
+        "extracted_skills": [],
+        "target_secteur": None,
+        "total_offers_compared": 0,
+        "recommendations": [],
+    }
+    if not query or not query.strip():
+        return empty
+
+    from . import faiss_index as fi
+    from . import ranker_service as rs
+    from matching_engine import SkillNormalizer, SectorNormalizer
+
+    sn = SkillNormalizer()
+    sec_norm = SectorNormalizer()
+
+    cand_skills = sn.extract_from_text(query)
+    extracted_skill_labels = sorted(
+        {s.get("libelle_canonique", "") for s in cand_skills if s.get("libelle_canonique")}
+    )
+
+    target_secteurs = sec_norm.extract_from_text(query)
+    target_secteur = target_secteurs[0] if target_secteurs else None
+
+    if embedding_fn is None:
+        from .embedding_service import encode
+        embedding_fn = encode
+
+    q_emb = np.array(embedding_fn(query), dtype=np.float32)
+    q_emb_normed = q_emb / (np.linalg.norm(q_emb) or 1.0)
+
+    try:
+        faiss_results = fi.search(q_emb_normed, top_k=min(k * 20, 200))
+    except FileNotFoundError:
+        empty["error"] = (
+            "Index FAISS introuvable. Executez build_faiss_index.py apres le seed."
+        )
+        return empty
+
+    cand_data = {
+        "id_famille": None,
+        "id_sous_famille": None,
+        "id_secteur": target_secteur["id_secteur"] if target_secteur else None,
+        "code_departement": None,
+        "code_niveau_etude": None,
+        "age": None,
+        "mobilite": None,
+        "profile_text": query,
+        "metier_vise": None,
+        "genre": None,
+        "specialite": None,
+        "qualification": None,
+        "secteur_demande": target_secteur["secteur_canonique"] if target_secteur else None,
+    }
+    cand_data["_spec_result"] = {}
+
+    try:
+        feature_names = rs.get_feature_names()
+    except FileNotFoundError:
+        feature_names = None
+
+    SCORE_THRESHOLD = float(os.environ.get("SCORE_THRESHOLD", "0.3"))
+
+    offer_ids_to_load = [oid for oid, _ in faiss_results if oid]
+    offers_from_db = db.query(JobOffer).filter(JobOffer.id.in_(offer_ids_to_load)).all()
+    offer_map = {o.id: o for o in offers_from_db}
+
+    recommendations = []
+    for offer_id, semantic_score in faiss_results:
+        offer = offer_map.get(offer_id)
+        if not offer:
+            continue
+
+        offer_data = {
+            "id_famille": offer.id_famille,
+            "id_sous_famille": offer.id_sous_famille,
+            "id_secteur": offer.id_secteur,
+            "code_departement": offer.code_departement,
+            "profile_text": offer.profile_text or "",
+            "intitule": offer.intitule,
+            "description": offer.description,
+            "competences_recherchees": offer.competences_recherchees,
+            "type_contrat": offer.type_contrat,
+            "secteur": offer.secteur,
+        }
+
+        if feature_names:
+            feat = _extract_features(cand_data, offer_data, semantic_score, sn)
+            feat_vec = np.array([[feat[f] for f in feature_names]], dtype=np.float32)
+            try:
+                score = float(rs.rerank(feat_vec)[0])
+            except Exception:
+                score = semantic_score
+        else:
+            score = semantic_score
+
+        if score < SCORE_THRESHOLD:
+            continue
+
+        offer_skills = []
+        if offer.competences_recherchees:
+            offer_skills = sn.extract_from_text(offer.competences_recherchees)
+        if offer.description and not offer_skills:
+            offer_skills = sn.extract_from_text(offer.description)
+
+        offer_labels = sorted(
+            {s.get("libelle_canonique", "") for s in offer_skills if s.get("libelle_canonique")}
+        )
+        matched = sorted(set(extracted_skill_labels) & set(offer_labels))
+        sector_match = bool(
+            target_secteur and offer.id_secteur
+            and target_secteur["id_secteur"] == offer.id_secteur
+        )
+
+        recommendations.append({
+            "offer_id": offer_id,
+            "intitule": offer.intitule,
+            "entreprise": offer.entreprise,
+            "secteur": offer.secteur,
+            "score": round(score, 4),
+            "matched_skills": matched,
+            "sector_match": sector_match,
+            "semantic_score": round(semantic_score, 4),
+        })
+
+    recommendations.sort(key=lambda x: x["score"], reverse=True)
+    return {
+        "query": query,
+        "extracted_skills": extracted_skill_labels,
+        "target_secteur": target_secteur,
+        "total_offers_compared": len(faiss_results),
+        "recommendations": recommendations[:k],
+    }
