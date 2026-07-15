@@ -34,7 +34,7 @@ DATA_DIR = os.path.join(
     HACKATON_DIR, "matching_engine", "matching_engine", "data", "raw",
 )
 
-DEMANDEURS_PATH = os.path.join(DATA_DIR, "Demandeurs .xlsx")
+DEMANDEURS_PATH = os.path.join(DATA_DIR, "Demandeurs.xlsx")
 OFFRES_PATH = os.path.join(DATA_DIR, "Offres_enrichi.xlsx")
 
 BATCH_SIZE = 256

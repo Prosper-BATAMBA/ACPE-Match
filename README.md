@@ -1,318 +1,119 @@
-# ACPE Match - Centralized Candidate Matching Platform
+# ACPE Match — Intelligent Job Matching (IndabaX Congo 2026)
 
-## Overview
+Moteur de matching entre candidats et offres d'emploi de l'Agence Congolaise pour l'Emploi (ACPE).
+Pipeline : embeddings **bge-m3** → recherche **FAISS** (top-200) → **CatBoost Ranker** (YetiRank).
 
-ACPE Match is a modernized, **centralized** candidate matching platform that brings together the power of AI-powered matching with traditional HR systems. Version 2.0 architecture eliminates external orchestration (n8n + Ollama) by embedding all AI logic directly within the FastAPI backend.
-
-### Key Innovation (V2.0)
-- ✅ **Single-Process AI**: Normalization, enrichment & embeddings run locally
-- ✅ **4-Container Architecture**: Simpler, faster, more reliable deployment
-- ✅ **Sub-50ms Matching**: Instant recommendations via hybrid SQL + Semantic search
-- ✅ **Deterministic Pipeline**: Same French-optimized AI model every time
-
-## Quick Start Guide
-
-### Prerequisites
-- ✅ Git 2.0+
-- ✅ Docker + Docker Compose
-
-### Quick Commands (Docker)
-```bash
-# Start everything in one go
-docker-compose up -d
-
-# Stop and remove containers
-docker-compose down
-
-# View logs
-docker-compose logs -f backend
-```
-
-### Quick Commands (Local Development)
-```bash
-# Install dependencies
-pip install -r backend/requirements.txt
-
-# Initialize database
-cd backend && python -c "from app.database import init_db; init_db()"
-
-# Start the API server
-cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-## Architecture Overview
-
-This project represents **Version 2.0** of the ACPE Match platform, featuring a completely centralized architecture where the FastAPI backend embeds the entire AI pipeline (normalization, enrichment, and embeddings) within the same Python process, eliminating the need for external orchestration services (n8n + Ollama).
-
-### Core Components
-
-**Backend (FastAPI)**:
-- 8 core dependencies including FastAPI, sentence-transformers, and SQLAlchemy
-- AI services: normalization, enrichment, semantic search
-- REST API for candidate/job operations and matching
-
-**Matching Engine Package**:
-- Local normalization (5 specialized modules for French text)
-- Knowledge enrichment via graph-based algorithms
-- Text preparation optimized for sentence-transformers
-
-**Storage Layer**:
-- PostgreSQL: Canonical data (50+ mapping tables)
-- ChromaDB: Vector embeddings with cosine similarity
-
-### Technical Stack
-
-**Backend Dependencies** (`backend/requirements.txt`):
-```bash
-fastapi>=0.104.0
-uvicorn[standard]>=0.24.0
-sqlalchemy>=2.0.0
-pydantic>=2.0.0
-sentence-transformers>=2.2.0
-torch>=2.0.0
-chromadb>=0.4.0
-rapidfuzz>=3.0
-```
-
-**AI Configuration**:
-- **Embedding Model**: `paraphrase-multilingual-MiniLM-L12-v2` (French-optimized)
-- **Cross-Encoder**: `BAAI/bge-reranker-v2-m3`
-- **Language Support**: Full French terminology and professional vocabulary
-
-## API Endpoints
-
-### Candidate Management
-- `POST /api/v1/candidates` - Create a new candidate
-- `GET /api/v1/candidates` - List all candidates
-- `GET /api/v1/candidates/{id}` - Get candidate by ID
-
-### Job Offer Management
-- `POST /api/v1/job-offers` - Create a new job offer
-- `GET /api/v1/job-offers` - List all job offers
-- `GET /api/v1/job-offers/{id}` - Get job offer by ID
-
-### Matching
-- `GET /api/v1/matching/candidate/{candidate_id}` - Get top 10 job recommendations
-
-## Project Structure
-
-```
-ACPE-Match/
-├── backend/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── app/
-│       ├── config.py
-│       ├── database.py
-│       ├── chromadb_client.py
-│       ├── main.py
-│       ├── services/
-│       │   ├── profile_builder.py
-│       │   ├── embedding_service.py
-│       │   └── matching_engine_service.py
-│       ├── models/
-│       │   ├── candidate.py
-│       │   └── job_offer.py
-│       ├── schemas/
-│       │   ├── candidate.py
-│       │   └── job_offer.py
-│       ├── routers/
-│       │   ├── candidates.py
-│       │   ├── job_offers.py
-│       │   └── matching.py
-│       └── __init__.py
-├── matching_engine/
-│   ├── pyproject.toml
-│   └── matching_engine/
-│       ├── config.py
-│       ├── normalizers/ (5 modules)
-│       ├── enrichment/
-│       └── data/
-├── docker-compose.yml
-├── ACPE_Match.md (architecture documentation)
-└── README.md (this file)
-```
-
-## Dependencies Fix Summary
-
-### Issue Identified
-The original `backend/requirements.txt` file was incomplete and inconsistent with the `matching_engine/pyproject.toml` configuration, leading to potential dependency gaps in the AI pipeline.
-
-### Problem Details
-1. **mismatched dependencies**: `requirements.txt` listed 8 packages while `pyproject.toml` only had `rapidfuzz`
-2. **missing sentence-transformers ecosystem**: The AI pipeline required transformers, tokenizers, etc.
-3. **inconsistent version management**: No clear dependency hierarchy
-
-### Solution Implemented
-✅ **Requirements.txt Updated**: Now contains 8 properly specified packages
-✅ **Dependency Consistency**: All sentence-transformers ecosystem packages resolved
-✅ **Version Pinned**: Proper version constraints for all dependencies
-✅ **Package Integration**: matching_engine properly integrated via Dockerfile
-
-### Core Dependencies Included
-```
-fastapi>=0.104.0        # Web framework & API management
-uvicorn[standard]>=0.24.0  # ASGI server for FastAPI
-postgresql>=2.0.0      # PostgreSQL ORM & database management
-sqlalchemy>=2.0.0       # Core ORM functionality
-pydantic>=2.0.0         # Data validation & serialization
-sentence-transformers>=2.2.0  # Multilingual embedding models
-torch>=2.0.0            # PyTorch ML framework (required by sentence-transformers)
-chromadb>=0.4.0         # Vector database for semantic search
-rapidfuzz>=3.0          # Text processing & matching acceleration
-```
-
-### Technical Impact
-This dependency fix ensures:
-1. **Complete AI Pipeline**: All sentence-transformers ecosystem packages available
-2. **Robust Database Operations**: Proper connection pooling & migration support
-3. **Production-Grade API**: FastAPI with CORS and middleware
-4. **Performance Optimization**: rapidfuzz for text operations, chromadb for vectors
-
-## Development & Testing
-
-### Local Development Setup
-```bash
-# Clone project
-git clone https://github.com/Prosper-BATAMBA/ACPE-Match.git
-cd ACPE-Match
-
-# Start databases
-docker-compose up -d postgresql chromadb
-
-# Install dependencies
-pip install -r backend/requirements.txt
-
-# Initialize database
-cd backend && python -c "from app.database import init_db; init_db()"
-
-# Start API server
-cd backend && uvicorn app.main:app --reload
-```
-
-### API Testing
-```bash
-# Test backend connectivity
-curl http://localhost:8000/
-
-# Create test candidate
-curl -X POST http://localhost:8000/api/v1/candidates \
-  -H "Content-Type: application/json" \
-  -d '{
-    "id": "test_candidate",
-    "nom": "Test",
-    "prenom": "User",
-    "metier_vise": "Software Developer",
-    "secteur_demande": "Technology",
-    "etudes": "Bachelor in Computer Science",
-    "localite": "Paris",
-    "competences_brutes": "Python, JavaScript, React"
-  }'
-
-# Get matching recommendations
-curl http://localhost:8000/api/v1/matching/candidate/test_candidate
-```
-
-### Docker Deployment
-```bash
-# Start production
-docker-compose up -d
-
-# View logs
-docker-compose logs -f backend
-
-# Stop everything
-docker-compose down
-```
-
-## Performance & Architecture Benefits
-
-### V2.0 Centralized Architecture
-- ✅ **Sub-50ms Response Time**: Instant matching via hybrid SQL + semantic search
-- ✅ **Zero Network Latency**: AI runs in same process as API
-- ✅ **Deterministic Results**: Same French-optimized model every time
-- ✅ **Memory Efficient**: Singleton model loading and optimized caching
-
-### Comparison: V1 → V2
-| Aspect | V1 (6 containers) | V2 (4 containers) |
-|--------|------------------|-------------------|
-| Orchestration | n8n + Ollama (external) | Embedded in FastAPI |
-| AI Pipeline | Distributed across services | Single-process solution |
-| Latency | Higher (network calls) | <50ms (local processing) |
-| Architecture | Complex | Simplified & centralized |
-
-### Production Features
-- ✅ **French Language Optimization**: All normalizers trained on French terminology
-- ✅ **Scalable Architecture**: Docker-based deployment with clear dependencies
-- ✅ **Real-time Matching**: Instant recommendations with semantic similarity
-- ✅ **Hybrid Search**: Combines SQL filters + ChromaDB vector search
-
-## Technology Highlights
-
-### AI/ML Stack
-- **Text Processing**: 7 specialized normalizers for French text
-- **Semantic Search**: sentence-transformers with multilingual support
-- **Knowledge Graphs**: Graph-based enrichment algorithms
-- **Vector Database**: ChromaDB with cosine similarity
-
-### API Design
-- **RESTful**: Standard HTTP methods and JSON responses
-- **Async Support**: FastAPI with async/await throughout
-- **Error Handling**: Comprehensive exception management
-- **Validation**: Pydantic schemas for all data models
-
-### Database Strategy
-- **PostgreSQL**: Canonical data storage (50+ tables)
-- **ChromaDB**: Vector embeddings & semantic search
-- **Hybrid Queries**: Combined SQL + vector search for optimal performance
-
-## Project Status
-
-### Current State
-✅ **Repository Initialized**: Git configuration complete
-✅ **Dependencies Fixed**: requirements.txt properly configured
-✅ **Architecture Ready**: Complete V2.0 centralized design
-✅ **Documentation**: ACPE_Match.md and README.md comprehensive
-
-### Next Steps
-1. **Review Dependencies**: Use `pip install -r backend/requirements.txt`
-2. **Initialize Database**: Run database setup commands
-3. **Start Development**: Begin building frontend or custom integrations
-4. **Deploy**: Use docker-compose for production ready deployment
-
-### Deployment Options
-- **Local Development**: Docker + Gitpod + Local installation
-- **Production**: Docker Compose with managed PostgreSQL & ChromaDB
-- **Cloud Ready**: Dockerfile for container orchestration platforms
-
-## Contributing
-
-### Development Workflow
-1. Fork the repository
-2. Create feature branch
-3. Implement changes following existing patterns
-4. Run tests to ensure functionality
-5. Submit pull request
-
-### Code Style Guidelines
-- **Python**: PEP 8 compliant
-- **Dependencies**: Version constraints used consistently
-- **Testing**: All new features include test coverage
-- **Documentation**: Update README for architectural changes
-
-## License
-
-This project is part of the ACPE platform ecosystem. See LICENSE file for details.
-
-## Contact
-
-**Project Repository**: https://github.com/Prosper-BATAMBA/ACPE-Match
-
-**For Questions**: File GitHub issues for bug reports and feature requests
-**Architecture Questions**: Refer to ACPE_Match.md for detailed technical documentation
+> 📐 Architecture détaillée (centralisation Backend, circuits d'ingestion/matching) : voir [`ACPE_Match.md`](./ACPE_Match.md).
 
 ---
 
-**Built with ❤️ for ACPE platform - Matching Excellence, Simplified**
+## ⚠️ Point clé : le modèle d'embedding s'auto-télécharge
 
-*Version 2.0 - Centralized Architecture*
+Le modèle **`BAAI/bge-m3`** (≈ 2,3 Go) est chargé **automatiquement** par `sentence-transformers`
+au premier appel d'encodage (`backend/app/services/embedding_service.py`). **Aucune installation
+manuelle du modèle n'est requise** : il se télécharge depuis HuggingFace au 1er lancement
+(il faut donc un accès internet et ~3 Go de disque libres pour ce 1er run).
+
+---
+
+## 🔒 Données personnelles — volontairement EXCLUES du dépôt (RGPD)
+
+Pour des raisons de confidentialité, les données réelles ne sont **pas** versionnées :
+
+| Élément | Statut | Raison |
+|---------|--------|--------|
+| `acpe.db` (candidats/offres, PII) | ❌ exclu | Données personnelles |
+| `chroma_data/` (embeddings) | ❌ exclu | Dérivé des PII |
+| `matching_engine/.../data/raw/*.xlsx` (sources brutes) | ❌ exclu | Noms, contacts réels |
+| `catboost_ranker.cbm` + `ranker_config.json` | ✅ inclus | Modèle entraîné |
+| `faiss_offers.index` | ✅ inclus* | Index FAISS (*stale — à reconstruire, voir dessous) |
+| Code + graphes de connaissances + `skills_enriched.json` | ✅ inclus | Nécessaires au run |
+
+**Pour faire tourner le projet, tu dois fournir tes propres fichiers sources** (hors Git) :
+
+```
+matching_engine/matching_engine/data/raw/
+├── Demandeurs.xlsx      # candidats
+└── Offres_enrichi.xlsx  # offres
+```
+
+Ces fichiers restent locaux (ignorés par Git). Place-les avant d'exécuter le seed.
+
+---
+
+## 🚀 Installation & Lancement
+
+### 1. Environnement
+
+```bash
+cd backend
+python -m venv venv
+# Windows :
+venv\Scripts\activate
+# Linux / macOS :
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+### 2. Peupler la base (SQLite + ChromaDB)
+
+```bash
+python -m seed_data
+```
+
+Importe les candidats/offres depuis tes Excel et génère leurs embeddings dans ChromaDB.
+
+### 3. Reconstruire l'index FAISS  ⚠️ OBLIGATOIRE après le seed
+
+L'index `faiss_offers.index` commité a été bâti sur les offres réelles d'origine. Après avoir
+seedé **tes** données, reconstruis-le pour qu'il soit cohérent :
+
+```bash
+python build_faiss_index.py
+```
+
+> Si tu oublies cette étape, le matching renverra des résultats vides (l'index ne correspond
+> pas aux offres en base).
+
+### 4. Démarrer l'API
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Documentation interactive : http://localhost:8000/docs
+
+### 5. Démarrer le Dashboard (optionnel, autre terminal)
+
+```bash
+streamlit run dashboard.py --server.port 8501
+```
+
+---
+
+## 🔌 Endpoints de l'API
+
+Le **Backend FastAPI est la seule porte d'entrée** : tout (dashboard, scripts, frontends) passe par l'API.
+
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/v1/stats` | Statistiques globales (cache 5 min) |
+| GET | `/api/v1/candidates/search?q=` | Recherche candidats (nom, métier, secteur, lieu, **ID**) |
+| GET | `/api/v1/job-offers/search?q=` | Recherche offres (référence, intitulé, secteur, entreprise) |
+| GET | `/api/v1/matching/candidate/{id}?top_k=` | Top offres pour un candidat |
+| GET | `/api/v1/matching/offer/{id}?top_k=` | Top candidats pour une offre |
+| GET | `/api/v1/matching/export-csv?candidate_ids=&top_k=` | Export CSV candidat → offres |
+| GET | `/api/v1/matching/export-csv-by-offer?offer_ids=&top_k=` | Export CSV offre → candidats |
+
+---
+
+## 📝 Notes
+
+- **Modèle entraîné inclus** : `catboost_ranker.cbm` + `ranker_config.json` sont versionnés.
+  Pour un ranking fidèle sur tes propres données, ré-entraîne via `train_ranker.py`.
+- **`docker-compose.yml`** est fourni à titre de référence (PostgreSQL + ChromaDB conteneurisés),
+  mais la configuration de lancement documentée ci-dessus utilise **SQLite + ChromaDB persistante**
+  (plus simple pour une démo locale).
+- **Reproductibilité** : le seeding et l'indexation sont déterministes ; relance-les après tout
+  changement de données source.
