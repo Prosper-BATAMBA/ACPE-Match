@@ -64,15 +64,23 @@ def safe_int(val):
         return None
 
 
+def _fmt_eta(seconds: float) -> str:
+    if seconds < 60:
+        return f"{seconds:.0f}s"
+    m, s = divmod(int(seconds), 60)
+    return f"{m}m{s:02d}s"
+
+
 def import_candidates(df: pd.DataFrame, pb: ProfileBuilder, chroma_candidates):
     t0 = time.time()
     db = SessionLocal()
     seen_ids = set()
     skipped = 0
     errors = 0
+    total_rows = len(df)
 
     rows_data = []
-    for _, row in df.iterrows():
+    for idx, (_, row) in enumerate(df.iterrows(), 1):
         candidate_id = safe_str(row.get("Matricule", ""))
         if not candidate_id or candidate_id in seen_ids:
             skipped += 1
@@ -128,9 +136,21 @@ def import_candidates(df: pd.DataFrame, pb: ProfileBuilder, chroma_candidates):
             errors += 1
             logger.error(f"Erreur candidat {candidate_id} : {e}")
 
+        if idx % 500 == 0 or idx == total_rows:
+            pct = idx / total_rows * 100
+            elapsed = time.time() - t0
+            speed = idx / elapsed if elapsed > 0 else 0
+            eta = (total_rows - idx) / speed if speed > 0 else 0
+            logger.info(
+                f"  Phase 1/2 candidats: {idx}/{total_rows} ({pct:.1f}%) "
+                f"| {len(rows_data)} insérés, {skipped} ignorés, {errors} erreurs "
+                f"| {_fmt_eta(eta)} restant"
+            )
+
     db.commit()
     logger.info(f"Phase 1/2 : {len(rows_data)} candidats en base ({skipped} ignorés, {errors} erreurs)")
 
+    t1 = time.time()
     logger.info(f"Phase 2/2 : Embedding + ChromaDB ({len(rows_data)} candidats)...")
     for i in range(0, len(rows_data), BATCH_SIZE):
         batch = rows_data[i:i + BATCH_SIZE]
@@ -143,8 +163,15 @@ def import_candidates(df: pd.DataFrame, pb: ProfileBuilder, chroma_candidates):
             documents=texts,
             metadatas=[{"id": cid} for cid in ids],
         )
-        if (i // BATCH_SIZE) % 10 == 0:
-            logger.info(f"  ... {i + len(batch)}/{len(rows_data)} candidats upsertés")
+        done = min(i + BATCH_SIZE, len(rows_data))
+        pct = done / len(rows_data) * 100 if rows_data else 0
+        elapsed2 = time.time() - t1
+        speed = done / elapsed2 if elapsed2 > 0 else 0
+        eta = (len(rows_data) - done) / speed if speed > 0 else 0
+        logger.info(
+            f"  Phase 2/2 candidats: {done}/{len(rows_data)} ({pct:.1f}%) "
+            f"| {_fmt_eta(eta)} restant"
+        )
 
     elapsed = time.time() - t0
     logger.info(f"Candidats terminés : {len(rows_data)} en {elapsed:.1f}s")
@@ -157,9 +184,10 @@ def import_offers(df: pd.DataFrame, pb: ProfileBuilder, chroma_offers):
     seen_ids = set()
     skipped = 0
     errors = 0
+    total_rows = len(df)
 
     rows_data = []
-    for _, row in df.iterrows():
+    for idx, (_, row) in enumerate(df.iterrows(), 1):
         offer_id = safe_str(row.get("Référence offre", ""))
         if not offer_id or offer_id in seen_ids:
             skipped += 1
@@ -226,9 +254,21 @@ def import_offers(df: pd.DataFrame, pb: ProfileBuilder, chroma_offers):
             errors += 1
             logger.error(f"Erreur offre {offer_id} : {e}")
 
+        if idx % 100 == 0 or idx == total_rows:
+            pct = idx / total_rows * 100
+            elapsed = time.time() - t0
+            speed = idx / elapsed if elapsed > 0 else 0
+            eta = (total_rows - idx) / speed if speed > 0 else 0
+            logger.info(
+                f"  Phase 1/2 offres: {idx}/{total_rows} ({pct:.1f}%) "
+                f"| {len(rows_data)} insérées, {skipped} ignorées, {errors} erreurs "
+                f"| {_fmt_eta(eta)} restant"
+            )
+
     db.commit()
     logger.info(f"Phase 1/2 : {len(rows_data)} offres en base ({skipped} ignorés, {errors} erreurs)")
 
+    t1 = time.time()
     logger.info(f"Phase 2/2 : Embedding + ChromaDB ({len(rows_data)} offres)...")
     for i in range(0, len(rows_data), BATCH_SIZE):
         batch = rows_data[i:i + BATCH_SIZE]
@@ -241,8 +281,15 @@ def import_offers(df: pd.DataFrame, pb: ProfileBuilder, chroma_offers):
             documents=texts,
             metadatas=[{"id": oid} for oid in ids],
         )
-        if (i // BATCH_SIZE) % 10 == 0:
-            logger.info(f"  ... {i + len(batch)}/{len(rows_data)} offres upsertées")
+        done = min(i + BATCH_SIZE, len(rows_data))
+        pct = done / len(rows_data) * 100 if rows_data else 0
+        elapsed2 = time.time() - t1
+        speed = done / elapsed2 if elapsed2 > 0 else 0
+        eta = (len(rows_data) - done) / speed if speed > 0 else 0
+        logger.info(
+            f"  Phase 2/2 offres: {done}/{len(rows_data)} ({pct:.1f}%) "
+            f"| {_fmt_eta(eta)} restant"
+        )
 
     elapsed = time.time() - t0
     logger.info(f"Offres terminées : {len(rows_data)} en {elapsed:.1f}s")
