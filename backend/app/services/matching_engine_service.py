@@ -145,7 +145,7 @@ def get_recommendations(
     except FileNotFoundError:
         feature_names = None
 
-    SCORE_THRESHOLD = float(os.environ.get("SCORE_THRESHOLD", "0.3"))
+    SCORE_THRESHOLD = float(os.environ.get("SCORE_THRESHOLD", "0.0"))
 
     offer_ids_to_load = [oid for oid, _ in faiss_results if oid]
     offers_from_db = db.query(JobOffer).filter(JobOffer.id.in_(offer_ids_to_load)).all()
@@ -158,8 +158,10 @@ def get_recommendations(
         if not offer:
             continue
         offer_skills_raw = sn.extract_from_text(offer.competences_recherchees or "")
-        if not offer_skills_raw:
-            offer_skills_raw = sn.extract_from_text(offer.description or "")
+        if len(offer_skills_raw) < 2:
+            offer_skills_raw = sn.extract_from_text(
+                f"{offer.intitule or ''} {offer.description or ''} {offer.competences_recherchees or ''}"
+            )
         offer_skills_map[offer_id] = offer_skills_raw
 
     job_graph, secteur_graph, speciality_graph = get_graphs()
@@ -282,8 +284,10 @@ def get_candidates_for_offer(
 
     # --- OPTIMIZATION: pre-extract offer skills once ---
     offer_skills = sn.extract_from_text(offer.competences_recherchees or "")
-    if not offer_skills:
-        offer_skills = sn.extract_from_text(offer.description or "")
+    if len(offer_skills) < 2:
+        offer_skills = sn.extract_from_text(
+            f"{offer.intitule or ''} {offer.description or ''} {offer.competences_recherchees or ''}"
+        )
 
     candidate_ids_to_load = [cid for cid, _ in candidate_scores if cid]
     candidates_from_db = db.query(Candidate).filter(Candidate.id.in_(candidate_ids_to_load)).all()
@@ -294,7 +298,7 @@ def get_candidates_for_offer(
     except FileNotFoundError:
         feature_names = None
 
-    SCORE_THRESHOLD = float(os.environ.get("SCORE_THRESHOLD", "0.3"))
+    SCORE_THRESHOLD = float(os.environ.get("SCORE_THRESHOLD", "0.0"))
 
     job_graph, secteur_graph, speciality_graph = get_graphs()
 
@@ -483,8 +487,10 @@ def nl_offer_search(
         if not offer:
             continue
         offer_skills_raw = sn.extract_from_text(offer.competences_recherchees or "")
-        if not offer_skills_raw:
-            offer_skills_raw = sn.extract_from_text(offer.description or "")
+        if len(offer_skills_raw) < 2:
+            offer_skills_raw = sn.extract_from_text(
+                f"{offer.intitule or ''} {offer.description or ''} {offer.competences_recherchees or ''}"
+            )
         offer_skills_map[offer_id] = offer_skills_raw
 
     recommendations = []

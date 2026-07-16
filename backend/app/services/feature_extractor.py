@@ -136,6 +136,19 @@ def get_education_rank(code: Optional[str]) -> int:
         return 4
     return EDUCATION_RANKS.get(code, 4)
 
+
+def _get_primary_domain(skill_ids: set) -> str:
+    """Return the domain with the most skill IDs, or empty string."""
+    domain_counts: Dict[str, int] = {}
+    for sid in skill_ids:
+        dom = SKILL_ID_TO_DOMAIN.get(sid)
+        if dom:
+            domain_counts[dom] = domain_counts.get(dom, 0) + 1
+    if domain_counts:
+        return max(domain_counts, key=domain_counts.get)
+    return ""
+
+
 # ---------------------------------------------------------------------------
 # Unified feature extraction
 # ---------------------------------------------------------------------------
@@ -152,7 +165,7 @@ def extract_features(
     cand_skills: Optional[List[Dict]] = None,
     offer_skills: Optional[List[Dict]] = None,
 ) -> Dict[str, float]:
-    """Compute 50+ features for candidate-offer pair.
+    """Compute features for candidate-offer pair.
 
     If ``cand_skills`` / ``offer_skills`` are provided (pre-extracted), they
     are used directly. Otherwise, ``sn.extract_from_text()`` is called.
@@ -222,8 +235,9 @@ def extract_features(
         offer_skills_raw = offer_skills
     elif sn is not None:
         offer_skills_raw = sn.extract_from_text(offer.get("competences_recherchees") or "")
-        if not offer_skills_raw:
-            offer_skills_raw = sn.extract_from_text(offer.get("description") or "")
+        if len(offer_skills_raw) < 2:
+            combined = f"{offer.get('intitule') or ''} {offer.get('description') or ''} {offer.get('competences_recherchees') or ''}"
+            offer_skills_raw = sn.extract_from_text(combined)
     else:
         offer_skills_raw = []
 
@@ -234,6 +248,18 @@ def extract_features(
     offer_labels = {s.get("libelle_canonique", "").lower() for s in offer_skills_raw if s.get("libelle_canonique")}
     common = cand_labels & offer_labels
     features["skill_gap_score"] = 1 - (len(common) / max(len(offer_labels), 1)) if offer_labels else 0.5
+
+    # --- new skill-match features ---
+    features["has_all_required_skills"] = int(
+        bool(offer_labels) and offer_labels.issubset(cand_labels)
+    )
+    features["skill_match_ratio"] = len(common) / max(len(offer_labels), 1) if offer_labels else 0.0
+
+    cand_skill_ids = set(s.get("id_skill", "") for s in cand_skills_raw)
+    offer_skill_ids = set(s.get("id_skill", "") for s in offer_skills_raw)
+    cand_domain = _get_primary_domain(cand_skill_ids)
+    offer_domain = _get_primary_domain(offer_skill_ids)
+    features["domain_match"] = int(bool(cand_domain) and cand_domain == offer_domain)
 
     features["has_description"] = int(bool(offer.get("description")))
     features["has_competences"] = int(bool(offer.get("competences_recherchees")))
@@ -249,12 +275,9 @@ def extract_features(
     features["candidate_profile_length"] = len(cand.get("profile_text") or "")
     features["offer_profile_length"] = len(offer.get("profile_text") or "")
     features["profile_length_ratio"] = features["candidate_profile_length"] / max(features["offer_profile_length"], 1)
-    features["intitule_length"] = len(offer.get("intitule") or "")
-    features["candidate_metier_length"] = len(cand.get("metier_vise") or "")
     features["offer_intitule_length"] = len(offer.get("intitule") or "")
 
     # --- offer skill domains ---
-    offer_skill_ids = set(s.get("id_skill", "") for s in offer_skills_raw)
     features["n_offer_skills_total"] = len(offer_skill_ids)
     features["offer_has_any_skill"] = 1 if offer_skill_ids else 0
     for domain, skill_ids in SKILL_DOMAINS.items():

@@ -2,7 +2,7 @@
 train_ranker.py
 
 Train CatBoost Ranker (YetiRank) for offer re-ranking.
-Uses FAISS top-50 retrieval + 50 features.
+Uses FAISS top-200 retrieval + unified feature extraction.
 
 Usage:
     cd backend
@@ -35,7 +35,6 @@ RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 
-# Import unified feature extraction
 from app.services.feature_extractor import (
     extract_features,
     get_graphs,
@@ -48,7 +47,12 @@ def main():
     print("=" * 60)
 
     print("\n[1/5] Chargement des donnees...")
-    gt_df = pd.read_excel(os.path.join(DATA_DIR, "raw", "Appariement_Demandeurs_Offres.xlsx"), engine="openpyxl")
+    gt_path = os.path.join(DATA_DIR, "raw", "Appariement_Demandeurs_Offres.xlsx")
+    if not os.path.exists(gt_path):
+        print(f"  ERREUR: Fichier ground truth introuvable: {gt_path}")
+        print("  Creez le fichier Appariement_Demandeurs_Offres.xlsx dans data/raw/")
+        return
+    gt_df = pd.read_excel(gt_path, engine="openpyxl")
     gt_df = gt_df.drop_duplicates(subset="id_demandeur", keep="first")
 
     conn = sqlite3.connect(os.path.join(BACKEND_DIR, "acpe.db"))
@@ -144,7 +148,12 @@ def main():
             cos_sim = float(np.dot(cand_embedding[0], offer_embeddings[offer_id_to_emb_idx[oid]]))
 
             if oid not in offer_skills_cache:
-                offer_skills_cache[oid] = sn.extract_from_text(offer_data.get("competences_recherchees") or "") or sn.extract_from_text(offer_data.get("description") or "")
+                offer_text = offer_data.get("competences_recherchees") or ""
+                offer_skills = sn.extract_from_text(offer_text)
+                if len(offer_skills) < 2:
+                    combined = f"{offer_data.get('intitule') or ''} {offer_data.get('description') or ''} {offer_text}"
+                    offer_skills = sn.extract_from_text(combined)
+                offer_skills_cache[oid] = offer_skills
             offer_skills = offer_skills_cache[oid]
 
             feat = extract_features(
@@ -215,6 +224,7 @@ def main():
 
     print(f"  Train: {len(y_train)} paires, {len(train_group_sizes)} queries")
     print(f"  Test:  {len(y_test)} paires, {len(test_group_sizes)} queries")
+    print(f"  Features: {len(feature_names)}")
 
     train_pool = Pool(
         data=X_train,

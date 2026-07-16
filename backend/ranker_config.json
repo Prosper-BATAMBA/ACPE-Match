@@ -17,14 +17,15 @@
     "n_candidate_skills",
     "n_offer_skills",
     "skill_gap_score",
+    "has_all_required_skills",
+    "skill_match_ratio",
+    "domain_match",
     "has_description",
     "has_competences",
     "sector_tension",
     "candidate_profile_length",
     "offer_profile_length",
     "profile_length_ratio",
-    "intitule_length",
-    "candidate_metier_length",
     "offer_intitule_length",
     "n_offer_skills_total",
     "offer_has_any_skill",
@@ -72,12 +73,13 @@
     "candidate_has_sous_famille",
     "offer_has_sous_famille"
   ],
-  "n_features": 71,
+  "n_features": 72,
   "n_train_pairs": 800000,
   "n_test_pairs": 200000,
   "n_train_queries": 4000,
   "n_test_queries": 1000,
   "positive_ratio": 0.01287875,
   "loss_function": "YetiRank",
-  "eval_metric": "NDCG:top=5"
+  "eval_metric": "NDCG:top=5",
+  "note": "Features changed: removed intitule_length+candidate_metier_length (duplicates), added has_all_required_skills+skill_match_ratio+domain_match. Model needs retrain."
 }

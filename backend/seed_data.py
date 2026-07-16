@@ -79,6 +79,14 @@ def import_candidates(df: pd.DataFrame, pb: ProfileBuilder, chroma_candidates):
     errors = 0
     total_rows = len(df)
 
+    sn = None
+    try:
+        from matching_engine import SkillNormalizer
+        sn = SkillNormalizer()
+        logger.info("SkillNormalizer chargé pour inférence compétences candidats")
+    except Exception as e:
+        logger.warning(f"SkillNormalizer indisponible (pas d'inférence skills) : {e}")
+
     rows_data = []
     for idx, (_, row) in enumerate(df.iterrows(), 1):
         candidate_id = safe_str(row.get("Matricule", ""))
@@ -95,6 +103,8 @@ def import_candidates(df: pd.DataFrame, pb: ProfileBuilder, chroma_candidates):
         secteur_demande = safe_str(row.get("secteur_metier", "")) or safe_str(row.get("Secteur demandé", ""))
         specialite = safe_str(row.get("Filière / Spécialité", ""))
         mobilite = safe_str(row.get("Mobilité géographique", ""))
+        experience_libre = safe_str(row.get("Expérience", "")) or safe_str(row.get("expérience", ""))
+        competences_declarees = safe_str(row.get("Compétences", "")) or safe_str(row.get("competences", ""))
 
         try:
             result = pb.build_candidate_profile(
@@ -110,6 +120,14 @@ def import_candidates(df: pd.DataFrame, pb: ProfileBuilder, chroma_candidates):
             edu_r = result.get("education_result") or {}
             loc_r = result.get("localisation_result") or {}
 
+            competences_inferees = ""
+            if sn and profile_text:
+                skills = sn.extract_from_text(profile_text)
+                labels = [s.get("libelle_canonique", "") for s in skills if s.get("libelle_canonique")]
+                competences_inferees = ", ".join(labels) if labels else ""
+            if not competences_inferees and competences_declarees:
+                competences_inferees = competences_declarees
+
             candidate = Candidate(
                 id=candidate_id,
                 nom=safe_str(row.get("Nom", "")) or None,
@@ -123,6 +141,8 @@ def import_candidates(df: pd.DataFrame, pb: ProfileBuilder, chroma_candidates):
                 secteur_demande=secteur_demande or None,
                 metier_vise=metier_vise or None,
                 mobilite=mobilite or None,
+                competences_brutes=competences_inferees or None,
+                experience_libre=experience_libre or None,
                 id_famille=job_r.get("id_famille"),
                 id_secteur=secteur_r.get("id_secteur"),
                 code_niveau_etude=edu_r.get("code_niveau"),
@@ -186,6 +206,14 @@ def import_offers(df: pd.DataFrame, pb: ProfileBuilder, chroma_offers):
     errors = 0
     total_rows = len(df)
 
+    sn = None
+    try:
+        from matching_engine import SkillNormalizer
+        sn = SkillNormalizer()
+        logger.info("SkillNormalizer chargé pour extraction compétences offres")
+    except Exception as e:
+        logger.warning(f"SkillNormalizer indisponible : {e}")
+
     rows_data = []
     for idx, (_, row) in enumerate(df.iterrows(), 1):
         offer_id = safe_str(row.get("Référence offre", ""))
@@ -198,14 +226,15 @@ def import_offers(df: pd.DataFrame, pb: ProfileBuilder, chroma_offers):
             continue
 
         intitule = safe_str(row.get("Intitule", ""))
-        secteur = safe_str(row.get("Secteur activité", ""))
+        secteur = safe_str(row.get("Secteur activite", "")) or safe_str(row.get("Secteur activité", ""))
         lieu = safe_str(row.get("Lieu", ""))
         description = safe_str(row.get("Description", ""))
         profil_text = safe_str(row.get("Profil", ""))
-        comp_declarees = safe_str(row.get("Compétences", ""))
+        comp_declarees = safe_str(row.get("Compétences", "")) or safe_str(row.get("Competences", ""))
         competences_inferees = safe_str(row.get("Competences_inferees", ""))
         famille_inferee = safe_str(row.get("Famille_metier_inferee", ""))
         sous_famille_inferee = safe_str(row.get("Sous_famille_inferee", ""))
+        type_contrat = safe_str(row.get("Type contrat", ""))
 
         competences_recherchees = competences_inferees
         if not competences_recherchees:
@@ -216,6 +245,15 @@ def import_offers(df: pd.DataFrame, pb: ProfileBuilder, chroma_offers):
                 parts.append(comp_declarees)
             competences_recherchees = " | ".join(parts) if parts else ""
 
+        if not competences_recherchees and sn:
+            combined = f"{intitule} {description} {profil_text}"
+            skills = sn.extract_from_text(combined)
+            labels = [s.get("libelle_canonique", "") for s in skills if s.get("libelle_canonique")]
+            competences_recherchees = ", ".join(labels) if labels else ""
+
+        profile_parts = [intitule, secteur, competences_recherchees, lieu, type_contrat, description]
+        enriched_text = " | ".join(p for p in profile_parts if p)
+
         try:
             result = pb.build_job_offer_profile(
                 intitule=intitule,
@@ -225,6 +263,9 @@ def import_offers(df: pd.DataFrame, pb: ProfileBuilder, chroma_offers):
                 description=description,
             )
             profile_text = result["profile_text"]
+            if enriched_text and len(enriched_text) > len(profile_text):
+                profile_text = enriched_text
+
             job_r = result.get("job_result") or {}
             secteur_r = result.get("secteur_result") or {}
             loc_r = result.get("localisation_result") or {}
@@ -233,7 +274,7 @@ def import_offers(df: pd.DataFrame, pb: ProfileBuilder, chroma_offers):
                 id=offer_id,
                 intitule=intitule or None,
                 poste=safe_str(row.get("Poste", "")) or None,
-                type_contrat=safe_str(row.get("Type contrat", "")) or None,
+                type_contrat=type_contrat or None,
                 type_entreprise=safe_str(row.get("Type d'entreprise", "")) or None,
                 entreprise=safe_str(row.get("Entreprise", "")) or None,
                 secteur=secteur or None,

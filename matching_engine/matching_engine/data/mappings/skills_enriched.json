@@ -1,93 +1,81 @@
 {
-  "mapping_version": "1.0-it-enrichi-allfamilies",
-  "description": "Référentiel canonique des compétences (Hard Skills & Soft Skills) pour l'extraction de mots-clés (NLP) et l'analyse des écarts de compétences.",
+  "mapping_version": "2.0-expanded-keywords",
+  "description": "Referentiel canonique des competences (Hard Skills & Soft Skills) - Version etendue avec keywords supplementaires pour ameliorer la detection NLP.",
   "skills_taxonomy": [
     {
-      "categorie": "Finance, Comptabilité & Fiscalité",
+      "categorie": "Finance, Comptabilite & Fiscalite",
       "competences": [
         {
           "id_skill": "SKILL_FIN_COMPTA_OHADA",
-          "libelle_canonique": "Comptabilité SYSCOHADA",
+          "libelle_canonique": "Comptabilite SYSCOHADA",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "SYSCOHADA",
-            "OHADA",
-            "comptabilité générale",
-            "comptabilité fournisseur",
-            "états financiers",
-            "normes comptables"
+            "syscohada", "ohada", "comptabilite generale", "comptabilite fournisseur",
+            "etats financiers", "normes comptables", "plan comptable", "grand livre",
+            "balance generale", "journal de caisse", "bilan comptable", "compte de resultat",
+            "ecritures comptables", "comptabilite analytique", "compta"
           ]
         },
         {
           "id_skill": "SKILL_FIN_FISCALITE",
-          "libelle_canonique": "Droit Fiscal & Fiscalité",
+          "libelle_canonique": "Droit Fiscal & Fiscalite",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "fiscalité",
-            "déclarations fiscales",
-            "législation fiscale",
-            "réglementation fiscale congolaise",
-            "liasse fiscale"
+            "fiscalite", "declarations fiscales", "legislation fiscale",
+            "reglementation fiscale congolaise", "liasse fiscale", "impot",
+            "impots", "tvca", "tpf", "iri", "bni", "fiscal"
           ]
         }
       ]
     },
     {
-      "categorie": "QHSE & Sécurité Industrielle",
+      "categorie": "QHSE & Securite Industrielle",
       "competences": [
         {
           "id_skill": "SKILL_HSE_CONFORMITE",
-          "libelle_canonique": "Conformité HSE & Normes",
+          "libelle_canonique": "Conformite HSE & Normes",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "procédures de sécurité",
-            "santé au travail",
-            "conformité réglementaire",
-            "politique HSE",
-            "normes ISO",
-            "sécurité industrielle"
+            "procedures de securite", "sante au travail", "conformite reglementaire",
+            "politique hse", "normes iso", "securite industrielle", "hse",
+            "hygiene securite environnement", "qualite", "norme iso 9001",
+            "norme iso 14001", "management de la qualite"
           ]
         },
         {
           "id_skill": "SKILL_HSE_PREVENTION",
-          "libelle_canonique": "Prévention et Évaluation des Risques",
+          "libelle_canonique": "Prevention et Evaluation des Risques",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "évaluation des risques",
-            "audit de sécurité",
-            "prévention des risques",
-            "arbres des causes",
-            "plan de prévention"
+            "evaluation des risques", "audit de securite", "prevention des risques",
+            "arbres des causes", "plan de prevention", "risk management",
+            "analyse de risques", "incident investigation"
           ]
         }
       ]
     },
     {
-      "categorie": "Maintenance & Ingénierie",
+      "categorie": "Maintenance & Ingenierie",
       "competences": [
         {
           "id_skill": "SKILL_MAINT_PREVENT",
-          "libelle_canonique": "Maintenance Préventive et Curative",
+          "libelle_canonique": "Maintenance Preventive et Curative",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "maintenance préventive",
-            "curative",
-            "dépannage",
-            "électromécanique",
-            "GMAO"
+            "maintenance preventive", "curative", "depannage", "electromecanique",
+            "gmao", "maintenance industrielle", "maintenance mecanique",
+            "roulants", "pompe", "compresseur", "maintenance des equipements"
           ]
         },
         {
           "id_skill": "SKILL_MAINT_ELEC",
-          "libelle_canonique": "Électricité Industrielle",
+          "libelle_canonique": "Electricite Industrielle",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "installations électriques",
-            "équipements électriques",
-            "habilitation électrique",
-            "haute tension",
-            "basse tension",
-            "câblage"
+            "installations electriques", "equipements electriques",
+            "habilitation electrique", "haute tension", "basse tension",
+            "cablage", "armoire electrique", "automate", "plc",
+            "centrale electrique", "generation", "transformation"
           ]
         }
       ]
@@ -97,16 +85,12 @@
       "competences": [
         {
           "id_skill": "SKILL_COM_NEGOCIATION",
-          "libelle_canonique": "Techniques de Vente et Négociation",
+          "libelle_canonique": "Techniques de Vente et Negotiation",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "techniques de vente",
-            "négociation",
-            "prospection",
-            "closing",
-            "développement de portefeuille",
-            "B2B",
-            "B2C"
+            "techniques de vente", "negociation", "prospection", "closing",
+            "developpement de portefeuille", "b2b", "b2c", "force de vente",
+            "terrain", "quota", "objectif commercial", "contrat commercial"
           ]
         },
         {
@@ -114,10 +98,9 @@
           "libelle_canonique": "Produits d'Assurance",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "produits d'assurance",
-            "gestion des sinistres",
-            "police d'assurance",
-            "courtage"
+            "produits d assurance", "gestion des sinistres", "police d assurance",
+            "courtage", "assurance vie", "assurance auto", "assurance habitation",
+            "souscription", "capitalisation"
           ]
         }
       ]
@@ -130,12 +113,9 @@
           "libelle_canonique": "Gestion Administrative",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "gestion administrative",
-            "secrétariat",
-            "rédaction de courriers",
-            "classement",
-            "archivage",
-            "tenue de registres"
+            "gestion administrative", "secretariat", "redaction de courriers",
+            "classement", "archivage", "tenue de registres", "accueil",
+            "standard telephonique", "ordonnancement", "agenda"
           ]
         },
         {
@@ -143,30 +123,25 @@
           "libelle_canonique": "Outils Bureautiques",
           "type": "Hard Skill",
           "mots_cles_extraction": [
-            "outils informatiques",
-            "pack office",
-            "excel",
-            "word",
-            "powerpoint",
-            "logiciels de gestion",
-            "ERP"
+            "outils informatiques", "pack office", "excel", "word", "powerpoint",
+            "logiciels de gestion", "erp", "access", "outlook", "teams",
+            "tableur", "traitement de texte", "presentation", "office 365",
+            "google sheets", "google docs", "libreoffice"
           ]
         }
       ]
     },
     {
-      "categorie": "Compétences Transversales (Soft Skills)",
+      "categorie": "Competences Transversales (Soft Skills)",
       "competences": [
         {
           "id_skill": "SKILL_SOFT_RELATIONNEL",
           "libelle_canonique": "Aisance Relationnelle",
           "type": "Soft Skill",
           "mots_cles_extraction": [
-            "aisance relationnelle",
-            "sens du contact",
-            "bon relationnel",
-            "empathie",
-            "écoute active"
+            "aisance relationnelle", "sens du contact", "bon relationnel",
+            "empathie", "ecoute active", "sens de l ecoute", "courtoisie",
+            "sens du service", "politesse", "affabilite"
           ]
         },
         {
@@ -174,28 +149,22 @@
           "libelle_canonique": "Communication",
           "type": "Soft Skill",
           "mots_cles_extraction": [
-            "outils de communication",
-            "communication orale",
-            "communication écrite",
-            "expression claire",
-            "présentation"
+            "outils de communication", "communication orale", "communication ecrite",
+            "expression claire", "presentation", "prise de parole",
+            "rhetorique", "argumentation", "publie", "communication interne",
+            "communication externe", "relation presse"
           ]
         },
         {
           "id_skill": "SKILL_SOFT_LEADERSHIP",
-          "libelle_canonique": "Leadership & Management d'équipe",
+          "libelle_canonique": "Leadership & Management d equipe",
           "type": "Soft Skill",
           "mots_cles_extraction": [
-            "coordonner les équipes",
-            "superviser",
-            "animer",
-            "management",
-            "leadership",
-            "gestion de projet",
-            "manager une equipe",
-            "manager equipe",
-            "encadrer une equipe",
-            "encadrement equipe"
+            "coordonner les equipes", "superviser", "animer", "management",
+            "leadership", "gestion de projet", "manager une equipe",
+            "manager equipe", "encadrer une equipe", "encadrement equipe",
+            "management d equipe", "pilotage", "co-management",
+            "animation d equipe", "coaching", "mentorat", "delegation"
           ]
         }
       ]
@@ -209,11 +178,11 @@
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_DATA_SCIENCE",
           "mots_cles_extraction": [
-            "python",
-            "pandas",
-            "numpy",
-            "scikit-learn",
-            "jupyter"
+            "python", "pandas", "numpy", "scikit-learn", "jupyter",
+            "tensorflow", "pytorch", "keras", "data science", "datascience",
+            "machine learning", "deep learning", "data mining", "analyse de donnees",
+            "matplotlib", "seaborn", "plotly", "flask", "django", "fastapi",
+            "scripting", "automatisation", "notebook", "anaconda"
           ]
         },
         {
@@ -222,24 +191,22 @@
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_DATA_SCIENCE",
           "mots_cles_extraction": [
-            "power bi",
-            "powerbi",
-            "business intelligence",
-            "tableau de bord",
-            "dashboard"
+            "power bi", "powerbi", "business intelligence", "tableau de bord",
+            "dashboard", "reporting", "kpi", "indicateur", "dataviz",
+            "data visualization", "tableau", "qlik", "looker", "superset",
+            "datawarehouse", "data warehouse", "etl", "dwh"
           ]
         },
         {
           "id_skill": "SKILL_IT_SQL",
-          "libelle_canonique": "SQL & Bases de données",
+          "libelle_canonique": "SQL & Bases de donnees",
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_DATA_SCIENCE",
           "mots_cles_extraction": [
-            "sql",
-            "base de données",
-            "requêtes sql",
-            "mysql",
-            "postgresql"
+            "sql", "base de donnees", "requetes sql", "mysql", "postgresql",
+            "oracle", "sql server", "mariadb", "sqlite", "mongodb",
+            "nosql", "redis", "elasticsearch", "database", "bdd",
+            "requetage", "optimisation requetes", "indexation"
           ]
         },
         {
@@ -248,88 +215,89 @@
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_DATA_SCIENCE",
           "mots_cles_extraction": [
-            "machine learning",
-            "intelligence artificielle",
-            "deep learning",
-            "modèle prédictif"
+            "machine learning", "intelligence artificielle", "deep learning",
+            "modele predictif", "reseau de neurones", "nlp", "traitement du langage",
+            "computer vision", "vision par ordinateur", "reinforcement learning",
+            "apprentissage automatique", "ia", "artificial intelligence",
+            "transformer", "bert", "gpt", "llm", "generative ai"
           ]
         },
         {
           "id_skill": "SKILL_IT_STATS",
-          "libelle_canonique": "Statistiques appliquées & Visualisation de données",
+          "libelle_canonique": "Statistiques appliquees & Visualisation de donnees",
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_DATA_SCIENCE",
           "mots_cles_extraction": [
-            "statistiques",
-            "analyse de données",
-            "visualisation de données",
-            "data viz"
+            "statistiques", "analyse de donnees", "visualisation de donnees",
+            "data viz", "probability", "probabilites", "regression",
+            "test statistique", "hypothese", "correlation", "variance",
+            "mean", "median", "distribution", "inferentielle", "descriptive"
           ]
         },
         {
           "id_skill": "SKILL_IT_WEBDEV",
-          "libelle_canonique": "Développement Web (Front/Back-End)",
+          "libelle_canonique": "Developpement Web (Front/Back-End)",
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_DEV",
           "mots_cles_extraction": [
-            "javascript",
-            "react",
-            "node.js",
-            "développement web",
-            "html css",
-            "front-end",
-            "back-end"
+            "javascript", "react", "node.js", "nodejs", "developpement web",
+            "html css", "html", "css", "front-end", "frontend", "back-end",
+            "backend", "php", "laravel", "symfony", "angular", "vue.js", "vuejs",
+            "vue", "typescript", "next.js", "nextjs", "nuxt", "wordpress",
+            "joomla", "drupal", "prestashop", "woocommerce", "fullstack",
+            "full stack", "web", "application web", "site web", "responsive",
+            "bootstrap", "tailwind", "jquery", "ajax", "rest api", "graphql",
+            "api rest", "swagger", "web design", "ui", "ux"
           ]
         },
         {
           "id_skill": "SKILL_IT_DEVOPS",
-          "libelle_canonique": "DevOps & Intégration continue",
+          "libelle_canonique": "DevOps & Integration continue",
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_DEV",
           "mots_cles_extraction": [
-            "devops",
-            "docker",
-            "git",
-            "intégration continue",
-            "ci/cd"
+            "devops", "docker", "git", "integration continue", "ci/cd",
+            "jenkins", "kubernetes", "k8s", "terraform", "ansible",
+            "aws", "azure", "gcp", "cloud", "infrastructure as code",
+            "iac", "pipeline", "github actions", "gitlab ci", "travis ci",
+            "monitoring", "prometheus", "grafana", "nginx", "apache"
           ]
         },
         {
           "id_skill": "SKILL_IT_RESEAUX",
-          "libelle_canonique": "Administration Réseaux & Systèmes",
+          "libelle_canonique": "Administration Reseaux & Systemes",
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_RESEAUX_SYS",
           "mots_cles_extraction": [
-            "administration réseaux",
-            "tcp/ip",
-            "administration systèmes",
-            "windows server",
-            "linux"
+            "administration reseaux", "tcp/ip", "administration systemes",
+            "windows server", "linux", "active directory", "dns", "dhcp",
+            "firewall", "pare-feu", "switch", "routeur", "cisco",
+            "vmware", "virtualisation", "hyper-v", "virtualbox",
+            "reseaux", "lan", "wan", "vpn", "ssh", "rdp"
           ]
         },
         {
           "id_skill": "SKILL_IT_TELECOM",
-          "libelle_canonique": "Télécommunications & Supervision Réseau (NOC)",
+          "libelle_canonique": "Telecommunications & Supervision Reseau (NOC)",
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_RESEAUX_SYS",
           "mots_cles_extraction": [
-            "télécom",
-            "noc",
-            "supervision réseau",
-            "monitoring"
+            "telecom", "noc", "supervision reseau", "monitoring",
+            "zte", "huawei", "alcatel", "fibre optique", "4g", "5g",
+            "antenne", "station de base", "backhaul", "transmission"
           ]
         },
         {
           "id_skill": "SKILL_IT_CYBERSEC",
-          "libelle_canonique": "Cybersécurité",
+          "libelle_canonique": "Cybersecurite",
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_CYBERSEC",
           "mots_cles_extraction": [
-            "cybersécurité",
-            "sécurité informatique",
-            "pare-feu",
-            "vpn",
-            "iso 27001"
+            "cybersecurite", "securite informatique", "pare-feu", "vpn",
+            "iso 27001", "pentest", "pentesting", "audit de securite",
+            "cryptography", "cryptographie", "chiffrement", "soc",
+            "security operations center", "siem", "intrusion",
+            "vulnerabilite", "malware", "ransomware", "phishing"
           ]
         },
         {
@@ -338,10 +306,9 @@
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_CARTO_SIG",
           "mots_cles_extraction": [
-            "sig",
-            "qgis",
-            "arcgis",
-            "cartographie"
+            "sig", "qgis", "arcgis", "cartographie", "geospatial",
+            "geographie information", "georeferencement", "geoinformatique",
+            "remote sensing", "teledetection", "gps", "geolocalisation"
           ]
         },
         {
@@ -350,11 +317,11 @@
           "type": "Hard Skill",
           "sous_famille_associee": "FAM_IT_DIGITAL_MKT",
           "mots_cles_extraction": [
-            "marketing digital",
-            "seo",
-            "sea",
-            "community management",
-            "réseaux sociaux"
+            "marketing digital", "seo", "sea", "sem", "community management",
+            "reseaux sociaux", "facebook ads", "google ads", "analytics",
+            "google analytics", "contenu", "content marketing", "emailing",
+            "newsletter", "influence marketing", "affiliate marketing",
+            "ppc", "campagne pub", "conversion", "funnel"
           ]
         }
       ]
@@ -368,22 +335,22 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_LOG_TRANSPORT",
           "mots_cles_extraction": [
-            "conduite defensive",
-            "permis poids lourd",
-            "reglementation routiere"
+            "conduite defensive", "permis poids lourd", "reglementation routiere",
+            "permis de conduire", "chauffeur", "livraison", "transport",
+            "logistique", "flotte", "vehicule", "camion", "fourgon",
+            "cepc", "capacite professionnelle"
           ]
         },
         {
           "id_skill": "SKILL_LOG_ENTREPOT",
-          "libelle_canonique": "Gestion d'Entrepôt & Stocks",
+          "libelle_canonique": "Gestion d'Entrepot & Stocks",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_LOG_ENTREPOT",
           "mots_cles_extraction": [
-            "gestion des stocks",
-            "gestion d'entrepot",
-            "manutention",
-            "inventaire",
-            "wms"
+            "gestion des stocks", "gestion d entrepot", "manutention",
+            "inventaire", "wms", "stockage", "approvisionnement",
+            "approvisionnement", "stock", "entreposage", "cariste",
+            "transpalette", "preparation de commande", " picking"
           ]
         },
         {
@@ -392,9 +359,10 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_LOG_ACHATS",
           "mots_cles_extraction": [
-            "sourcing fournisseurs",
-            "negociation achats",
-            "approvisionnement"
+            "sourcing fournisseurs", "negociation achats", "approvisionnement",
+            "achats", "marches publics", "appel d offres", "consultation",
+            "fournisseur", "contrat fournisseur", "evaluation fournisseur",
+            "purchasing", "buyer", "acheteur"
           ]
         },
         {
@@ -403,10 +371,10 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_LOG_DOUANE",
           "mots_cles_extraction": [
-            "reglementation douaniere",
-            "declaration en douane",
-            "incoterms",
-            "transit international"
+            "reglementation douaniere", "declaration en douane", "incoterms",
+            "transit international", "douane", "transit", "import export",
+            "documentation douaniere", "tarif douanier", "droit de douane",
+            "bureau de douane", "procedures douanieres"
           ]
         },
         {
@@ -415,9 +383,10 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_LOG_MANAGEMENT",
           "mots_cles_extraction": [
-            "pilotage de la chaine logistique",
-            "gestion de flotte",
-            "optimisation logistique"
+            "pilotage de la chaine logistique", "gestion de flotte",
+            "optimisation logistique", "supply chain", "chain logistique",
+            "planification logistique", "distribution", "flux logistiques",
+            "lean logistics", "kpi logistique", "performance logistique"
           ]
         }
       ]
@@ -431,70 +400,76 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_RH_CORE",
           "mots_cles_extraction": [
-            "recrutement",
-            "gestion de la paie",
-            "droit du travail",
-            "gpec"
+            "recrutement", "gestion de la paie", "droit du travail",
+            "gpec", "grh", "administration du personnel", "paie",
+            "Bulletin de paie", "contrat de travail", "embauche",
+            "entretien d embauche", "competences", "formation",
+            "evaluation", "licenciement", "demission", "conge",
+            "absenteeisme", "climat social", "dialogue social"
           ]
         },
         {
           "id_skill": "SKILL_ADMIN_SECRETARIAT2",
-          "libelle_canonique": "Secrétariat & Administration",
+          "libelle_canonique": "Secretariat & Administration",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_ADMIN_SECRETARIAT",
           "mots_cles_extraction": [
-            "secretariat",
-            "gestion administrative",
-            "classement",
-            "archivage"
+            "secretariat", "gestion administrative", "classement",
+            "archivage", "accueil", "standard", "courrier",
+            "comite de direction", "pv de reunion", "convocation",
+            "agenda", "salle de reunion", "organisation"
           ]
         },
         {
           "id_skill": "SKILL_ADMIN_PILOTAGE",
-          "libelle_canonique": "Administration Générale & Pilotage",
+          "libelle_canonique": "Administration Generale & Pilotage",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_ADMIN_DIRECTION",
           "mots_cles_extraction": [
-            "pilotage administratif",
-            "reporting"
+            "pilotage administratif", "reporting", "tableau de bord",
+            "indicateur de performance", "suivi administratif",
+            "coordination", "planification", "ordonnancement"
           ]
         }
       ]
     },
     {
-      "categorie": "Comptabilité, Gestion & Audit",
+      "categorie": "Comptabilite, Gestion & Audit",
       "competences": [
         {
           "id_skill": "SKILL_FIN_COMPTA2",
-          "libelle_canonique": "Comptabilité générale",
+          "libelle_canonique": "Comptabilite generale",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_FIN_COMPTA",
           "mots_cles_extraction": [
-            "tenue de comptes",
-            "etats financiers",
-            "comptabilite"
+            "tenue de comptes", "etats financiers", "comptabilite",
+            "ecritures", "rapprochement bancaire", "rapprochement",
+            "journal de caisse", "grand livre", "balance",
+            "bilan", "compte de resultat", "annexe"
           ]
         },
         {
           "id_skill": "SKILL_FIN_AUDIT",
-          "libelle_canonique": "Audit & Contrôle de gestion",
+          "libelle_canonique": "Audit & Controle de gestion",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_FIN_AUDIT",
           "mots_cles_extraction": [
-            "audit financier",
-            "controle de gestion",
-            "normes d'audit"
+            "audit financier", "controle de gestion", "normes d audit",
+            "audit interne", "audit externe", "comite d audit",
+            "analyse des ecarts", "budget previsionnel",
+            "plan d affaires", "rentabilite", "marge"
           ]
         },
         {
           "id_skill": "SKILL_FIN_FINANCE",
-          "libelle_canonique": "Finance & Trésorerie",
+          "libelle_canonique": "Finance & Tresorerie",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_FIN_FINANCE",
           "mots_cles_extraction": [
-            "analyse financiere",
-            "gestion de tresorerie",
-            "marches financiers"
+            "analyse financiere", "gestion de tresorerie",
+            "marches financiers", "investissement", "financement",
+            "tresorerie", "cash flow", "fonds de roulement",
+            "credit", "emprunt", "obligation", "action"
           ]
         },
         {
@@ -503,8 +478,9 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_FIN_RECOUV_ASSUR",
           "mots_cles_extraction": [
-            "recouvrement de creances",
-            "gestion des sinistres"
+            "recouvrement de creances", "gestion des sinistres",
+            "recouvrement", "creance", "impaye", "relance",
+            "contentieux commercial", "assurance"
           ]
         }
       ]
@@ -514,35 +490,39 @@
       "competences": [
         {
           "id_skill": "SKILL_HSE_QUALITE2",
-          "libelle_canonique": "QHSE & Qualité",
+          "libelle_canonique": "QHSE & Qualite",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_HSE_QUALITE",
           "mots_cles_extraction": [
-            "conformite hse",
-            "controle qualite",
-            "audit de securite"
+            "conformite hse", "controle qualite", "audit de securite",
+            "assurance qualite", "amelioration continue", "lean",
+            "six sigma", "kaizen", "5s", "spm", "spc",
+            "controle non destructif", "metrologie", "etalonnage",
+            "processus", "documentation qualite"
           ]
         },
         {
           "id_skill": "SKILL_HSE_MECA",
-          "libelle_canonique": "Maintenance Mécanique & Chaudronnerie",
+          "libelle_canonique": "Maintenance Mecanique & Chaudronnerie",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_HSE_MECA",
           "mots_cles_extraction": [
-            "maintenance mecanique",
-            "chaudronnerie",
-            "soudure"
+            "maintenance mecanique", "chaudronnerie", "soudure",
+            "tuyaauterie", "usinage", "fraisage", "tournage",
+            "soudage", "electrode", "mig", "mag", "tig",
+            "fabrication industrielle", "mecanique generale"
           ]
         },
         {
           "id_skill": "SKILL_HSE_ELEC2",
-          "libelle_canonique": "Maintenance Électrique & Instrumentation",
+          "libelle_canonique": "Maintenance Electrique & Instrumentation",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_HSE_ELEC",
           "mots_cles_extraction": [
-            "instrumentation",
-            "automatisme",
-            "habilitation electrique"
+            "instrumentation", "automatisme", "habilitation electrique",
+            "automate programmable", "api", "capteur", "transmetteur",
+            "vanne", "regulation", "scada", "dcs", "plc",
+            "maintenance electrique", "depannage electrique"
           ]
         },
         {
@@ -551,8 +531,10 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_HSE_PRODUCTION",
           "mots_cles_extraction": [
-            "conduite de ligne de production",
-            "conditionnement"
+            "conduite de ligne de production", "conditionnement",
+            "production", "fabrication", "rendement", "productivite",
+            "ligne de production", "atelier", "usine",
+            "shift", "roulement", "three eight"
           ]
         }
       ]
@@ -562,13 +544,16 @@
       "competences": [
         {
           "id_skill": "SKILL_COM_VENTE2",
-          "libelle_canonique": "Vente & Développement Commercial",
+          "libelle_canonique": "Vente & Developpement Commercial",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_VENTE_COMMERCIAL",
           "mots_cles_extraction": [
-            "techniques de vente",
-            "prospection",
-            "developpement de portefeuille"
+            "techniques de vente", "prospection",
+            "developpement de portefeuille", "commercial",
+            "vente", "client", "negociation commerciale",
+            "devis", "commande", "facturation", "ca",
+            "chiffre d affaires", "objectif", "terrain",
+            "ccount manager", "key account"
           ]
         },
         {
@@ -577,25 +562,28 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_VENTE_RELATION_CLIENT",
           "mots_cles_extraction": [
-            "gestion de la relation client",
-            "centre d'appels",
-            "gestion des reclamations"
+            "gestion de la relation client", "centre d appels",
+            "gestion des reclamations", "service client", "satisfaction",
+            "after sales", "helpdesk", "hotline", "support",
+            "crm", "fidelisation", "体验 client"
           ]
         },
         {
           "id_skill": "SKILL_COM_MARKETING",
-          "libelle_canonique": "Marketing & Études",
+          "libelle_canonique": "Marketing & Etudes",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_VENTE_MARKETING",
           "mots_cles_extraction": [
-            "marketing operationnel",
-            "etude de marche"
+            "marketing operationnel", "etude de marche", "marketing",
+            "strategie marketing", "segmentation", "positionnement",
+            "mix marketing", "4p", "branding", "marque",
+            "etude qualitative", "etude quantitative", "sondage"
           ]
         }
       ]
     },
     {
-      "categorie": "Hôtellerie, Restauration & Services de Proximité",
+      "categorie": "Hotellerie, Restauration & Services de Proximite",
       "competences": [
         {
           "id_skill": "SKILL_RESTA_CUISINE",
@@ -603,47 +591,54 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_RESTA_CUISINE",
           "mots_cles_extraction": [
-            "techniques culinaires",
-            "normes haccp",
-            "cuisine",
-            "cuisinier",
-            "chef de cuisine"
+            "techniques culinaires", "normes haccp", "cuisine",
+            "cuisinier", "chef de cuisine", "chef de partie",
+            "gastronomie", "patissier", "boulanger", "barman",
+            "sommelier", "restauration", "restaurant", "bar",
+            "brasserie", "cafe", "hotellerie", "menu",
+            "carte", "dressage", "mise en place"
           ]
         },
         {
           "id_skill": "SKILL_RESTA_HOTELLERIE",
-          "libelle_canonique": "Hôtellerie & Accueil",
+          "libelle_canonique": "Hotellerie & Accueil",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_RESTA_HOTELLERIE",
           "mots_cles_extraction": [
-            "accueil client",
-            "gestion hoteliere",
-            "front office"
+            "accueil client", "gestion hoteliere", "front office",
+            "reception", "check-in", "check-out", "housekeeping",
+            "etage", "reservation", "conciergerie", "hotel",
+            "hebergement", "chambre", "suite", "lobby"
           ]
         },
         {
           "id_skill": "SKILL_RESTA_SERVICES_PERSONNE",
-          "libelle_canonique": "Services de Proximité",
+          "libelle_canonique": "Services de Proximite",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_RESTA_SERVICES_PERSONNE",
           "mots_cles_extraction": [
-            "techniques de coiffure",
-            "esthetique"
+            "techniques de coiffure", "esthetique", "coiffure",
+            "barbier", "beaute", "soin", "manucure", "pedicure",
+            "maquillage", "epilation", "massage", "spa"
           ]
         }
       ]
     },
     {
-      "categorie": "Santé, Pharmacie & Recherche Scientifique",
+      "categorie": "Sante, Pharmacie & Recherche Scientifique",
       "competences": [
         {
           "id_skill": "SKILL_SANTE_MEDICAL",
-          "libelle_canonique": "Médical & Paramédical",
+          "libelle_canonique": "Medical & Paramedical",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_SANTE_MEDICAL",
           "mots_cles_extraction": [
-            "soins infirmiers",
-            "diagnostic medical"
+            "soins infirmiers", "diagnostic medical", "infirmier",
+            "infirmiere", "medecin", "sage-femme", "technicien de laboratoire",
+            "radiologie", "imagerie medicale", "chirurgie",
+            "anesthesie", "reanimation", "urgences", "soins",
+            "patient", "hospitalisation", "clinique", "hopital",
+            "pharmacie", "medicament", "prescription"
           ]
         },
         {
@@ -652,9 +647,10 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_SANTE_PHARMA",
           "mots_cles_extraction": [
-            "pharmacologie",
-            "dispensation pharmaceutique",
-            "officine"
+            "pharmacologie", "dispensation pharmaceutique", "officine",
+            "pharmacie", "pharmacien", "pharmacienne", "medicament",
+            "prescription", "ordonnance", "galenique", "production pharmaceutique",
+            "controle de qualite", "laboratoire pharmaceutique"
           ]
         },
         {
@@ -663,24 +659,28 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_SANTE_RECHERCHE",
           "mots_cles_extraction": [
-            "analyses de laboratoire",
-            "recherche scientifique"
+            "analyses de laboratoire", "recherche scientifique",
+            "laboratoire", "analyses", "biologie", "chimie",
+            "spectrometrie", "chromatographie", "pcr", "culture cellulaire",
+            "microbiologie", "virologie", "parasitologie"
           ]
         }
       ]
     },
     {
-      "categorie": "Bâtiment, Travaux Publics & Aménagement du Territoire",
+      "categorie": "Batiment, Travaux Publics & Amenagement du Territoire",
       "competences": [
         {
           "id_skill": "SKILL_BTP_GROS_OEUVRE",
-          "libelle_canonique": "Gros Œuvre & Construction",
+          "libelle_canonique": "Gros Oeuvre & Construction",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_BTP_GROS_OEUVRE",
           "mots_cles_extraction": [
-            "maconnerie",
-            "coffrage",
-            "lecture de plans"
+            "maconnerie", "coffrage", "lecture de plans",
+            "batiment", "construction", "chantier", "fondation",
+            "structure", "beton", "armature", "ferraillage",
+            "carreleur", "peintre", "platrier", "electricien bt",
+            "plombier", "menuisier"
           ]
         },
         {
@@ -689,71 +689,79 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_BTP_ENGINS",
           "mots_cles_extraction": [
-            "conduite d'engins de chantier",
-            "securite chantier"
+            "conduite d engins de chantier", "securite chantier",
+            "pelle hydraulique", "chargeur", "bulldozer",
+            "grue", "pont roulant", "gerbeur", "chariot elevateur",
+            "nacelle", "compacteur", "finisseur"
           ]
         },
         {
           "id_skill": "SKILL_BTP_ETUDES",
-          "libelle_canonique": "Études & Conception",
+          "libelle_canonique": "Etudes & Conception",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_BTP_ETUDES",
           "mots_cles_extraction": [
-            "conception architecturale",
-            "autocad",
-            "genie civil"
+            "conception architecturale", "autocad", "genie civil",
+            "topographie", "etude de sol", "dimensionnement",
+            "architecte", "dessinateur", "bim", "revit",
+            "plan", "permit", "permis de construire", " urbanisme"
           ]
         }
       ]
     },
     {
-      "categorie": "Industrie Pétrolière, Gazière & Énergie",
+      "categorie": "Industrie Petroliere, Gaziere & Energie",
       "competences": [
         {
           "id_skill": "SKILL_PETROLE_FORAGE",
-          "libelle_canonique": "Forage & Complétion",
+          "libelle_canonique": "Forage & Completion",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_PETROLE_FORAGE",
           "mots_cles_extraction": [
-            "techniques de forage",
-            "completion de puits"
+            "techniques de forage", "completion de puits",
+            "forage", "puits", "tubing", "casing", "ciment",
+            "boue de forage", "bit", "trieuse", "directionnel"
           ]
         },
         {
           "id_skill": "SKILL_PETROLE_INGENIERIE",
-          "libelle_canonique": "Ingénierie Pétrolière & Gisement",
+          "libelle_canonique": "Ingenierie Petroliere & Gisement",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_PETROLE_INGENIERIE",
           "mots_cles_extraction": [
-            "genie petrolier",
-            "geologie petroliere"
+            "genie petrolier", "geologie petroliere", "gisement",
+            "reservoir", "production", "pompage", "extraction",
+            "petrole", "gaz", "hydrocarbure", "upstream", "downstream"
           ]
         },
         {
           "id_skill": "SKILL_PETROLE_OFFSHORE",
-          "libelle_canonique": "Opérations Offshore & Raffinerie",
+          "libelle_canonique": "Operations Offshore & Raffinerie",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_PETROLE_OFFSHORE",
           "mots_cles_extraction": [
-            "operations offshore",
-            "raffinage petrolier",
-            "commissioning"
+            "operations offshore", "raffinage petrolier", "commissioning",
+            "plateforme", "flare", "distillation", "cracking",
+            "raffinage", "petrochimie", "industrie petroliere",
+            "terminal petrolier", "stockage petrolier"
           ]
         }
       ]
     },
     {
-      "categorie": "Agriculture, Agroalimentaire & Exploitation Forestière",
+      "categorie": "Agriculture, Agroalimentaire & Exploitation Forestiere",
       "competences": [
         {
           "id_skill": "SKILL_AGRI_PRODUCTION",
-          "libelle_canonique": "Agriculture & Élevage",
+          "libelle_canonique": "Agriculture & Elevage",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_AGRI_PRODUCTION",
           "mots_cles_extraction": [
-            "techniques agricoles",
-            "elevage",
-            "agronomie"
+            "techniques agricoles", "elevage", "agronomie",
+            "culture", "plantation", "recolte", "irrigation",
+            "engrais", "semence", "pesticide", "machinerie agricole",
+            "tractor", "bovin", "porcin", "avi", "avicole",
+            "peche", "aquaculture"
           ]
         },
         {
@@ -762,24 +770,27 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_AGRI_TRANSFORMATION",
           "mots_cles_extraction": [
-            "transformation agroalimentaire",
-            "controle qualite alimentaire"
+            "transformation agroalimentaire", "controle qualite alimentaire",
+            "industrie alimentaire", "conditionnement", "emballage",
+            "conservation", "pasteurisation", "stérilisation",
+            "transformation", "alimentaire", "agroalimentaire"
           ]
         },
         {
           "id_skill": "SKILL_AGRI_FORESTERIE",
-          "libelle_canonique": "Foresterie & Exploitation Forestière",
+          "libelle_canonique": "Foresterie & Exploitation Forestiere",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_AGRI_FORESTERIE",
           "mots_cles_extraction": [
-            "exploitation forestiere",
-            "sylviculture"
+            "exploitation forestiere", "sylviculture", "foret",
+            "bois", "plantation forestiere", "peupleraie",
+            "scierie", "bois d oeuvre", "charbon de bois"
           ]
         }
       ]
     },
     {
-      "categorie": "Droit, Justice & Conformité",
+      "categorie": "Droit, Justice & Conformite",
       "competences": [
         {
           "id_skill": "SKILL_JURI_AFFAIRES",
@@ -787,50 +798,56 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_JURI_AFFAIRES",
           "mots_cles_extraction": [
-            "droit des societes",
-            "redaction de contrats"
+            "droit des societes", "redaction de contrats", "contrat",
+            "droit commercial", "droit des affaires", "avocat",
+            "juriste", "contentieux", "arbitrage", "mediation",
+            "conseil juridique", "legal", "reglementation"
           ]
         },
         {
           "id_skill": "SKILL_JURI_CONTENTIEUX",
-          "libelle_canonique": "Contentieux & Conformité",
+          "libelle_canonique": "Contentieux & Conformite",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_JURI_CONTENTIEUX",
           "mots_cles_extraction": [
-            "procedure judiciaire",
-            "conformite reglementaire"
+            "procedure judiciaire", "conformite reglementaire",
+            "contentieux", "litige", "recours", "appel",
+            "cassation", "tribunal", "jugement", "arbitrage",
+            "compliance", "anti-corruption", "blanchiment"
           ]
         }
       ]
     },
     {
-      "categorie": "Sécurité, Sûreté & Défense",
+      "categorie": "Securite, Surete & Defense",
       "competences": [
         {
           "id_skill": "SKILL_SECU_GARDIENNAGE",
-          "libelle_canonique": "Gardiennage & Sûreté",
+          "libelle_canonique": "Gardiennage & Surete",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_SECU_GARDIENNAGE",
           "mots_cles_extraction": [
-            "surveillance",
-            "controle d'acces",
-            "rondes de securite"
+            "surveillance", "controle d acces", "rondes de securite",
+            "gardiennage", "surete", "vigile", "agent de securite",
+            "cctv", "video surveillance", "alarme", "perimetre",
+            "ronde", "verrouillage", "desverrouillage"
           ]
         },
         {
           "id_skill": "SKILL_SECU_DEFENSE",
-          "libelle_canonique": "Défense & Sûreté d'État",
+          "libelle_canonique": "Defense & Surete d'Etat",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_SECU_DEFENSE",
           "mots_cles_extraction": [
-            "discipline militaire",
-            "surete d'etat"
+            "discipline militaire", "surete d etat", "defense",
+            "armee", "gendarmerie", "police", "militaire",
+            "armement", "tir", "combat", "parade"
           ]
         }
       ]
     },
     {
-      "categorie": "Communication, Médias & Événementiel",
+      "categorie": "Communication, Medias & Evenementiel",
       "competences": [
         {
           "id_skill": "SKILL_COM_INSTITUTIONNELLE",
@@ -838,33 +855,37 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_COM_INSTITUTIONNELLE",
           "mots_cles_extraction": [
-            "communication institutionnelle",
-            "relations publiques"
+            "communication institutionnelle", "relations publiques",
+            "image de marque", "communication corporate",
+            "porteur de marque", "rp", "attaché de presse"
           ]
         },
         {
           "id_skill": "SKILL_COM_MEDIAS",
-          "libelle_canonique": "Médias & Journalisme",
+          "libelle_canonique": "Medias & Journalisme",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_COM_MEDIAS",
           "mots_cles_extraction": [
-            "redaction journalistique",
-            "reportage"
+            "redaction journalistique", "reportage", "journalisme",
+            "presse", "radio", "television", "media",
+            "interview", "chronique", "documentaire"
           ]
         },
         {
           "id_skill": "SKILL_COM_EVENEMENTIEL",
-          "libelle_canonique": "Événementiel",
+          "libelle_canonique": "Evenementiel",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_COM_EVENEMENTIEL",
           "mots_cles_extraction": [
-            "organisation d'evenements"
+            "organisation d evenements", "evenementiel", "conference",
+            "seminaire", "colloque", "forum", "salon",
+            "exposition", "gala", "ceremonie", "lancement"
           ]
         }
       ]
     },
     {
-      "categorie": "Marine, Aéronautique & Opérations Portuaires/Aéroportuaires",
+      "categorie": "Marine, Aeronautique & Operations Portuaires/Aeroportuaires",
       "competences": [
         {
           "id_skill": "SKILL_MARINE_MARCHANDE",
@@ -872,53 +893,61 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_MARINE_MARCHANDE",
           "mots_cles_extraction": [
-            "navigation maritime",
-            "securite maritime"
+            "navigation maritime", "securite maritime", "marine",
+            "maritime", "port", "navire", "bateau", "cargo",
+            "conteneur", "affretement", "nolissement", "connaissement"
           ]
         },
         {
           "id_skill": "SKILL_AERO",
-          "libelle_canonique": "Aéronautique",
+          "libelle_canonique": "Aeronautique",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_AERO",
           "mots_cles_extraction": [
-            "operations aeroportuaires",
-            "gestion d'escale"
+            "operations aeroportuaires", "gestion d escale",
+            "aeroport", "aviation", "compagnie aerienne",
+            "piste", "tour de controle", "handling", "escale",
+            "passager", "bagage", "fret aerien"
           ]
         },
         {
           "id_skill": "SKILL_MARINE_PORT",
-          "libelle_canonique": "Opérations Portuaires",
+          "libelle_canonique": "Operations Portuaires",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_MARINE_PORT",
           "mots_cles_extraction": [
-            "operations portuaires",
-            "manutention portuaire"
+            "operations portuaires", "manutention portuaire",
+            "port", "quai", "cale", "transbordement",
+            "arrimage", "surestaries", "plan de charge"
           ]
         }
       ]
     },
     {
-      "categorie": "Direction Générale & Management",
+      "categorie": "Direction Generale & Management",
       "competences": [
         {
           "id_skill": "SKILL_DIR_GENERALE",
-          "libelle_canonique": "Direction Générale & Stratégie",
+          "libelle_canonique": "Direction Generale & Strategie",
           "type": "Hard Skill",
           "sous_famille_associee": "SF_DIR_GENERALE",
           "mots_cles_extraction": [
-            "pilotage strategique",
-            "gouvernance d'entreprise"
+            "pilotage strategique", "gouvernance d entreprise",
+            "direction generale", "dg", "president directeur general",
+            "pdg", "strategie", "vision", "decision",
+            "conseil d administration", "assemblee generale"
           ]
         },
         {
           "id_skill": "SKILL_DIR_MANAGEMENT_OP",
-          "libelle_canonique": "Management Opérationnel",
+          "libelle_canonique": "Management Operationnel",
           "type": "Soft Skill",
           "sous_famille_associee": "SF_DIR_MANAGEMENT_OP",
           "mots_cles_extraction": [
-            "management d'equipe",
-            "supervision operationnelle"
+            "management d equipe", "supervision operationnelle",
+            "management operationnel", "gestion operationnelle",
+            "production", "rendement", "performance",
+            "optimisation", "processus", "procedure"
           ]
         },
         {
@@ -927,9 +956,11 @@
           "type": "Hard Skill",
           "sous_famille_associee": "SF_DIR_PROJET",
           "mots_cles_extraction": [
-            "gestion de projet",
-            "planification et pilotage",
-            "coordination d'equipes"
+            "gestion de projet", "planification et pilotage",
+            "coordination d equipes", "chef de projet",
+            "project management", "methodologie agile", "scrum",
+            "kanban", "pmbok", "diagramme de gantt",
+            "suivi de projet", "budget projet", "milestone"
           ]
         }
       ]
