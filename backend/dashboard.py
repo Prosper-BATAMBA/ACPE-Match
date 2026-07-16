@@ -136,7 +136,7 @@ if page == "Vue d'ensemble":
     stats = load_stats()
 
     if stats:
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4, col5 = st.columns(5)
         col1.metric("Candidats", f"{stats['total_candidates']:,}")
         col2.metric("Offres", f"{stats['total_offers']:,}")
         col3.metric(
@@ -144,6 +144,9 @@ if page == "Vue d'ensemble":
             f"{stats['encoded_candidates']:,} / {stats['encoded_offers']:,}",
         )
         col4.metric("Taux encodage", f"{stats['encoding_rate']:.1%}")
+
+        avg_score = st.session_state.get("avg_recommendation_score")
+        col5.metric("Score moyen", f"{avg_score:.2%}" if avg_score else "N/A")
 
         st.divider()
 
@@ -196,6 +199,32 @@ if page == "Vue d'ensemble":
                 st.bar_chart(df.set_index("Niveau"))
             else:
                 st.info("Aucune donnee")
+
+        col_e, col_f = st.columns(2)
+        with col_e:
+            st.subheader("Offres par localisation")
+            loc_data = dist.get("offers_by_localisation", {})
+            if loc_data:
+                df = pd.DataFrame(
+                    list(loc_data.items()), columns=["Localisation", "Nombre"]
+                ).sort_values("Nombre", ascending=False).head(12)
+                st.bar_chart(df.set_index("Localisation"))
+            else:
+                st.info("Aucune donnee")
+
+        with col_f:
+            st.subheader("Statistiques recommandations")
+            total_recs = st.session_state.get("total_recommendations_generated", 0)
+            avg_score = st.session_state.get("avg_recommendation_score")
+            rec_count = st.session_state.get("recommendations_count", 0)
+
+            stat_rows = [
+                {"Metrique": "Total recommandations generees", "Valeur": f"{total_recs:,}"},
+                {"Metrique": "Score moyen", "Valeur": f"{avg_score:.2%}" if avg_score else "N/A"},
+                {"Metrique": "Derniere session", "Valeur": f"{rec_count} recommandations"},
+            ]
+            df_stats = pd.DataFrame(stat_rows)
+            st.dataframe(df_stats.set_index("Metrique"), use_container_width=True, hide_index=True)
 
         st.divider()
 
@@ -285,6 +314,13 @@ elif page == "Matching":
                     )
                     _render_recommendations_table(recs)
 
+                    if recs:
+                        scores = [r["score"] for r in recs]
+                        st.session_state["avg_recommendation_score"] = sum(scores) / len(scores)
+                        st.session_state["total_recommendations_generated"] = (
+                            st.session_state.get("total_recommendations_generated", 0) + len(recs)
+                        )
+
 
 # ─────────────────────────────────────────────
 # PAGE 3 : RECOMMANDATIONS
@@ -366,6 +402,13 @@ elif page == "Recommandations":
                 df_recs = pd.DataFrame(all_recs)
                 st.subheader(f"{len(all_recs)} recommandation(s) pour {len(selected_ids)} candidat(s)")
                 st.dataframe(df_recs, use_container_width=True, hide_index=True)
+
+                if "Score" in df_recs.columns:
+                    st.session_state["avg_recommendation_score"] = df_recs["Score"].mean()
+                    st.session_state["total_recommendations_generated"] = (
+                        st.session_state.get("total_recommendations_generated", 0) + len(all_recs)
+                    )
+                    st.session_state["recommendations_count"] = len(all_recs)
 
                 st.divider()
                 st.subheader("Exporter les resultats")

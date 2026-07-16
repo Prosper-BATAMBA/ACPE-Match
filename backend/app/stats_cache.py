@@ -71,6 +71,14 @@ def _compute_stats(
         .all()
     )
 
+    off_by_localisation = dict(
+        db.query(JobOffer.localisation, func.count())
+        .filter(JobOffer.localisation.isnot(None))
+        .group_by(JobOffer.localisation)
+        .order_by(func.count().desc())
+        .all()
+    )
+
     return {
         "total_candidates": total_candidates,
         "total_offers": total_offers,
@@ -82,6 +90,7 @@ def _compute_stats(
             "candidates_by_department": cand_by_dept,
             "offers_by_sector": off_by_secteur,
             "offers_by_contract": off_by_contrat,
+            "offers_by_localisation": off_by_localisation,
             "candidates_by_education": cand_by_education,
         },
         "top_familles_offers": [

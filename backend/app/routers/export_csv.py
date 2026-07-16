@@ -183,3 +183,74 @@ def export_csv(
             "Content-Disposition": "attachment; filename=acpe_matching_export.csv"
         },
     )
+
+
+@router.get("/export-csv-minimal")
+def export_csv_minimal(
+    candidate_ids: Optional[str] = Query(
+        None,
+        description="IDs separes par des virgules. Si vide, exporte les 100 premiers candidats encodes.",
+    ),
+    top_k: int = Query(10, ge=1, le=50),
+    db: Session = Depends(get_db),
+):
+    """Export minimal au format requis : candidate_id, rank, job_id, score."""
+    chroma_col = get_offers_collection()
+
+    if candidate_ids:
+        ids = [i.strip() for i in candidate_ids.split(",") if i.strip()]
+    else:
+        ids = [
+            str(r[0])
+            for r in db.query(Candidate.id)
+            .filter(Candidate.profile_text.isnot(None))
+            .limit(MAX_EXPORT_CANDIDATES)
+            .all()
+        ]
+
+    if not ids:
+        raise HTTPException(status_code=404, detail="Aucun candidat trouve")
+
+    if len(ids) > MAX_EXPORT_CANDIDATES:
+        ids = ids[:MAX_EXPORT_CANDIDATES]
+
+    rows = []
+    for cid in ids:
+        recs = get_recommendations(
+            db=db,
+            chroma_collection=chroma_col,
+            candidate_id=cid,
+            k=top_k,
+            embedding_fn=encode,
+        )
+
+        for rank, r in enumerate(recs, 1):
+            rows.append({
+                "candidate_id": cid,
+                "rank": rank,
+                "job_id": r["offer_id"],
+                "score": round(r["score"], 4),
+            })
+
+    if not rows:
+        raise HTTPException(
+            status_code=404,
+            detail="Aucune recommandation generee",
+        )
+
+    fieldnames = ["candidate_id", "rank", "job_id", "score"]
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(rows)
+
+    content = output.getvalue()
+    output.close()
+
+    return StreamingResponse(
+        iter([content]),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": "attachment; filename=acpe_recommendations.csv"
+        },
+    )
