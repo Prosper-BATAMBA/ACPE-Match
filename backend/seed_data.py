@@ -37,7 +37,7 @@ DATA_DIR = os.path.join(
 DEMANDEURS_PATH = os.path.join(DATA_DIR, "Demandeurs.xlsx")
 OFFRES_PATH = os.path.join(DATA_DIR, "Offres_ACPE.xlsx")
 
-BATCH_SIZE = 256
+BATCH_SIZE = 64
 
 
 def load_excel(path: str) -> pd.DataFrame:

@@ -2,7 +2,7 @@
 train_ranker.py
 
 Train CatBoost Ranker (YetiRank) for offer re-ranking.
-Uses FAISS top-50 retrieval + 40 features.
+Uses FAISS top-50 retrieval + 50 features.
 
 Usage:
     cd backend
@@ -35,159 +35,11 @@ RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 
-EDUCATION_RANKS = {
-    "NV_0_AUCUN": 0, "NV_1_PRIMARY": 1, "NV_2_COLLEGE": 2,
-    "NV_3_PRO_N1": 3, "NV_4_BAC": 4, "NV_5_BAC_2": 5,
-    "NV_6_BAC_3": 6, "NV_7_BAC_5": 7, "NV_8_DOCTORAT": 8,
-}
-TENSION_MAP = {"faible": 0, "moyenne": 1, "forte": 2}
-SKILL_DOMAINS = {
-    "finance": ["SKILL_FIN_COMPTA_OHADA", "SKILL_FIN_FISCALITE", "SKILL_FIN_COMPTA2", "SKILL_FIN_AUDIT", "SKILL_FIN_FINANCE", "SKILL_FIN_RECOUV_ASSUR"],
-    "hse_maintenance": ["SKILL_HSE_CONFORMITE", "SKILL_HSE_PREVENTION", "SKILL_HSE_QUALITE2", "SKILL_HSE_MECA", "SKILL_HSE_ELEC2", "SKILL_HSE_PRODUCTION", "SKILL_MAINT_PREVENT", "SKILL_MAINT_ELEC"],
-    "it_digital": ["SKILL_IT_OFFICE", "SKILL_IT_PYTHON", "SKILL_IT_BI_POWERBI", "SKILL_IT_SQL", "SKILL_IT_ML", "SKILL_IT_STATS", "SKILL_IT_WEBDEV", "SKILL_IT_DEVOPS", "SKILL_IT_RESEAUX", "SKILL_IT_TELECOM", "SKILL_IT_CYBERSEC", "SKILL_IT_SIG", "SKILL_IT_DIGITAL_MKT"],
-    "commerce": ["SKILL_COM_NEGOCIATION", "SKILL_COM_ASSURANCE", "SKILL_COM_VENTE2", "SKILL_COM_RELATION_CLIENT", "SKILL_COM_MARKETING", "SKILL_COM_INSTITUTIONNELLE", "SKILL_COM_MEDIAS", "SKILL_COM_EVENEMENTIEL"],
-    "logistique": ["SKILL_LOG_TRANSPORT", "SKILL_LOG_ENTREPOT", "SKILL_LOG_ACHATS", "SKILL_LOG_DOUANE", "SKILL_LOG_MANAGEMENT"],
-    "sante": ["SKILL_SANTE_MEDICAL", "SKILL_SANTE_PHARMA", "SKILL_SANTE_RECHERCHE"],
-    "btp_industrie": ["SKILL_BTP_GROS_OEUVRE", "SKILL_BTP_ENGINS", "SKILL_BTP_ETUDES", "SKILL_PETROLE_FORAGE", "SKILL_PETROLE_INGENIERIE", "SKILL_PETROLE_OFFSHORE"],
-    "restauration": ["SKILL_RESTA_CUISINE", "SKILL_RESTA_HOTELLERIE", "SKILL_RESTA_SERVICES_PERSONNE"],
-    "agriculture": ["SKILL_AGRI_PRODUCTION", "SKILL_AGRI_TRANSFORMATION", "SKILL_AGRI_FORESTERIE"],
-    "droit_securite": ["SKILL_JURI_AFFAIRES", "SKILL_JURI_CONTENTIEUX", "SKILL_SECU_GARDIENNAGE", "SKILL_SECU_DEFENSE"],
-    "marine_aero": ["SKILL_MARINE_MARCHANDE", "SKILL_AERO", "SKILL_MARINE_PORT"],
-    "transversal": ["SKILL_SOFT_RELATIONNEL", "SKILL_SOFT_COMMUNICATION", "SKILL_SOFT_LEADERSHIP", "SKILL_RH_CORE", "SKILL_ADMIN_SECRETARIAT2", "SKILL_ADMIN_PILOTAGE", "SKILL_ADMIN_GESTION", "SKILL_DIR_GENERALE", "SKILL_DIR_MANAGEMENT_OP", "SKILL_DIR_PROJET"],
-}
-
-
-def load_knowledge_graphs():
-    graphs_dir = os.path.join(DATA_DIR, "graphs")
-    with open(os.path.join(graphs_dir, "job_knowledge_graph_v3.json"), encoding="utf-8") as f:
-        job_graph = json.load(f)
-    with open(os.path.join(graphs_dir, "secteur_knowledge_graph.json"), encoding="utf-8") as f:
-        secteur_graph = json.load(f)
-    with open(os.path.join(graphs_dir, "speciality_knowledge_graph.json"), encoding="utf-8") as f:
-        speciality_graph = json.load(f)
-    return job_graph, secteur_graph, speciality_graph
-
-
-def get_education_rank(code):
-    if not code:
-        return 4
-    return EDUCATION_RANKS.get(code, 4)
-
-
-def _tokenize_french(text):
-    if not text:
-        return set()
-    text = text.lower()
-    for ch in "(),.:-;/":
-        text = text.replace(ch, " ")
-    return set(w for w in text.split() if len(w) > 2)
-
-
-def _jaccard(set_a, set_b):
-    if not set_a or not set_b:
-        return 0.0
-    inter = len(set_a & set_b)
-    union = len(set_a | set_b)
-    return inter / union if union > 0 else 0.0
-
-
-def extract_features(cand, offer, job_graph, secteur_graph, speciality_graph):
-    features = {}
-    features["same_id_famille"] = int(bool(cand.get("id_famille")) and bool(offer.get("id_famille")) and cand["id_famille"] == offer["id_famille"])
-    features["same_id_secteur"] = int(bool(cand.get("id_secteur")) and bool(offer.get("id_secteur")) and cand["id_secteur"] == offer["id_secteur"])
-    features["same_departement"] = int(bool(cand.get("code_departement")) and bool(offer.get("code_departement")) and cand["code_departement"] == offer["code_departement"] and cand["code_departement"] != "INC")
-
-    mobilite = (cand.get("mobilite") or "").lower()
-    features["candidate_mobilite"] = 0 if "non" in mobilite else 1
-    features["candidate_age"] = cand.get("age") or 30
-    features["candidate_niveau_rang"] = get_education_rank(cand.get("code_niveau_etude"))
-    features["education_gap"] = features["candidate_niveau_rang"] - 4
-    features["candidate_has_famille"] = int(bool(cand.get("id_famille")))
-    features["candidate_has_secteur"] = int(bool(cand.get("id_secteur")))
-    features["offer_has_famille"] = int(bool(offer.get("id_famille")))
-    features["offer_has_secteur"] = int(bool(offer.get("id_secteur")))
-
-    cand_id_fam = cand.get("id_famille", "")
-    offer_id_sect = offer.get("id_secteur", "")
-    features["sector_proximity"] = 0
-    if cand_id_fam and offer_id_sect and offer_id_sect in secteur_graph:
-        sg = secteur_graph[offer_id_sect]
-        associated_fams = sg.get("familles_specialite_associees", [])
-        features["sector_proximity"] = int(cand_id_fam in associated_fams)
-
-    offer_id_fam = offer.get("id_famille", "")
-    features["family_proximity"] = 0
-    if cand_id_fam and offer_id_fam:
-        job_entry = job_graph.get("metiers", {}).get(cand_id_fam, {})
-        if not job_entry:
-            job_entry = job_graph.get("familles", {}).get(cand_id_fam, {})
-        proches = job_entry.get("metiers_proches", [])
-        features["family_proximity"] = int(offer_id_fam in proches)
-
-    features["semantic_similarity"] = cand.get("_semantic_score", 0.5)
-    features["n_candidate_skills"] = cand.get("_n_skills", 0)
-    features["n_offer_skills"] = offer.get("_n_skills", 0)
-    features["skill_gap_score"] = cand.get("_skill_gap", 0.5)
-    features["has_description"] = int(bool(offer.get("description")))
-    features["has_competences"] = int(bool(offer.get("competences_recherchees")))
-
-    cand_tension = 0
-    if cand.get("id_secteur") and cand["id_secteur"] in secteur_graph:
-        cand_tension = TENSION_MAP.get(secteur_graph[cand["id_secteur"]].get("tension_marche", ""), 1)
-    features["sector_tension"] = cand_tension
-    features["candidate_profile_length"] = len(cand.get("profile_text") or "")
-    features["offer_profile_length"] = len(offer.get("profile_text") or "")
-    features["profile_length_ratio"] = features["candidate_profile_length"] / max(features["offer_profile_length"], 1)
-    features["intitule_length"] = len(offer.get("intitule") or "")
-    features["candidate_metier_length"] = len(cand.get("metier_vise") or "")
-    features["offer_intitule_length"] = len(offer.get("intitule") or "")
-    offer_skill_ids = set(s.get("id_skill", "") for s in offer.get("_extracted_skills", []))
-    features["n_offer_skills_total"] = len(offer_skill_ids)
-    features["offer_has_any_skill"] = 1 if offer_skill_ids else 0
-    for domain, skill_ids in SKILL_DOMAINS.items():
-        domain_skills = set(skill_ids) & offer_skill_ids
-        features[f"offer_domain_{domain}_count"] = len(domain_skills)
-        features[f"offer_domain_{domain}_has"] = 1 if domain_skills else 0
-    features["candidate_gender"] = 1 if (cand.get("genre") or "").lower().startswith("h") else 0
-
-    cand_spec_family = cand.get("_spec_result", {}).get("id_famille_affiliation", "")
-    features["same_specialty_family"] = int(bool(cand_spec_family) and bool(offer_id_fam) and cand_spec_family == offer_id_fam)
-    features["candidate_has_specialite"] = int(bool(cand_spec_family))
-
-    contrat = (offer.get("type_contrat") or "").upper()
-    features["offer_type_contrat_cdi"] = int("CDI" in contrat)
-    features["offer_type_contrat_cdd"] = int("CDD" in contrat)
-    features["offer_type_contrat_stage"] = int("STAGE" in contrat)
-
-    features["candidate_qualification_length"] = len(cand.get("qualification") or "")
-
-    cand_sec_proches = secteur_graph.get(cand.get("id_secteur", ""), {}).get("secteurs_proches", [])
-    features["secteur_proximity_from_secteur_graph"] = int(offer_id_sect in cand_sec_proches)
-
-    spec_graph_data = speciality_graph.get("graph", {})
-    spec_entry = spec_graph_data.get(cand_spec_family, {})
-    typical_level = spec_entry.get("niveau_etude_typique", "")
-    features["family_education_gap"] = get_education_rank(cand.get("code_niveau_etude")) - get_education_rank(typical_level)
-
-    features["offer_n_sectors_proches"] = len(secteur_graph.get(offer_id_sect, {}).get("secteurs_proches", []))
-    features["cand_n_sectors_proches"] = len(cand_sec_proches)
-    features["offer_n_competences_hors_ref"] = len(spec_entry.get("competences_inferred_hors_referentiel", []))
-
-    cand_metier_tokens = _tokenize_french(cand.get("metier_vise") or "")
-    offer_intitule_tokens = _tokenize_french(offer.get("intitule") or "")
-    features["metier_intitule_jaccard"] = _jaccard(cand_metier_tokens, offer_intitule_tokens)
-    features["metier_intitule_contains"] = int(bool(cand_metier_tokens and offer_intitule_tokens and cand_metier_tokens.issubset(offer_intitule_tokens)))
-    features["cand_metier_vise_len"] = len(cand.get("metier_vise") or "")
-
-    cand_sec_tokens = _tokenize_french(cand.get("secteur_demande") or "")
-    offer_sec_tokens = _tokenize_french(offer.get("secteur") or "")
-    features["secteur_demande_jaccard"] = _jaccard(cand_sec_tokens, offer_sec_tokens)
-
-    features["same_id_sous_famille"] = int(bool(cand.get("id_sous_famille")) and bool(offer.get("id_sous_famille")) and cand["id_sous_famille"] == offer["id_sous_famille"])
-    features["candidate_has_sous_famille"] = int(bool(cand.get("id_sous_famille")))
-    features["offer_has_sous_famille"] = int(bool(offer.get("id_sous_famille")))
-
-    return features
+# Import unified feature extraction
+from app.services.feature_extractor import (
+    extract_features,
+    get_graphs,
+)
 
 
 def main():
@@ -225,7 +77,7 @@ def main():
 
     offer_id_to_emb_idx = {oid: i for i, oid in enumerate(valid_offer_ids)}
 
-    job_graph, secteur_graph, speciality_graph = load_knowledge_graphs()
+    job_graph, secteur_graph, speciality_graph = get_graphs()
 
     from matching_engine import SkillNormalizer, SpecialtyNormalizer
     sn = SkillNormalizer()
@@ -281,7 +133,6 @@ def main():
         if cid not in cand_spec_cache:
             cand_spec_cache[cid] = spec_norm.normalize(cand_data.get("specialite") or "") or {}
         cand_skills = sn.extract_from_text(cand_data.get("profile_text") or "")
-        cand_data["_n_skills"] = len(cand_skills)
         cand_data["_spec_result"] = cand_spec_cache[cid]
 
         for oid in top_offer_ids:
@@ -295,13 +146,12 @@ def main():
             if oid not in offer_skills_cache:
                 offer_skills_cache[oid] = sn.extract_from_text(offer_data.get("competences_recherchees") or "") or sn.extract_from_text(offer_data.get("description") or "")
             offer_skills = offer_skills_cache[oid]
-            cand_data["_semantic_score"] = cos_sim
-            offer_data["_n_skills"] = len(offer_skills)
-            offer_data["_extracted_skills"] = offer_skills
-            common = set(s.get("libelle_canonique") for s in cand_skills) & set(s.get("libelle_canonique") for s in offer_skills)
-            cand_data["_skill_gap"] = 1 - (len(common) / max(len(offer_skills), 1)) if offer_skills else 0.5
 
-            feat = extract_features(cand_data, offer_data, job_graph, secteur_graph, speciality_graph)
+            feat = extract_features(
+                cand_data, offer_data, cos_sim,
+                job_graph=job_graph, secteur_graph=secteur_graph, speciality_graph=speciality_graph,
+                cand_skills=cand_skills, offer_skills=offer_skills,
+            )
             all_features.append(feat)
             all_labels.append(1 if oid in gt_offers else 0)
             all_query_ids.append(cid)

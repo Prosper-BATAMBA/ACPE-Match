@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import json
 import logging
 import os
+from functools import lru_cache
 from typing import Any, Dict, List
 
 import numpy as np
@@ -11,223 +11,39 @@ from sqlalchemy.orm import Session
 from ..models.candidate import Candidate
 from ..models.job_offer import JobOffer
 
-SKILL_DOMAINS = {
-    "finance": ["SKILL_FIN_COMPTA_OHADA", "SKILL_FIN_FISCALITE", "SKILL_FIN_COMPTA2", "SKILL_FIN_AUDIT", "SKILL_FIN_FINANCE", "SKILL_FIN_RECOUV_ASSUR"],
-    "hse_maintenance": ["SKILL_HSE_CONFORMITE", "SKILL_HSE_PREVENTION", "SKILL_HSE_QUALITE2", "SKILL_HSE_MECA", "SKILL_HSE_ELEC2", "SKILL_HSE_PRODUCTION", "SKILL_MAINT_PREVENT", "SKILL_MAINT_ELEC"],
-    "it_digital": ["SKILL_IT_OFFICE", "SKILL_IT_PYTHON", "SKILL_IT_BI_POWERBI", "SKILL_IT_SQL", "SKILL_IT_ML", "SKILL_IT_STATS", "SKILL_IT_WEBDEV", "SKILL_IT_DEVOPS", "SKILL_IT_RESEAUX", "SKILL_IT_TELECOM", "SKILL_IT_CYBERSEC", "SKILL_IT_SIG", "SKILL_IT_DIGITAL_MKT"],
-    "commerce": ["SKILL_COM_NEGOCIATION", "SKILL_COM_ASSURANCE", "SKILL_COM_VENTE2", "SKILL_COM_RELATION_CLIENT", "SKILL_COM_MARKETING", "SKILL_COM_INSTITUTIONNELLE", "SKILL_COM_MEDIAS", "SKILL_COM_EVENEMENTIEL"],
-    "logistique": ["SKILL_LOG_TRANSPORT", "SKILL_LOG_ENTREPOT", "SKILL_LOG_ACHATS", "SKILL_LOG_DOUANE", "SKILL_LOG_MANAGEMENT"],
-    "sante": ["SKILL_SANTE_MEDICAL", "SKILL_SANTE_PHARMA", "SKILL_SANTE_RECHERCHE"],
-    "btp_industrie": ["SKILL_BTP_GROS_OEUVRE", "SKILL_BTP_ENGINS", "SKILL_BTP_ETUDES", "SKILL_PETROLE_FORAGE", "SKILL_PETROLE_INGENIERIE", "SKILL_PETROLE_OFFSHORE"],
-    "restauration": ["SKILL_RESTA_CUISINE", "SKILL_RESTA_HOTELLERIE", "SKILL_RESTA_SERVICES_PERSONNE"],
-    "agriculture": ["SKILL_AGRI_PRODUCTION", "SKILL_AGRI_TRANSFORMATION", "SKILL_AGRI_FORESTERIE"],
-    "droit_securite": ["SKILL_JURI_AFFAIRES", "SKILL_JURI_CONTENTIEUX", "SKILL_SECU_GARDIENNAGE", "SKILL_SECU_DEFENSE"],
-    "marine_aero": ["SKILL_MARINE_MARCHANDE", "SKILL_AERO", "SKILL_MARINE_PORT"],
-    "transversal": ["SKILL_SOFT_RELATIONNEL", "SKILL_SOFT_COMMUNICATION", "SKILL_SOFT_LEADERSHIP", "SKILL_RH_CORE", "SKILL_ADMIN_SECRETARIAT2", "SKILL_ADMIN_PILOTAGE", "SKILL_ADMIN_GESTION", "SKILL_DIR_GENERALE", "SKILL_DIR_MANAGEMENT_OP", "SKILL_DIR_PROJET"],
-}
-
-# Inverse : id_skill -> domaine (utilisé pour inférer le secteur cible d'une requête NL).
-SKILL_ID_TO_DOMAIN = {}
-for _dom, _ids in SKILL_DOMAINS.items():
-    for _sid in _ids:
-        SKILL_ID_TO_DOMAIN[_sid] = _dom
-
-# Domaine de compétences -> secteur cible (ids canoniques de secteur_mapping.json).
-# Permet d'inférer le secteur d'une requête NL même quand le texte ne le nomme pas
-# explicitement (ex: "informaticien" ne matche pas "informatique" en substring strict).
-DOMAIN_TO_SECTOR = {
-    "finance": "SEC_FIN_COMPTA",
-    "hse_maintenance": "SEC_INDU_MAINT",
-    "it_digital": "SEC_IT_DIGITAL",
-    "commerce": "SEC_COMM_VENTE",
-    "logistique": "SEC_TRANS_LOG",
-    "sante": "SEC_SANTE_PHARMA",
-    "btp_industrie": "SEC_BTP_AMENAGE",
-    "restauration": "SEC_HOTEL_RESTAU",
-    "agriculture": "SEC_AGRO",
-    "droit_securite": "SEC_DROIT_SOCIAL",
-    "marine_aero": "SEC_TRANS_LOG",
-    "transversal": None,
-}
-
-EDUCATION_RANKS = {
-    "NV_0_AUCUN": 0, "NV_1_PRIMARY": 1, "NV_2_COLLEGE": 2,
-    "NV_3_PRO_N1": 3, "NV_4_BAC": 4, "NV_5_BAC_2": 5,
-    "NV_6_BAC_3": 6, "NV_7_BAC_5": 7, "NV_8_DOCTORAT": 8,
-}
-
-_job_graph: dict = {}
-_secteur_graph: dict = {}
-_speciality_graph: dict = {}
+from .feature_extractor import (
+    SKILL_DOMAINS,
+    SKILL_ID_TO_DOMAIN,
+    DOMAIN_TO_SECTOR,
+    EDUCATION_RANKS,
+    extract_features,
+    tokenize_french,
+    jaccard,
+    get_education_rank,
+    get_graphs,
+)
 
 
-def _load_graphs():
-    global _job_graph, _secteur_graph, _speciality_graph
-    if _job_graph:
-        return
-    base = os.path.join(os.path.dirname(__file__), "..", "..", "..",
-                        "matching_engine", "matching_engine", "data", "graphs")
-    jpath = os.path.join(base, "job_knowledge_graph_v3.json")
-    spath = os.path.join(base, "secteur_knowledge_graph.json")
-    specpath = os.path.join(base, "speciality_knowledge_graph.json")
-    if os.path.exists(jpath):
-        with open(jpath, "r", encoding="utf-8") as f:
-            _job_graph = json.load(f)
-    if os.path.exists(spath):
-        with open(spath, "r", encoding="utf-8") as f:
-            raw = json.load(f)
-            _secteur_graph = raw.get("graph", raw)
-    if os.path.exists(specpath):
-        with open(specpath, "r", encoding="utf-8") as f:
-            raw = json.load(f)
-            _speciality_graph = raw.get("graph", raw)
+# ---------------------------------------------------------------------------
+# Cached normalizer singletons (avoids re-instantiation per request)
+# ---------------------------------------------------------------------------
+
+@lru_cache(maxsize=1)
+def _get_skill_normalizer():
+    from matching_engine import SkillNormalizer
+    return SkillNormalizer()
 
 
-def _get_education_rank(code):
-    if not code:
-        return 4
-    return EDUCATION_RANKS.get(code, 4)
+@lru_cache(maxsize=1)
+def _get_specialty_normalizer():
+    from matching_engine import SpecialtyNormalizer
+    return SpecialtyNormalizer()
 
 
-def _tokenize_french(text):
-    if not text:
-        return set()
-    text = text.lower()
-    for ch in "(),.:-;/":
-        text = text.replace(ch, " ")
-    return set(w for w in text.split() if len(w) > 2)
-
-
-def _jaccard(set_a, set_b):
-    if not set_a or not set_b:
-        return 0.0
-    inter = len(set_a & set_b)
-    union = len(set_a | set_b)
-    return inter / union if union > 0 else 0.0
-
-
-def _extract_features(cand: Dict, offer: Dict, semantic_score: float,
-                      sn) -> Dict[str, float]:
-    _load_graphs()
-    features = {}
-
-    features["same_id_famille"] = int(
-        bool(cand.get("id_famille")) and bool(offer.get("id_famille"))
-        and cand["id_famille"] == offer["id_famille"])
-    features["same_id_secteur"] = int(
-        bool(cand.get("id_secteur")) and bool(offer.get("id_secteur"))
-        and cand["id_secteur"] == offer["id_secteur"])
-    features["same_departement"] = int(
-        bool(cand.get("code_departement")) and bool(offer.get("code_departement"))
-        and cand["code_departement"] == offer["code_departement"]
-        and cand["code_departement"] != "INC")
-
-    mobilite = (cand.get("mobilite") or "").lower()
-    features["candidate_mobilite"] = 0 if "non" in mobilite else 1
-    features["candidate_age"] = cand.get("age") or 30
-    features["candidate_niveau_rang"] = _get_education_rank(cand.get("code_niveau_etude"))
-    features["education_gap"] = features["candidate_niveau_rang"] - 4
-    features["candidate_has_famille"] = int(bool(cand.get("id_famille")))
-    features["candidate_has_secteur"] = int(bool(cand.get("id_secteur")))
-    features["offer_has_famille"] = int(bool(offer.get("id_famille")))
-    features["offer_has_secteur"] = int(bool(offer.get("id_secteur")))
-
-    cand_id_fam = cand.get("id_famille", "")
-    offer_id_sect = offer.get("id_secteur", "")
-    features["sector_proximity"] = 0
-    if cand_id_fam and offer_id_sect and offer_id_sect in _secteur_graph:
-        sg = _secteur_graph[offer_id_sect]
-        associated_fams = sg.get("familles_specialite_associees", [])
-        features["sector_proximity"] = int(cand_id_fam in associated_fams)
-
-    offer_id_fam = offer.get("id_famille", "")
-    features["family_proximity"] = 0
-    if cand_id_fam and offer_id_fam:
-        job_entry = _job_graph.get("metiers", {}).get(cand_id_fam, {})
-        if not job_entry:
-            job_entry = _job_graph.get("familles", {}).get(cand_id_fam, {})
-        proches = job_entry.get("metiers_proches", [])
-        features["family_proximity"] = int(offer_id_fam in proches)
-
-    features["semantic_similarity"] = semantic_score
-
-    cand_skills = sn.extract_from_text(cand.get("profile_text") or "")
-    offer_skills_raw = sn.extract_from_text(offer.get("competences_recherchees") or "")
-    if not offer_skills_raw:
-        offer_skills_raw = sn.extract_from_text(offer.get("description") or "")
-
-    features["n_candidate_skills"] = len(cand_skills)
-    features["n_offer_skills"] = len(offer_skills_raw)
-
-    cand_labels = {s.get("libelle_canonique", "").lower() for s in cand_skills if s.get("libelle_canonique")}
-    offer_labels = {s.get("libelle_canonique", "").lower() for s in offer_skills_raw if s.get("libelle_canonique")}
-    common = cand_labels & offer_labels
-    features["skill_gap_score"] = 1 - (len(common) / max(len(offer_labels), 1)) if offer_labels else 0.5
-
-    features["has_description"] = int(bool(offer.get("description")))
-    features["has_competences"] = int(bool(offer.get("competences_recherchees")))
-
-    cand_tension = 0
-    if cand.get("id_secteur") and cand["id_secteur"] in _secteur_graph:
-        tension_str = _secteur_graph[cand["id_secteur"]].get("tension_marche", "")
-        tension_map = {"faible": 0, "moyenne": 1, "forte": 2}
-        cand_tension = tension_map.get(tension_str, 1)
-    features["sector_tension"] = cand_tension
-
-    features["candidate_profile_length"] = len(cand.get("profile_text") or "")
-    features["offer_profile_length"] = len(offer.get("profile_text") or "")
-    features["profile_length_ratio"] = features["candidate_profile_length"] / max(features["offer_profile_length"], 1)
-    features["intitule_length"] = len(offer.get("intitule") or "")
-    features["candidate_metier_length"] = len(cand.get("metier_vise") or "")
-    features["offer_intitule_length"] = len(offer.get("intitule") or "")
-
-    offer_skill_ids = set(s.get("id_skill", "") for s in offer_skills_raw)
-    features["n_offer_skills_total"] = len(offer_skill_ids)
-    features["offer_has_any_skill"] = 1 if offer_skill_ids else 0
-    for domain, skill_ids in SKILL_DOMAINS.items():
-        domain_skills = set(skill_ids) & offer_skill_ids
-        features[f"offer_domain_{domain}_count"] = len(domain_skills)
-        features[f"offer_domain_{domain}_has"] = 1 if domain_skills else 0
-    features["candidate_gender"] = 1 if (cand.get("genre") or "").lower().startswith("h") else 0
-
-    cand_spec_family = cand.get("_spec_result", {}).get("id_famille_affiliation", "")
-    features["same_specialty_family"] = int(bool(cand_spec_family) and bool(offer_id_fam) and cand_spec_family == offer_id_fam)
-    features["candidate_has_specialite"] = int(bool(cand_spec_family))
-
-    contrat = (offer.get("type_contrat") or "").upper()
-    features["offer_type_contrat_cdi"] = int("CDI" in contrat)
-    features["offer_type_contrat_cdd"] = int("CDD" in contrat)
-    features["offer_type_contrat_stage"] = int("STAGE" in contrat)
-
-    features["candidate_qualification_length"] = len(cand.get("qualification") or "")
-
-    cand_sec_proches = _secteur_graph.get(cand.get("id_secteur", ""), {}).get("secteurs_proches", [])
-    features["secteur_proximity_from_secteur_graph"] = int(offer_id_sect in cand_sec_proches)
-
-    spec_graph_data = _speciality_graph.get("graph", {})
-    spec_entry = spec_graph_data.get(cand_spec_family, {})
-    typical_level = spec_entry.get("niveau_etude_typique", "")
-    features["family_education_gap"] = _get_education_rank(cand.get("code_niveau_etude")) - _get_education_rank(typical_level)
-
-    features["offer_n_sectors_proches"] = len(_secteur_graph.get(offer_id_sect, {}).get("secteurs_proches", []))
-    features["cand_n_sectors_proches"] = len(cand_sec_proches)
-    features["offer_n_competences_hors_ref"] = len(spec_entry.get("competences_inferred_hors_referentiel", []))
-
-    cand_metier_tokens = _tokenize_french(cand.get("metier_vise") or "")
-    offer_intitule_tokens = _tokenize_french(offer.get("intitule") or "")
-    features["metier_intitule_jaccard"] = _jaccard(cand_metier_tokens, offer_intitule_tokens)
-    features["metier_intitule_contains"] = int(bool(cand_metier_tokens and offer_intitule_tokens and cand_metier_tokens.issubset(offer_intitule_tokens)))
-    features["cand_metier_vise_len"] = len(cand.get("metier_vise") or "")
-
-    cand_sec_tokens = _tokenize_french(cand.get("secteur_demande") or "")
-    offer_sec_tokens = _tokenize_french(offer.get("secteur") or "")
-    features["secteur_demande_jaccard"] = _jaccard(cand_sec_tokens, offer_sec_tokens)
-
-    features["same_id_sous_famille"] = int(bool(cand.get("id_sous_famille")) and bool(offer.get("id_sous_famille")) and cand["id_sous_famille"] == offer["id_sous_famille"])
-    features["candidate_has_sous_famille"] = int(bool(cand.get("id_sous_famille")))
-    features["offer_has_sous_famille"] = int(bool(offer.get("id_sous_famille")))
-
-    return features
+@lru_cache(maxsize=1)
+def _get_sector_normalizer():
+    from matching_engine import SectorNormalizer
+    return SectorNormalizer()
 
 
 def compute_skill_gap(
@@ -260,10 +76,9 @@ def get_recommendations(
 
     from . import faiss_index as fi
     from . import ranker_service as rs
-    from matching_engine import SkillNormalizer, SpecialtyNormalizer
 
-    sn = SkillNormalizer()
-    spec_norm = SpecialtyNormalizer()
+    sn = _get_skill_normalizer()
+    spec_norm = _get_specialty_normalizer()
     logging.debug(f"Début de get_recommendations pour candidate {candidate_id}")
 
     candidate_embedding = None
@@ -322,6 +137,9 @@ def get_recommendations(
     }
     cand_data["_spec_result"] = spec_norm.normalize(cand_data.get("specialite") or "") or {}
 
+    # --- OPTIMIZATION: hoist extract_from_text() calls outside the loop ---
+    candidate_skills = sn.extract_from_text(candidate.profile_text)
+
     try:
         feature_names = rs.get_feature_names()
     except FileNotFoundError:
@@ -332,6 +150,19 @@ def get_recommendations(
     offer_ids_to_load = [oid for oid, _ in faiss_results if oid]
     offers_from_db = db.query(JobOffer).filter(JobOffer.id.in_(offer_ids_to_load)).all()
     offer_map = {o.id: o for o in offers_from_db}
+
+    # Pre-extract offer skills for all offers in one pass
+    offer_skills_map: Dict[str, list] = {}
+    for offer_id, _ in faiss_results:
+        offer = offer_map.get(offer_id)
+        if not offer:
+            continue
+        offer_skills_raw = sn.extract_from_text(offer.competences_recherchees or "")
+        if not offer_skills_raw:
+            offer_skills_raw = sn.extract_from_text(offer.description or "")
+        offer_skills_map[offer_id] = offer_skills_raw
+
+    job_graph, secteur_graph, speciality_graph = get_graphs()
 
     recommendations = []
     for offer_id, semantic_score in faiss_results:
@@ -352,8 +183,14 @@ def get_recommendations(
             "secteur": offer.secteur,
         }
 
+        offer_skills = offer_skills_map.get(offer_id, [])
+
         if feature_names:
-            feat = _extract_features(cand_data, offer_data, semantic_score, sn)
+            feat = extract_features(
+                cand_data, offer_data, semantic_score,
+                job_graph=job_graph, secteur_graph=secteur_graph, speciality_graph=speciality_graph,
+                cand_skills=candidate_skills, offer_skills=offer_skills,
+            )
             feat_vec = np.array([[feat[f] for f in feature_names]], dtype=np.float32)
             try:
                 score = float(rs.rerank(feat_vec)[0])
@@ -364,13 +201,6 @@ def get_recommendations(
 
         if score < SCORE_THRESHOLD:
             continue
-
-        candidate_skills = sn.extract_from_text(candidate.profile_text)
-        offer_skills = []
-        if offer.competences_recherchees:
-            offer_skills = sn.extract_from_text(offer.competences_recherchees)
-        if offer.description and not offer_skills:
-            offer_skills = sn.extract_from_text(offer.description)
 
         skill_gap = compute_skill_gap(candidate_skills, offer_skills)
 
@@ -398,10 +228,9 @@ def get_candidates_for_offer(
         return []
 
     from . import ranker_service as rs
-    from matching_engine import SkillNormalizer, SpecialtyNormalizer
 
-    sn = SkillNormalizer()
-    spec_norm = SpecialtyNormalizer()
+    sn = _get_skill_normalizer()
+    spec_norm = _get_specialty_normalizer()
     logging.debug(f"Debut de get_candidates_for_offer pour offer {offer_id}")
 
     offer_embedding = None
@@ -451,6 +280,11 @@ def get_candidates_for_offer(
         "secteur": offer.secteur,
     }
 
+    # --- OPTIMIZATION: pre-extract offer skills once ---
+    offer_skills = sn.extract_from_text(offer.competences_recherchees or "")
+    if not offer_skills:
+        offer_skills = sn.extract_from_text(offer.description or "")
+
     candidate_ids_to_load = [cid for cid, _ in candidate_scores if cid]
     candidates_from_db = db.query(Candidate).filter(Candidate.id.in_(candidate_ids_to_load)).all()
     cand_map = {c.id: c for c in candidates_from_db}
@@ -461,6 +295,16 @@ def get_candidates_for_offer(
         feature_names = None
 
     SCORE_THRESHOLD = float(os.environ.get("SCORE_THRESHOLD", "0.3"))
+
+    job_graph, secteur_graph, speciality_graph = get_graphs()
+
+    # --- OPTIMIZATION: batch-load candidate skills ---
+    candidate_skills_map: Dict[str, list] = {}
+    for cand_id, _ in candidate_scores:
+        candidate = cand_map.get(cand_id)
+        if not candidate or not candidate.profile_text:
+            continue
+        candidate_skills_map[cand_id] = sn.extract_from_text(candidate.profile_text)
 
     recommendations = []
     for cand_id, semantic_score in candidate_scores:
@@ -485,8 +329,14 @@ def get_candidates_for_offer(
         }
         cand_data["_spec_result"] = spec_norm.normalize(cand_data.get("specialite") or "") or {}
 
+        cand_skills = candidate_skills_map.get(cand_id, [])
+
         if feature_names:
-            feat = _extract_features(cand_data, offer_data, semantic_score, sn)
+            feat = extract_features(
+                cand_data, offer_data, semantic_score,
+                job_graph=job_graph, secteur_graph=secteur_graph, speciality_graph=speciality_graph,
+                cand_skills=cand_skills, offer_skills=offer_skills,
+            )
             feat_vec = np.array([[feat[f] for f in feature_names]], dtype=np.float32)
             try:
                 score = float(rs.rerank(feat_vec)[0])
@@ -498,14 +348,7 @@ def get_candidates_for_offer(
         if score < SCORE_THRESHOLD:
             continue
 
-        candidate_skills = sn.extract_from_text(candidate.profile_text)
-        offer_skills = []
-        if offer.competences_recherchees:
-            offer_skills = sn.extract_from_text(offer.competences_recherchees)
-        if offer.description and not offer_skills:
-            offer_skills = sn.extract_from_text(offer.description)
-
-        skill_gap = compute_skill_gap(candidate_skills, offer_skills)
+        skill_gap = compute_skill_gap(cand_skills, offer_skills)
 
         recommendations.append({
             "candidate_id": cand_id,
@@ -523,21 +366,21 @@ def nl_offer_search(
     k: int = 10,
     embedding_fn=None,
 ) -> Dict[str, Any]:
-    """Recherche d'offres en langage naturel (robuste, sémantique-first).
+    """Recherche d'offres en langage naturel (robuste, semantique-first).
 
-    Approche généralisable (pas de patch cas-par-cas) :
-      1. Extraction des compétences/secteur depuis le texte libre (Normalizers),
-         puis inférence du secteur cible à partir du domaine majoritaire des
-         compétences détectées (utile quand le texte ne nomme pas le secteur).
-      2. Alignement de représentation : on reconstruit un `profile_text`
-         normalisé via le MÊME pipeline de dénormalisation que les offres
+    Approche generalisable (pas de patch cas-par-cas) :
+      1. Extraction des competences/secteur depuis le texte libre (Normalizers),
+         puis inference du secteur cible a partir du domaine majoritaire des
+         competences detectees (utile quand le texte ne nomme pas le secteur).
+      2. Alignement de representation : on reconstruit un `profile_text`
+         normalise via le MEME pipeline de denormalisation que les offres
          (ProfileBuilder), puis on l'embed pour le FAISS. On compare donc
-         offres contre offres (espace d'embedding aligné) au lieu d'une
+         offres contre offres (espace d'embedding aligne) au lieu d'une
          auto-description contre des offres.
-      3. Ranking sémantique en premier : similarité FAISS + boosts (compétences
-         matchées, secteur cible). Le seuil CatBoost 0.3 est abandonné (il est
-         mal calibré pour une entrée candidate synthétique sparse -> tous les
-         scores sont négatifs). Le score CatBoost est conservé en sortie à
+      3. Ranking semantique en premier : similarite FAISS + boosts (competences
+         matchees, secteur cible). Le seuil CatBoost 0.3 est abandonne (il est
+         mal calibre pour une entree candidate synthetique sparse -> tous les
+         scores sont negatifs). Le score CatBoost est conserve en sortie a
          titre informatif uniquement.
     """
     empty = {
@@ -553,13 +396,13 @@ def nl_offer_search(
 
     from . import faiss_index as fi
     from . import ranker_service as rs
-    from matching_engine import SkillNormalizer, SectorNormalizer
     from .profile_builder import ProfileBuilder
 
-    sn = SkillNormalizer()
-    sec_norm = SectorNormalizer()
+    sn = _get_skill_normalizer()
+    sec_norm = _get_sector_normalizer()
     pb = ProfileBuilder()
 
+    # --- OPTIMIZATION: hoist extract_from_text() outside loop ---
     cand_skills = sn.extract_from_text(query)
     detected_skill_ids = [s.get("id_skill") for s in cand_skills if s.get("id_skill")]
     extracted_skill_labels = sorted(
@@ -569,10 +412,7 @@ def nl_offer_search(
     target_secteurs = sec_norm.extract_from_text(query)
     target_secteur = target_secteurs[0] if target_secteurs else None
 
-    # Inférence de secteur à partir des domaines de compétences détectées.
-    # Général : si le texte ne nomme pas le secteur (ex: "informaticien" ne
-    # matche pas "informatique" en substring strict), on le déduit du domaine
-    # majoritaire des compétences extraites.
+    # Inference de secteur a partir des domaines de competences detectees.
     if not target_secteur or target_secteur.get("id_secteur") == "SEC_AUTRES":
         domain_counts = {}
         for sid in detected_skill_ids:
@@ -585,8 +425,7 @@ def nl_offer_search(
             if inferred_id and inferred_id != "SEC_AUTRES":
                 target_secteur = sec_norm.sector_metadata.get(inferred_id)
 
-    # 2. Alignement de représentation : profil offre normalisé (même pipeline
-    # que les offres au seed), puis embedding de ce profil aligné.
+    # 2. Alignement de representation : profil offre normalise.
     pb_result = pb.build_job_offer_profile(
         secteur=target_secteur["secteur_canonique"] if target_secteur else None,
         competences_recherchees=", ".join(extracted_skill_labels) if extracted_skill_labels else None,
@@ -597,7 +436,6 @@ def nl_offer_search(
         from .embedding_service import encode
         embedding_fn = encode
 
-    # On embed le profil aligné si pertinent, sinon la requête brute (fallback).
     text_to_embed = query_profile_text if len(query_profile_text) > 10 else query
     q_emb = np.array(embedding_fn(text_to_embed), dtype=np.float32)
     q_emb_normed = q_emb / (np.linalg.norm(q_emb) or 1.0)
@@ -636,6 +474,19 @@ def nl_offer_search(
     offers_from_db = db.query(JobOffer).filter(JobOffer.id.in_(offer_ids_to_load)).all()
     offer_map = {o.id: o for o in offers_from_db}
 
+    job_graph, secteur_graph, speciality_graph = get_graphs()
+
+    # --- OPTIMIZATION: batch pre-extract offer skills ---
+    offer_skills_map: Dict[str, list] = {}
+    for offer_id, _ in faiss_results:
+        offer = offer_map.get(offer_id)
+        if not offer:
+            continue
+        offer_skills_raw = sn.extract_from_text(offer.competences_recherchees or "")
+        if not offer_skills_raw:
+            offer_skills_raw = sn.extract_from_text(offer.description or "")
+        offer_skills_map[offer_id] = offer_skills_raw
+
     recommendations = []
     for offer_id, semantic_score in faiss_results:
         offer = offer_map.get(offer_id)
@@ -655,11 +506,7 @@ def nl_offer_search(
             "secteur": offer.secteur,
         }
 
-        offer_skills = []
-        if offer.competences_recherchees:
-            offer_skills = sn.extract_from_text(offer.competences_recherchees)
-        if offer.description and not offer_skills:
-            offer_skills = sn.extract_from_text(offer.description)
+        offer_skills = offer_skills_map.get(offer_id, [])
 
         offer_labels = sorted(
             {s.get("libelle_canonique", "") for s in offer_skills if s.get("libelle_canonique")}
@@ -670,15 +517,19 @@ def nl_offer_search(
             and target_secteur["id_secteur"] == offer.id_secteur
         )
 
-        # 3. Ranking sémantique + boosts (pas de gate CatBoost 0.3).
+        # 3. Ranking semantique + boosts (pas de gate CatBoost 0.3).
         relevance = semantic_score
         relevance += 0.05 * len(matched)
         relevance += 0.10 * (1 if sector_match else 0)
 
-        # Score CatBoost conservé à titre informatif (non utilisé pour le rank/gate).
+        # Score CatBoost conserve a titre informatif.
         catboost_score = None
         if feature_names:
-            feat = _extract_features(cand_data, offer_data, semantic_score, sn)
+            feat = extract_features(
+                cand_data, offer_data, semantic_score,
+                job_graph=job_graph, secteur_graph=secteur_graph, speciality_graph=speciality_graph,
+                cand_skills=cand_skills, offer_skills=offer_skills,
+            )
             feat_vec = np.array([[feat[f] for f in feature_names]], dtype=np.float32)
             try:
                 catboost_score = float(rs.rerank(feat_vec)[0])
@@ -697,7 +548,6 @@ def nl_offer_search(
             "sector_match": sector_match,
         })
 
-    # Tri par pertinence décroissante ; top_k renvoyé (aucun seuil dur).
     recommendations.sort(key=lambda x: x["score"], reverse=True)
     empty["query_profile_text"] = query_profile_text
     empty["extracted_skills"] = extracted_skill_labels
