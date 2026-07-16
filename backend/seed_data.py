@@ -35,7 +35,7 @@ DATA_DIR = os.path.join(
 )
 
 DEMANDEURS_PATH = os.path.join(DATA_DIR, "Demandeurs.xlsx")
-OFFRES_PATH = os.path.join(DATA_DIR, "Offres_enrichi.xlsx")
+OFFRES_PATH = os.path.join(DATA_DIR, "Offres_ACPE.xlsx")
 
 BATCH_SIZE = 256
 
@@ -204,7 +204,9 @@ def import_offers(df: pd.DataFrame, pb: ProfileBuilder, chroma_offers):
             offer = JobOffer(
                 id=offer_id,
                 intitule=intitule or None,
+                poste=safe_str(row.get("Poste", "")) or None,
                 type_contrat=safe_str(row.get("Type contrat", "")) or None,
+                type_entreprise=safe_str(row.get("Type d'entreprise", "")) or None,
                 entreprise=safe_str(row.get("Entreprise", "")) or None,
                 secteur=secteur or None,
                 localisation=lieu or None,

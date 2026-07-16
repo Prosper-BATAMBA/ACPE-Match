@@ -31,7 +31,7 @@ RAW_DATA_DIR = DATA_DIR / "raw"
 # Utilisés uniquement par des scripts hors-runtime qui (re)génèrent les
 # mappings et graphes ci-dessous. Aucun Normalizer ni Enricher n'y touche
 # directement au runtime.
-OFFRES_ACPE_PATH = RAW_DATA_DIR / "Offres_enrichi.xlsx"
+OFFRES_ACPE_PATH = RAW_DATA_DIR / "Offres_ACPE.xlsx"
 OFFRES_ACPE_EXTENSIONS_PATH = RAW_DATA_DIR / "Offres_ACPE_Extensions.xlsx"
 DEMANDEURS_PATH = RAW_DATA_DIR / "Demandeurs.xlsx"
 

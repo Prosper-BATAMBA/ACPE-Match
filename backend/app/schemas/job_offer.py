@@ -6,7 +6,9 @@ from pydantic import BaseModel
 class JobOfferCreate(BaseModel):
     id: str
     intitule: Optional[str] = None
+    poste: Optional[str] = None
     type_contrat: Optional[str] = None
+    type_entreprise: Optional[str] = None
     entreprise: Optional[str] = None
     secteur: Optional[str] = None
     localisation: Optional[str] = None
@@ -19,7 +21,9 @@ class JobOfferCreate(BaseModel):
 class JobOfferResponse(BaseModel):
     id: str
     intitule: Optional[str] = None
+    poste: Optional[str] = None
     type_contrat: Optional[str] = None
+    type_entreprise: Optional[str] = None
     entreprise: Optional[str] = None
     secteur: Optional[str] = None
     localisation: Optional[str] = None

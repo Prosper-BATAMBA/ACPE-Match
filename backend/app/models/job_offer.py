@@ -8,7 +8,9 @@ class JobOffer(Base):
 
     id = Column(String, primary_key=True, index=True)
     intitule = Column(String, nullable=True)
+    poste = Column(String, nullable=True)
     type_contrat = Column(String, nullable=True)
+    type_entreprise = Column(String, nullable=True)
     entreprise = Column(String, nullable=True)
     secteur = Column(String, nullable=True)
     localisation = Column(String, nullable=True)
