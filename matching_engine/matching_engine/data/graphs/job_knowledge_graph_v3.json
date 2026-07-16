@@ -44,7 +44,7 @@
         "Sécurité routière",
         "Livraison"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_GESTIONNAIRE_STOCKS"
       ]
@@ -396,7 +396,7 @@
         "Dépannage",
         "Normes électriques"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_ELECTROTECHNICIEN",
         "JOB_CHARGE_MAINTENANCE"
@@ -411,7 +411,7 @@
         "Diagnostic de panne",
         "Entretien"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_INGENIEUR_MECANIQUE",
         "JOB_CHARGE_MAINTENANCE"
@@ -426,7 +426,7 @@
         "Lecture de plans",
         "Contrôle qualité soudure"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_TECHNICIEN_TUYAUTEUR"
       ]
@@ -469,7 +469,7 @@
         "Lecture de plans isométriques",
         "Assemblage"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_SOUDEUR"
       ]
@@ -511,7 +511,7 @@
         "Climatisation",
         "Maintenance frigorifique"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_TECHNICIEN_ELECTRICIEN"
       ]
@@ -539,7 +539,7 @@
         "Relation client",
         "Gestion de caisse"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_VENDEUR_PHARMACIE"
       ]
@@ -639,7 +639,7 @@
         "Entretien",
         "Service"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_MANOEUVRE"
       ]
@@ -653,7 +653,7 @@
         "Hygiène alimentaire",
         "Gestion de cuisine"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_CHEF_DE_SALLE"
       ]
@@ -681,7 +681,7 @@
         "Conseil client",
         "Techniques capillaires"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_AGENT_POLYVALENT"
       ]
@@ -695,7 +695,7 @@
         "Contrôle d'accès",
         "Prévention des risques"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_AGENT_POLYVALENT"
       ]
@@ -709,7 +709,7 @@
         "Entretien des locaux",
         "Hygiène"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_AGENT_POLYVALENT"
       ]
@@ -723,7 +723,7 @@
         "Assistance technique",
         "Manutention"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP",
+      "niveau_etude_min": "NV_3_PRO_N1",
       "metiers_proches": [
         "JOB_AGENT_POLYVALENT"
       ]
@@ -1304,7 +1304,7 @@
         "FAM_MARINE",
         "FAM_PETROLE_GAZ"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP"
+      "niveau_etude_min": "NV_3_PRO_N1"
     },
     "FAM_RH_ADMIN": {
       "famille": "Ressources Humaines & Administration",
@@ -1356,7 +1356,7 @@
         "FAM_BTP",
         "FAM_TRANS_LOG"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP"
+      "niveau_etude_min": "NV_3_PRO_N1"
     },
     "FAM_COMM_VENTE": {
       "famille": "Commerce, Vente & Relation Client",
@@ -1411,7 +1411,7 @@
         "FAM_COMM_VENTE",
         "FAM_SOCIAL"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP"
+      "niveau_etude_min": "NV_3_PRO_N1"
     },
     "FAM_SANTE": {
       "famille": "Santé, Pharmacie & Recherche Scientifique",
@@ -1463,7 +1463,7 @@
         "FAM_PETROLE_GAZ",
         "FAM_TRANS_LOG"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP"
+      "niveau_etude_min": "NV_3_PRO_N1"
     },
     "FAM_PETROLE_GAZ": {
       "famille": "Industrie Pétrolière, Gazière & Énergie",
@@ -1500,7 +1500,7 @@
         "FAM_HSE_INDUS",
         "FAM_RESTA_SERV"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP"
+      "niveau_etude_min": "NV_3_PRO_N1"
     },
     "FAM_JURIDIQUE": {
       "famille": "Droit, Justice & Conformité",
@@ -1550,7 +1550,7 @@
         "FAM_MARINE",
         "FAM_DIRECTION"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP"
+      "niveau_etude_min": "NV_3_PRO_N1"
     },
     "FAM_COMM_MEDIA": {
       "famille": "Communication, Médias & Événementiel",
@@ -1654,7 +1654,7 @@
         "FAM_COMM_VENTE",
         "FAM_BTP"
       ],
-      "niveau_etude_min": "NV_3_CAP_BEP"
+      "niveau_etude_min": "NV_3_PRO_N1"
     },
     "FAM_SOCIAL": {
       "famille": "Services à la Personne & Action Sociale",

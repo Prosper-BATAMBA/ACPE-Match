@@ -62,7 +62,7 @@ Le Backend FastAPI est la **seule porte d'entrée et de sortie**. Le dashboard, 
                          └─────────┘ └─────────┘ └────────┘
 ```
 
-### Endpoints API (9)
+### Endpoints API (15)
 
 | Méthode | Endpoint | Rôle |
 |---------|----------|------|
@@ -73,9 +73,13 @@ Le Backend FastAPI est la **seule porte d'entrée et de sortie**. Le dashboard, 
 | `GET` | `/api/v1/candidates/{id}` | Détail d'un candidat |
 | `POST` | `/api/v1/job-offers` | Créer une offre |
 | `GET` | `/api/v1/job-offers` | Lister les offres |
+| `GET` | `/api/v1/job-offers/search?q=` | Rechercher une offre |
 | `GET` | `/api/v1/job-offers/{id}` | Détail d'une offre |
-| `GET` | `/api/v1/matching/candidate/{id}` | Recommandations |
-| `GET` | `/api/v1/matching/export-csv` | Export CSV batch |
+| `GET` | `/api/v1/matching/candidate/{id}` | Top offres pour un candidat |
+| `GET` | `/api/v1/matching/offer/{id}` | Top candidats pour une offre |
+| `POST` | `/api/v1/matching/nl-offer-search` | Recherche NL d'offres |
+| `GET` | `/api/v1/matching/export-csv` | Export CSV candidat → offres |
+| `GET` | `/api/v1/matching/export-csv-by-offer` | Export CSV offre → candidats |
 | `GET` | `/api/v1/stats` | Statistiques globales |
 
 ---
@@ -102,11 +106,11 @@ Pour chaque candidat, on récupère les **top-200 offres** les plus proches en s
 
 **Modèle :** CatBoost Ranker avec loss `YetiRank` et métrique `NDCG:top=5`
 
-Le ranker prend les top-200 offres de FAISS et les re-classe selon 71 features. Le modèle est entraîné sur **1 million de paires** candidat-offre (80% train / 20% test), avec des hard negatives issues de FAISS.
+Le ranker prend les top-200 offres de FAISS et les re-classe selon 79 features. Le modèle est entraîné sur **1 million de paires** candidat-offre (80% train / 20% test), avec des hard negatives issues de FAISS.
 
 **Entraînement :** 500 itérations, learning_rate=0.1, depth=6, early stopping à 50.
 
-### 3.4 Feature Engineering — 71 features
+### 3.4 Feature Engineering — 79 features
 
 Les features se répartissent en 6 catégories :
 
@@ -230,7 +234,7 @@ cd backend && streamlit run dashboard.py --server.port 8501
 
 ### Court terme
 - **Encoder les 21 000 candidats restants** — `seed_candidates_only.py` avec checkpoint
-- **Sélection de features** — réduire de 71 à ~50 features (domaines peu discriminants)
+- **Sélection de features** — réduire de 79 à ~50 features (domaines peu discriminants)
 - **Dashboard temps réel** — WebSocket pour mise à jour instantanée
 
 ### Moyen terme

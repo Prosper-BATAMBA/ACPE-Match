@@ -1,5 +1,5 @@
 {
-  "mapping_version": "1.0",
+  "mapping_version": "1.1",
   "description": "Table de correspondance reliant les Filières / Spécialités des demandeurs aux familles de métiers (id_famille) du moteur d'appariement.",
   "specialty_mappings": [
     {
@@ -59,8 +59,6 @@
         "Soudure Homologué",
         "Électrotechnique",
         "Maintenance industrielle",
-        "Génie civil",
-        "Maçonnerie",
         "Gestion d'environnement",
         "Qualité, Hygiène, Sécurité, Environnement (QHSE)",
         "Forage et Production",
@@ -101,8 +99,72 @@
         "Restauration",
         "Arts Culinaires",
         "Tourisme",
-        "Sécurité Privée",
         "Esthétique - Cosmétique - Coiffure"
+      ]
+    },
+    {
+      "id_famille": "FAM_SANTE",
+      "libelle_famille": "Santé, Pharmacie & Recherche Scientifique",
+      "filieres_associees": [
+        "Médecine",
+        "Pharmacie",
+        "Sciences Infirmières",
+        "Santé publique",
+        "Recherche scientifique",
+        "Biologie"
+      ]
+    },
+    {
+      "id_famille": "FAM_EDUC",
+      "libelle_famille": "Éducation, Formation & Enseignement",
+      "filieres_associees": [
+        "Sciences de l'Éducation",
+        "Pédagogie",
+        "Enseignement",
+        "Formation professionnelle"
+      ]
+    },
+    {
+      "id_famille": "FAM_BTP",
+      "libelle_famille": "Bâtiment, Travaux Publics & Architecture",
+      "filieres_associees": [
+        "Génie civil",
+        "Architecture",
+        "Maçonnerie",
+        "Topographie",
+        "Travaux publics"
+      ]
+    },
+    {
+      "id_famille": "FAM_JURIDIQUE",
+      "libelle_famille": "Droit, Justice & Secteur Social",
+      "filieres_associees": [
+        "Droit privé",
+        "Droit public",
+        "Sciences Juridiques",
+        "Travail social",
+        "Justice"
+      ]
+    },
+    {
+      "id_famille": "FAM_SECURITE",
+      "libelle_famille": "Sécurité, Sûreté & Défense",
+      "filieres_associees": [
+        "Sécurité Privée",
+        "Sécurité publique",
+        "Gardiennage",
+        "Défense"
+      ]
+    },
+    {
+      "id_famille": "FAM_COMM_MEDIA",
+      "libelle_famille": "Communication, Médias & Événementiel",
+      "filieres_associees": [
+        "Journalisme",
+        "Audiovisuel",
+        "Communication",
+        "Publicité",
+        "Événementiel"
       ]
     },
     {
@@ -113,7 +175,6 @@
         "Bac D",
         "Bac C",
         "Aucune",
-        "Droit privé",
         "Agroéconomie",
         "Sciences Humaines",
         "Lettres Modernes"

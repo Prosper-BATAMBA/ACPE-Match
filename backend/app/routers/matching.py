@@ -1,6 +1,6 @@
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from ..database import get_db
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/api/v1/matching", tags=["matching"])
 @router.get("/candidate/{candidate_id}")
 def match_candidate(
     candidate_id: str,
-    top_k: Optional[int] = 10,
+    top_k: int = Query(10, ge=1, le=100),
     db: Session = Depends(get_db),
 ):
     candidate = db.query(Candidate).filter(Candidate.id == candidate_id).first()
@@ -49,7 +49,7 @@ def match_candidate(
 @router.get("/offer/{offer_id}")
 def match_offer(
     offer_id: str,
-    top_k: Optional[int] = 5,
+    top_k: int = Query(5, ge=1, le=100),
     db: Session = Depends(get_db),
 ):
     offer = db.query(JobOffer).filter(JobOffer.id == offer_id).first()
@@ -92,8 +92,8 @@ def match_offer(
 
 
 class NLOfferSearchRequest(BaseModel):
-    query: str
-    top_k: int = 10
+    query: str = Field(..., min_length=1)
+    top_k: int = Field(10, ge=1, le=100)
 
 
 @router.post("/nl-offer-search")
@@ -101,10 +101,6 @@ def nl_offer_search_endpoint(
     req: NLOfferSearchRequest,
     db: Session = Depends(get_db),
 ):
-    """Recherche d'offres à partir d'une phrase libre (langage naturel)."""
-    if not req.query or not req.query.strip():
-        raise HTTPException(status_code=400, detail="Le champ 'query' est requis.")
-
     results = nl_offer_search(
         db=db,
         query=req.query,

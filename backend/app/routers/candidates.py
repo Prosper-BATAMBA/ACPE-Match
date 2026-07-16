@@ -88,15 +88,19 @@ def create_candidate(payload: CandidateCreate, db: Session = Depends(get_db)):
 
 
 @router.get("", response_model=list[CandidateResponse])
-def list_candidates(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def list_candidates(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=500),
+    db: Session = Depends(get_db),
+):
     return db.query(Candidate).offset(skip).limit(limit).all()
 
 
 @router.get("/search")
 def search_candidates(
     q: str = Query("", description="Recherche par nom, prénom, métier, secteur, lieu"),
-    skip: int = 0,
-    limit: int = 50,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
     db: Session = Depends(get_db),
 ):
     query = db.query(Candidate)

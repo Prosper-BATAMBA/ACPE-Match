@@ -81,8 +81,8 @@ def create_job_offer(payload: JobOfferCreate, db: Session = Depends(get_db)):
 @router.get("/search")
 def search_job_offers(
     q: str = Query("", description="Recherche par référence, intitulé, secteur ou entreprise"),
-    skip: int = 0,
-    limit: int = 50,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
     db: Session = Depends(get_db),
 ):
     query = db.query(JobOffer)
@@ -102,7 +102,11 @@ def search_job_offers(
 
 
 @router.get("", response_model=list[JobOfferResponse])
-def list_job_offers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def list_job_offers(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=500),
+    db: Session = Depends(get_db),
+):
     return db.query(JobOffer).offset(skip).limit(limit).all()
 
 

@@ -1,167 +1,377 @@
 {
-  "graph_version": "1.0",
-  "description": "Graphe de connaissances enrichissant chaque id_secteur de secteur_mapping.json. Permet, quand aucune offre/famille exacte n'existe dans un secteur donné, d'élargir intelligemment la recherche vers des secteurs proches et de déduire compétences/familles de spécialité dominantes. Les id_skill référencent skills.json, les id_famille référencent speciality_mapping.json, les id_canonique référencent job_mapping_base.json, les code_niveau référencent niveau_etude.json.",
+  "graph_version": "1.1",
+  "description": "Graphe de connaissances enrichissant chaque id_secteur de secteur_mapping.json. Permet, quand aucune offre/famille exacte n'existe dans un secteur donné, d'élargir intelligemment la recherche vers des secteurs proches et de déduire compétences/familles de spécialité dominantes.",
   "graph": {
     "SEC_AGRO": {
       "libelle_secteur": "Agriculture, Agroalimentaire & Élevage",
-      "secteurs_proches": ["SEC_FOREST_BOIS", "SEC_INDU_MAINT", "SEC_HYDRO_PETROLE"],
-      "competences_dominantes": ["SKILL_HSE_CONFORMITE"],
-      "competences_dominantes_hors_referentiel": ["Agronomie", "Élevage", "Aquaculture"],
-      "familles_specialite_associees": ["FAM_HSE_INDUS", "FAM_GENERAL_OU_AUTRE"],
+      "secteurs_proches": [
+        "SEC_FOREST_BOIS",
+        "SEC_INDU_MAINT",
+        "SEC_HYDRO_PETROLE"
+      ],
+      "competences_dominantes": [
+        "SKILL_HSE_CONFORMITE"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Agronomie",
+        "Élevage",
+        "Aquaculture"
+      ],
+      "familles_specialite_associees": [
+        "FAM_HSE_INDUS",
+        "FAM_GENERAL_OU_AUTRE"
+      ],
       "niveau_etude_dominant": "NV_3_PRO_N1",
       "tension_marche": "moyenne"
     },
     "SEC_TRANS_LOG": {
       "libelle_secteur": "Transport, Logistique & Supply Chain",
-      "secteurs_proches": ["SEC_HYDRO_PETROLE", "SEC_SECURITE"],
-      "competences_dominantes": ["SKILL_ADMIN_GESTION"],
-      "competences_dominantes_hors_referentiel": ["Douanes", "Gestion de flotte", "Chaîne logistique"],
-      "familles_specialite_associees": ["FAM_TRANS_LOG"],
+      "secteurs_proches": [
+        "SEC_HYDRO_PETROLE",
+        "SEC_SECURITE"
+      ],
+      "competences_dominantes": [
+        "SKILL_ADMIN_GESTION"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Douanes",
+        "Gestion de flotte",
+        "Chaîne logistique"
+      ],
+      "familles_specialite_associees": [
+        "FAM_TRANS_LOG"
+      ],
       "niveau_etude_dominant": "NV_4_BAC",
       "tension_marche": "forte"
     },
     "SEC_FIN_COMPTA": {
       "libelle_secteur": "Finance, Banque, Assurance & Comptabilité",
-      "secteurs_proches": ["SEC_RH_ADMIN", "SEC_DROIT_SOCIAL"],
-      "competences_dominantes": ["SKILL_FIN_COMPTA_OHADA", "SKILL_FIN_FISCALITE", "SKILL_IT_OFFICE"],
-      "competences_dominantes_hors_referentiel": ["Audit", "Contrôle de gestion"],
-      "familles_specialite_associees": ["FAM_COMPTA_FIN"],
-      "niveau_etude_dominant": "NV_6_LICENCE",
+      "secteurs_proches": [
+        "SEC_RH_ADMIN",
+        "SEC_DROIT_SOCIAL"
+      ],
+      "competences_dominantes": [
+        "SKILL_FIN_COMPTA_OHADA",
+        "SKILL_FIN_FISCALITE",
+        "SKILL_IT_OFFICE"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Audit",
+        "Contrôle de gestion"
+      ],
+      "familles_specialite_associees": [
+        "FAM_COMPTA_FIN"
+      ],
+      "niveau_etude_dominant": "NV_6_BAC_3",
       "tension_marche": "moyenne"
     },
     "SEC_RH_ADMIN": {
       "libelle_secteur": "Ressources Humaines, Gestion Administrative & Conseil",
-      "secteurs_proches": ["SEC_FIN_COMPTA", "SEC_DROIT_SOCIAL", "SEC_EDU_FORM"],
-      "competences_dominantes": ["SKILL_ADMIN_GESTION", "SKILL_IT_OFFICE", "SKILL_SOFT_COMMUNICATION"],
-      "competences_dominantes_hors_referentiel": ["Droit du travail", "Recrutement"],
-      "familles_specialite_associees": ["FAM_RH_ADMIN"],
+      "secteurs_proches": [
+        "SEC_FIN_COMPTA",
+        "SEC_DROIT_SOCIAL",
+        "SEC_EDU_FORM"
+      ],
+      "competences_dominantes": [
+        "SKILL_ADMIN_GESTION",
+        "SKILL_IT_OFFICE",
+        "SKILL_SOFT_COMMUNICATION"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Droit du travail",
+        "Recrutement"
+      ],
+      "familles_specialite_associees": [
+        "FAM_RH_ADMIN"
+      ],
       "niveau_etude_dominant": "NV_5_BAC_2",
       "tension_marche": "faible"
     },
     "SEC_COMM_VENTE": {
       "libelle_secteur": "Commerce, Vente, Marketing & Grande Distribution",
-      "secteurs_proches": ["SEC_COMM_MEDIA", "SEC_HOTEL_RESTAU"],
-      "competences_dominantes": ["SKILL_COM_NEGOCIATION", "SKILL_COM_ASSURANCE", "SKILL_SOFT_RELATIONNEL"],
-      "competences_dominantes_hors_referentiel": ["Marketing", "Commerce international"],
-      "familles_specialite_associees": ["FAM_COMM_VENTE"],
+      "secteurs_proches": [
+        "SEC_COMM_MEDIA",
+        "SEC_HOTEL_RESTAU"
+      ],
+      "competences_dominantes": [
+        "SKILL_COM_NEGOCIATION",
+        "SKILL_COM_ASSURANCE",
+        "SKILL_SOFT_RELATIONNEL"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Marketing",
+        "Commerce international"
+      ],
+      "familles_specialite_associees": [
+        "FAM_COMM_VENTE"
+      ],
       "niveau_etude_dominant": "NV_4_BAC",
       "tension_marche": "forte"
     },
     "SEC_IT_DIGITAL": {
       "libelle_secteur": "Informatique, Data, Télécommunications & Digital",
-      "secteurs_proches": ["SEC_COMM_MEDIA", "SEC_EDU_FORM"],
-      "competences_dominantes": ["SKILL_IT_OFFICE"],
-      "competences_dominantes_hors_referentiel": ["Python", "Développement Web", "Réseaux & Télécoms", "Cybersécurité"],
-      "familles_specialite_associees": ["FAM_IT_DATA"],
-      "niveau_etude_dominant": "NV_6_LICENCE",
+      "secteurs_proches": [
+        "SEC_COMM_MEDIA",
+        "SEC_EDU_FORM"
+      ],
+      "competences_dominantes": [
+        "SKILL_IT_OFFICE"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Python",
+        "Développement Web",
+        "Réseaux & Télécoms",
+        "Cybersécurité"
+      ],
+      "familles_specialite_associees": [
+        "FAM_IT_DATA"
+      ],
+      "niveau_etude_dominant": "NV_6_BAC_3",
       "tension_marche": "forte"
     },
     "SEC_BTP_AMENAGE": {
       "libelle_secteur": "Bâtiment, Travaux Publics, BTP & Architecture",
-      "secteurs_proches": ["SEC_INDU_MAINT", "SEC_HYDRO_PETROLE", "SEC_QHSE_ENVIRON"],
-      "competences_dominantes": ["SKILL_MAINT_ELEC", "SKILL_HSE_CONFORMITE"],
-      "competences_dominantes_hors_referentiel": ["Génie civil", "Architecture", "Maçonnerie"],
-      "familles_specialite_associees": ["FAM_HSE_INDUS"],
+      "secteurs_proches": [
+        "SEC_INDU_MAINT",
+        "SEC_HYDRO_PETROLE",
+        "SEC_QHSE_ENVIRON"
+      ],
+      "competences_dominantes": [
+        "SKILL_MAINT_ELEC",
+        "SKILL_HSE_CONFORMITE"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Génie civil",
+        "Architecture",
+        "Maçonnerie"
+      ],
+      "familles_specialite_associees": [
+        "FAM_BTP",
+        "FAM_HSE_INDUS"
+      ],
       "niveau_etude_dominant": "NV_3_PRO_N1",
       "tension_marche": "moyenne"
     },
     "SEC_HYDRO_PETROLE": {
       "libelle_secteur": "Pétrole, Gaz, Énergie & Hydrocarbures",
-      "secteurs_proches": ["SEC_INDU_MAINT", "SEC_QHSE_ENVIRON", "SEC_TRANS_LOG", "SEC_BTP_AMENAGE"],
-      "competences_dominantes": ["SKILL_MAINT_PREVENT", "SKILL_MAINT_ELEC", "SKILL_HSE_CONFORMITE", "SKILL_HSE_PREVENTION"],
-      "competences_dominantes_hors_referentiel": ["Forage", "Pétrochimie"],
-      "familles_specialite_associees": ["FAM_HSE_INDUS"],
+      "secteurs_proches": [
+        "SEC_INDU_MAINT",
+        "SEC_QHSE_ENVIRON",
+        "SEC_TRANS_LOG",
+        "SEC_BTP_AMENAGE"
+      ],
+      "competences_dominantes": [
+        "SKILL_MAINT_PREVENT",
+        "SKILL_MAINT_ELEC",
+        "SKILL_HSE_CONFORMITE",
+        "SKILL_HSE_PREVENTION"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Forage",
+        "Pétrochimie"
+      ],
+      "familles_specialite_associees": [
+        "FAM_HSE_INDUS"
+      ],
       "niveau_etude_dominant": "NV_5_BAC_2",
       "tension_marche": "forte"
     },
     "SEC_QHSE_ENVIRON": {
       "libelle_secteur": "Qualité, Hygiène, Sécurité, Environnement (QHSE)",
-      "secteurs_proches": ["SEC_HYDRO_PETROLE", "SEC_INDU_MAINT", "SEC_BTP_AMENAGE", "SEC_SANTE_PHARMA"],
-      "competences_dominantes": ["SKILL_HSE_CONFORMITE", "SKILL_HSE_PREVENTION"],
-      "competences_dominantes_hors_referentiel": ["Gestion des déchets", "Développement durable"],
-      "familles_specialite_associees": ["FAM_HSE_INDUS"],
+      "secteurs_proches": [
+        "SEC_HYDRO_PETROLE",
+        "SEC_INDU_MAINT",
+        "SEC_BTP_AMENAGE",
+        "SEC_SANTE_PHARMA"
+      ],
+      "competences_dominantes": [
+        "SKILL_HSE_CONFORMITE",
+        "SKILL_HSE_PREVENTION"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Gestion des déchets",
+        "Développement durable"
+      ],
+      "familles_specialite_associees": [
+        "FAM_HSE_INDUS"
+      ],
       "niveau_etude_dominant": "NV_5_BAC_2",
       "tension_marche": "moyenne"
     },
     "SEC_SANTE_PHARMA": {
       "libelle_secteur": "Santé, Pharmacie & Recherche Scientifique",
-      "secteurs_proches": ["SEC_QHSE_ENVIRON", "SEC_EDU_FORM"],
+      "secteurs_proches": [
+        "SEC_QHSE_ENVIRON",
+        "SEC_EDU_FORM"
+      ],
       "competences_dominantes": [],
-      "competences_dominantes_hors_referentiel": ["Médecine", "Pharmacie", "Recherche scientifique"],
-      "familles_specialite_associees": ["FAM_GENERAL_OU_AUTRE"],
-      "niveau_etude_dominant": "NV_6_LICENCE",
+      "competences_dominantes_hors_referentiel": [
+        "Médecine",
+        "Pharmacie",
+        "Recherche scientifique"
+      ],
+      "familles_specialite_associees": [
+        "FAM_SANTE",
+        "FAM_GENERAL_OU_AUTRE"
+      ],
+      "niveau_etude_dominant": "NV_6_BAC_3",
       "tension_marche": "moyenne"
     },
     "SEC_INDU_MAINT": {
       "libelle_secteur": "Industrie, Production & Maintenance",
-      "secteurs_proches": ["SEC_HYDRO_PETROLE", "SEC_BTP_AMENAGE", "SEC_QHSE_ENVIRON", "SEC_AGRO"],
-      "competences_dominantes": ["SKILL_MAINT_PREVENT", "SKILL_MAINT_ELEC"],
-      "competences_dominantes_hors_referentiel": ["Électromécanique", "Soudure", "Froid et climatisation"],
-      "familles_specialite_associees": ["FAM_HSE_INDUS"],
+      "secteurs_proches": [
+        "SEC_HYDRO_PETROLE",
+        "SEC_BTP_AMENAGE",
+        "SEC_QHSE_ENVIRON",
+        "SEC_AGRO"
+      ],
+      "competences_dominantes": [
+        "SKILL_MAINT_PREVENT",
+        "SKILL_MAINT_ELEC"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Électromécanique",
+        "Soudure",
+        "Froid et climatisation"
+      ],
+      "familles_specialite_associees": [
+        "FAM_HSE_INDUS"
+      ],
       "niveau_etude_dominant": "NV_3_PRO_N1",
       "tension_marche": "moyenne"
     },
     "SEC_FOREST_BOIS": {
       "libelle_secteur": "Exploitation Forestière, Bois & Artisanat",
-      "secteurs_proches": ["SEC_AGRO", "SEC_INDU_MAINT"],
+      "secteurs_proches": [
+        "SEC_AGRO",
+        "SEC_INDU_MAINT"
+      ],
       "competences_dominantes": [],
-      "competences_dominantes_hors_referentiel": ["Menuiserie", "Exploitation forestière", "Artisanat"],
-      "familles_specialite_associees": ["FAM_GENERAL_OU_AUTRE"],
+      "competences_dominantes_hors_referentiel": [
+        "Menuiserie",
+        "Exploitation forestière",
+        "Artisanat"
+      ],
+      "familles_specialite_associees": [
+        "FAM_GENERAL_OU_AUTRE"
+      ],
       "niveau_etude_dominant": "NV_2_COLLEGE",
       "tension_marche": "faible"
     },
     "SEC_HOTEL_RESTAU": {
       "libelle_secteur": "Hôtellerie, Restauration & Tourisme",
-      "secteurs_proches": ["SEC_COMM_VENTE", "SEC_SERVICES_NETTOYAGE"],
-      "competences_dominantes": ["SKILL_SOFT_RELATIONNEL"],
-      "competences_dominantes_hors_referentiel": ["Arts culinaires", "Accueil touristique"],
-      "familles_specialite_associees": ["FAM_RESTA_SERV"],
+      "secteurs_proches": [
+        "SEC_COMM_VENTE",
+        "SEC_SERVICES_NETTOYAGE"
+      ],
+      "competences_dominantes": [
+        "SKILL_SOFT_RELATIONNEL"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Arts culinaires",
+        "Accueil touristique"
+      ],
+      "familles_specialite_associees": [
+        "FAM_RESTA_SERV"
+      ],
       "niveau_etude_dominant": "NV_3_PRO_N1",
       "tension_marche": "moyenne"
     },
     "SEC_SECURITE": {
       "libelle_secteur": "Sécurité, Sûreté & Défense",
-      "secteurs_proches": ["SEC_TRANS_LOG", "SEC_HYDRO_PETROLE"],
-      "competences_dominantes": ["SKILL_HSE_CONFORMITE"],
-      "competences_dominantes_hors_referentiel": ["Gardiennage", "Protection des sites sensibles"],
-      "familles_specialite_associees": ["FAM_RESTA_SERV"],
+      "secteurs_proches": [
+        "SEC_TRANS_LOG",
+        "SEC_HYDRO_PETROLE"
+      ],
+      "competences_dominantes": [
+        "SKILL_HSE_CONFORMITE"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Gardiennage",
+        "Protection des sites sensibles"
+      ],
+      "familles_specialite_associees": [
+        "FAM_SECURITE",
+        "FAM_GENERAL_OU_AUTRE"
+      ],
       "niveau_etude_dominant": "NV_2_COLLEGE",
       "tension_marche": "faible"
     },
     "SEC_EDU_FORM": {
       "libelle_secteur": "Éducation, Formation & Enseignement",
-      "secteurs_proches": ["SEC_RH_ADMIN", "SEC_SANTE_PHARMA", "SEC_IT_DIGITAL"],
-      "competences_dominantes": ["SKILL_SOFT_COMMUNICATION"],
-      "competences_dominantes_hors_referentiel": ["Pédagogie", "Ingénierie de formation"],
-      "familles_specialite_associees": ["FAM_GENERAL_OU_AUTRE"],
-      "niveau_etude_dominant": "NV_6_LICENCE",
+      "secteurs_proches": [
+        "SEC_RH_ADMIN",
+        "SEC_SANTE_PHARMA",
+        "SEC_IT_DIGITAL"
+      ],
+      "competences_dominantes": [
+        "SKILL_SOFT_COMMUNICATION"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Pédagogie",
+        "Ingénierie de formation"
+      ],
+      "familles_specialite_associees": [
+        "FAM_EDUC",
+        "FAM_GENERAL_OU_AUTRE"
+      ],
+      "niveau_etude_dominant": "NV_6_BAC_3",
       "tension_marche": "faible"
     },
     "SEC_COMM_MEDIA": {
       "libelle_secteur": "Communication, Médias & Événementiel",
-      "secteurs_proches": ["SEC_COMM_VENTE", "SEC_IT_DIGITAL"],
-      "competences_dominantes": ["SKILL_SOFT_COMMUNICATION"],
-      "competences_dominantes_hors_referentiel": ["Journalisme", "Audiovisuel", "Community management"],
-      "familles_specialite_associees": ["FAM_GENERAL_OU_AUTRE"],
+      "secteurs_proches": [
+        "SEC_COMM_VENTE",
+        "SEC_IT_DIGITAL"
+      ],
+      "competences_dominantes": [
+        "SKILL_SOFT_COMMUNICATION"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Journalisme",
+        "Audiovisuel",
+        "Community management"
+      ],
+      "familles_specialite_associees": [
+        "FAM_COMM_MEDIA",
+        "FAM_GENERAL_OU_AUTRE"
+      ],
       "niveau_etude_dominant": "NV_5_BAC_2",
       "tension_marche": "faible"
     },
     "SEC_SERVICES_NETTOYAGE": {
       "libelle_secteur": "Services à la personne, Nettoyage & Blanchisserie",
-      "secteurs_proches": ["SEC_HOTEL_RESTAU"],
+      "secteurs_proches": [
+        "SEC_HOTEL_RESTAU"
+      ],
       "competences_dominantes": [],
-      "competences_dominantes_hors_referentiel": ["Nettoyage industriel", "Blanchisserie"],
-      "familles_specialite_associees": ["FAM_GENERAL_OU_AUTRE"],
+      "competences_dominantes_hors_referentiel": [
+        "Nettoyage industriel",
+        "Blanchisserie"
+      ],
+      "familles_specialite_associees": [
+        "FAM_GENERAL_OU_AUTRE"
+      ],
       "niveau_etude_dominant": "NV_1_PRIMARY",
       "tension_marche": "faible"
     },
     "SEC_DROIT_SOCIAL": {
       "libelle_secteur": "Droit, Justice & Secteur Social",
-      "secteurs_proches": ["SEC_RH_ADMIN", "SEC_FIN_COMPTA"],
+      "secteurs_proches": [
+        "SEC_RH_ADMIN",
+        "SEC_FIN_COMPTA"
+      ],
       "competences_dominantes": [],
-      "competences_dominantes_hors_referentiel": ["Droit privé", "Droit public", "Travail social"],
-      "familles_specialite_associees": ["FAM_GENERAL_OU_AUTRE"],
-      "niveau_etude_dominant": "NV_6_LICENCE",
+      "competences_dominantes_hors_referentiel": [
+        "Droit privé",
+        "Droit public",
+        "Travail social"
+      ],
+      "familles_specialite_associees": [
+        "FAM_JURIDIQUE",
+        "FAM_GENERAL_OU_AUTRE"
+      ],
+      "niveau_etude_dominant": "NV_6_BAC_3",
       "tension_marche": "faible"
     },
     "SEC_AUTRES": {
@@ -169,24 +379,37 @@
       "secteurs_proches": [],
       "competences_dominantes": [],
       "competences_dominantes_hors_referentiel": [],
-      "familles_specialite_associees": ["FAM_GENERAL_OU_AUTRE"],
+      "familles_specialite_associees": [
+        "FAM_GENERAL_OU_AUTRE"
+      ],
       "niveau_etude_dominant": null,
       "tension_marche": "inconnue",
-      "note": "Secteur fourre-tout : aucune inférence fiable. Ne devrait jamais être utilisé comme critère positif de matching, seulement comme absence d'information."
+      "note": "Secteur fourre-tout : aucune inférence fiable."
     },
     "SEC_TRADUCTION": {
       "libelle_secteur": "Traduction & Interprétariat",
-      "secteurs_proches": ["SEC_COMM_MEDIA", "SEC_EDU_FORM"],
-      "competences_dominantes": ["SKILL_SOFT_COMMUNICATION"],
-      "competences_dominantes_hors_referentiel": ["Traduction", "Interprétariat"],
-      "familles_specialite_associees": ["FAM_GENERAL_OU_AUTRE"],
-      "niveau_etude_dominant": "NV_6_LICENCE",
+      "secteurs_proches": [
+        "SEC_COMM_MEDIA",
+        "SEC_EDU_FORM"
+      ],
+      "competences_dominantes": [
+        "SKILL_SOFT_COMMUNICATION"
+      ],
+      "competences_dominantes_hors_referentiel": [
+        "Traduction",
+        "Interprétariat"
+      ],
+      "familles_specialite_associees": [
+        "FAM_COMM_MEDIA",
+        "FAM_GENERAL_OU_AUTRE"
+      ],
+      "niveau_etude_dominant": "NV_6_BAC_3",
       "tension_marche": "faible"
     }
   },
   "_meta_notes": {
-    "secteurs_proches": "Relations symétriques mais saisies une seule fois par paire dans le sens le plus naturel ; à parcourir dans les deux sens côté code (si A est proche de B, traiter B comme proche de A).",
-    "tension_marche": "Estimation qualitative (faible / moyenne / forte) à valider avec des données réelles d'offres vs demandeurs par secteur ; placeholder en attendant un calcul dynamique basé sur Offres_ACPE.xlsx / Demandeurs_.xlsx.",
-    "usage_type": "Ce graphe sert principalement à l'ÉLARGISSEMENT de recherche (fallback) quand le matching direct métier/famille échoue, pas comme critère de matching primaire."
+    "secteurs_proches": "Relations symétriques mais saisies une seule fois par paire.",
+    "tension_marche": "Estimation qualitative (faible / moyenne / forte).",
+    "usage_type": "Ce graphe sert principalement à l'élargissement de recherche (fallback)."
   }
 }

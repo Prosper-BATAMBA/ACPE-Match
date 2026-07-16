@@ -75,10 +75,12 @@ def _load_graphs():
             _job_graph = json.load(f)
     if os.path.exists(spath):
         with open(spath, "r", encoding="utf-8") as f:
-            _secteur_graph = json.load(f)
+            raw = json.load(f)
+            _secteur_graph = raw.get("graph", raw)
     if os.path.exists(specpath):
         with open(specpath, "r", encoding="utf-8") as f:
-            _speciality_graph = json.load(f)
+            raw = json.load(f)
+            _speciality_graph = raw.get("graph", raw)
 
 
 def _get_education_rank(code):

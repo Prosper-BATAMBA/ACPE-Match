@@ -33,7 +33,7 @@ RAW_DATA_DIR = DATA_DIR / "raw"
 # directement au runtime.
 OFFRES_ACPE_PATH = RAW_DATA_DIR / "Offres_enrichi.xlsx"
 OFFRES_ACPE_EXTENSIONS_PATH = RAW_DATA_DIR / "Offres_ACPE_Extensions.xlsx"
-DEMANDEURS_PATH = RAW_DATA_DIR / "Demandeurs_.xlsx"
+DEMANDEURS_PATH = RAW_DATA_DIR / "Demandeurs.xlsx"
 
 # --- Mappings (couche 1 : normalisation) ---
 JOB_MAPPING_PATH = MAPPINGS_DIR / "job_mapping_enriched.json"

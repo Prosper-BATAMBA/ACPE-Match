@@ -8,7 +8,9 @@ networks:
 services:
   # 1. Le Hub Central (Logique Métier, API, Normalisation, Enrichissement et Embeddings)
   backend:
-    build: ./backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: acpe-backend
     ports:
       - "8000:8000"
@@ -28,20 +30,7 @@ services:
       chromadb:
         condition: service_started
 
-  # 2. L'Interface Conseiller (Widget / Extension Démo)
-  frontend:
-    build: ./frontend
-    container_name: acpe-frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - API_URL=http://backend:8000
-    networks:
-      - acpe-network
-    depends_on:
-      - backend
-
-  # 3. Base de Données Classique (Filtres métiers, Villes, Diplômes)
+  # 2. Base de Données Classique (Filtres métiers, Villes, Diplômes)
   postgresql:
     image: postgres:15-alpine
     container_name: acpe-postgres
@@ -61,7 +50,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # 4. Base Vectorielle (Indexation des sens des textes, vecteurs sentence-transformers)
+  # 3. Base Vectorielle (Indexation des sens des textes, vecteurs sentence-transformers)
   chromadb:
     image: chromadb/chroma:latest
     container_name: acpe-chromadb

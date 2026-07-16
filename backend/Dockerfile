@@ -2,13 +2,13 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ../matching_engine /matching_engine
-RUN pip install -e /matching_engine
+COPY matching_engine /matching_engine
+RUN pip install --no-cache-dir /matching_engine
 
-COPY . .
+COPY backend/ .
 
 EXPOSE 8000
 
