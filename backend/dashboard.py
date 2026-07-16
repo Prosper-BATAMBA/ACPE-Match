@@ -42,7 +42,7 @@ st.sidebar.title("ACPE Match")
 st.sidebar.caption("IndabaX Congo 2026")
 page = st.sidebar.radio(
     "Navigation",
-    ["Vue d'ensemble", "Matching", "Export CSV", "Offre > Candidats", "Recherche NL", "Rapport"],
+    ["Vue d'ensemble", "Matching", "Recommandations", "Offre > Candidats", "Recherche NL", "Rapport"],
 )
 st.sidebar.divider()
 st.sidebar.caption("API: " + API_URL)
@@ -287,15 +287,15 @@ elif page == "Matching":
 
 
 # ─────────────────────────────────────────────
-# PAGE 3 : EXPORT CSV
+# PAGE 3 : RECOMMANDATIONS
 # ─────────────────────────────────────────────
-elif page == "Export CSV":
-    st.title("Export CSV des recommandations")
+elif page == "Recommandations":
+    st.title("Recommandations")
 
     col1, col2 = st.columns([3, 1])
     with col1:
         search_export = st.text_input(
-            "Rechercher des candidats a exporter",
+            "Rechercher des candidats",
             placeholder="Nom, metier, secteur, ou ID...",
         )
     with col2:
@@ -332,35 +332,54 @@ elif page == "Export CSV":
         st.divider()
         st.info(f"{len(selected_ids)} candidat(s) selectionne(s)")
 
-        if st.button("Generer le CSV", type="primary"):
-            with st.spinner("Generation du fichier CSV en cours..."):
-                try:
-                    csv_resp = requests.get(
-                        f"{API_URL}/api/v1/matching/export-csv",
-                        params={
-                            "candidate_ids": ",".join(selected_ids),
-                            "top_k": top_k_export,
-                        },
-                        timeout=60,
-                        stream=True,
-                    )
-                    csv_resp.raise_for_status()
+        if st.button("Generer les recommandations", type="primary"):
+            all_recs = []
+            progress_bar = st.progress(0)
+            status_text = st.empty()
 
-                    st.download_button(
-                        label=f"Telecharger CSV ({len(selected_ids)} candidats)",
-                        data=csv_resp.content,
-                        file_name="acpe_matching_export.csv",
-                        mime="text/csv",
-                        type="primary",
-                    )
+            for idx, cand_id in enumerate(selected_ids, 1):
+                status_text.text(f"Traitement {idx}/{len(selected_ids)} — {cand_id}")
+                progress_bar.progress(idx / len(selected_ids))
 
-                    preview = csv_resp.content.decode("utf-8").split("\n")
-                    st.success(f"CSV genere — {len(preview) - 1} lignes")
-                    with st.expander("Apercu du CSV"):
-                        st.code("\n".join(preview[:20]))
+                result = _api_get(
+                    f"/api/v1/matching/candidate/{cand_id}",
+                    params={"top_k": top_k_export},
+                    timeout=30,
+                )
+                if result and result.get("recommendations"):
+                    cand_name = result.get("candidate_name", cand_id)
+                    for r in result["recommendations"]:
+                        all_recs.append({
+                            "Candidat": cand_name,
+                            "ID Candidat": cand_id,
+                            "Rang": len([x for x in all_recs if x["ID Candidat"] == cand_id]) + 1,
+                            "Offre": r.get("intitule", "N/A"),
+                            "Entreprise": r.get("entreprise", "N/A"),
+                            "Score": round(r["score"], 3),
+                            "Couverture": f"{r.get('skill_gap', {}).get('gap_score', 0):.0%}",
+                        })
 
-                except Exception as e:
-                    st.error(f"Erreur generation CSV : {e}")
+            progress_bar.progress(1.0)
+            status_text.text("Termine")
+
+            if all_recs:
+                df_recs = pd.DataFrame(all_recs)
+                st.subheader(f"{len(all_recs)} recommandation(s) pour {len(selected_ids)} candidat(s)")
+                st.dataframe(df_recs, use_container_width=True, hide_index=True)
+
+                st.divider()
+                st.subheader("Exporter les resultats")
+
+                csv_data = df_recs.to_csv(index=False).encode("utf-8")
+                st.download_button(
+                    label=f"Telecharger CSV ({len(all_recs)} lignes)",
+                    data=csv_data,
+                    file_name="acpe_recommandations.csv",
+                    mime="text/csv",
+                    type="primary",
+                )
+            else:
+                st.warning("Aucune recommandation generee.")
 
 
 # ─────────────────────────────────────────────
