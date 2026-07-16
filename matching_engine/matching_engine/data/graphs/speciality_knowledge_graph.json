@@ -1,4 +1,4 @@
-﻿{
+{
   "graph_version": "1.0",
   "description": "Graphe de connaissances enrichissant chaque id_famille de speciality_mapping.json. Sert de couche d'inférence : quand une filière est normalisée en id_famille mais qu'aucun métier exact n'est identifié, ce graphe permet de déduire compétences probables, métiers de débouché et secteurs pertinents. Les id_skill référencent skills.json, les id_canonique référencent job_mapping_base.json, les code_niveau référencent niveau_etude.json, les id_secteur référencent secteur_mapping.json.",
   "graph": {
