@@ -22,7 +22,7 @@ from app.chromadb_client import get_offers_collection
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 HACKATON_DIR = os.path.dirname(BACKEND_DIR)
 DATA_DIR = os.path.join(HACKATON_DIR, "matching_engine", "matching_engine", "data", "raw")
-OFFRES_PATH = os.path.join(DATA_DIR, "Offres_enrichi.xlsx")
+OFFRES_PATH = os.path.join(DATA_DIR, "Offres_ACPE.xlsx")
 
 BATCH_SIZE = 256
 

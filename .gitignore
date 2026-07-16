@@ -1,7 +1,7 @@
 # ─────────────────────────────────────────────
 # ACPE Match — .gitignore
-# Objectif : versionner le CODE + modèles/configs nécessaires,
-#           EXCLUER les données personnelles (RGPD) et artefacts d'entraînement.
+# Versionne : CODE + modèles/configs nécessaires au run.
+# Exclut : données perso (RGPD), artefacts, outils internes.
 # ─────────────────────────────────────────────
 
 # ── IDE / OS ──
@@ -12,6 +12,9 @@
 *~
 .DS_Store
 Thumbs.db
+
+# ── Outils internes ──
+.opencode/
 
 # ── Python ──
 __pycache__/
@@ -49,8 +52,6 @@ venv.bak/
 # ═════════════════════════════════════════════
 # Base SQLite des candidats/offres (noms, prénoms, etc.)
 *.db
-acpe.db
-backend/acpe.db
 
 # Embeddings ChromaDB dérivés des profils (volumineux + données perso)
 chroma_data/
@@ -61,18 +62,22 @@ chromadb/
 # ARTEFACTS D'ENTRAÎNEMENT (volumineux, régénérables)
 # ═════════════════════════════════════════════
 catboost_info/
+backend/catboost_info/
 captune_info/
 cross_encoder_onnx/
 
+# Index FAISS stale (à reconstruire via build_faiss_index.py après le seed)
+backend/faiss_offers.index
+backend/faiss_offers_meta.json
+
 # ═════════════════════════════════════════════
-# LOGS / RAPPORTS DE TEST LOCAUX
+# LOGS / FICHIERS LOCAUX
 # ═════════════════════════════════════════════
 *.log
-server.log
-streamlit.log
 logs/
 test_report.txt
 run_tests.ps1
+backend/server.err
 
 # ── Secrets ──
 *.key
@@ -91,8 +96,7 @@ temp/
 # ── Inclus intentionnellement (nécessaires au run) :
 #    backend/catboost_ranker.cbm  (modèle, ~574 KB, non sensible)
 #    backend/ranker_config.json   (feature names du ranker)
-#    backend/faiss_offers.index   (index FAISS, ~10 MB)
 #    matching_engine/.../graphs/*.json (graphes de connaissances)
-#    matching_engine/.../skills/skills_enriched.json (référentiel compétences)
+#    matching_engine/.../data/mappings/*.json (référentiels)
 #    rapport_technique.md          (livrable hackathon)
 # ═════════════════════════════════════════════
